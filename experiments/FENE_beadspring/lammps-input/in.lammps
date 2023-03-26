@@ -38,7 +38,7 @@ timestep                 0.0025
 neighbor       0.3 bin
 neigh_modify   delay 1 every 1 check yes
 
-restart                  1000000  restart
+restart                  1000000  "experiments/FENE_beadspring/checkpoints/fene.restart"
 
 # First let the polymers relax
 
