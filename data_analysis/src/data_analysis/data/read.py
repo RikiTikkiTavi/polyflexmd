@@ -1,13 +1,36 @@
+import io
 import pathlib
 import typing
 import pandas as pd
-from data_analysis.data.types import LammpsSystemTopology
+import pymatgen.io.lammps.data
+import data_analysis.data.types
 
-def read_lammps_system_topology_file(
+
+def read_lammps_system_data(
         path: pathlib.Path,
-        atom_style_columns: list[str]
-) -> LammpsSystemTopology:
-    pass
+        atom_style: str = "angle"
+) -> data_analysis.data.types.LammpsSystemData:
+    """Reads a LAMMPS data file and returns a dictionary with the header information
+        and a pandas DataFrame with the atom coordinates and bonds information."""
+    content = pymatgen.io.lammps.data.LammpsData.from_file(
+        str(path),
+        atom_style=atom_style,
+        sort_id=False
+    )
+
+    content.atoms.rename({
+        "nx": "ix",
+        "ny": "iy",
+        "nz": "iz"
+    }, axis=1, inplace=True)
+
+    return data_analysis.data.types.LammpsSystemData(
+        box=content.box,
+        masses=content.masses,
+        atoms=content.atoms,
+        angles=content.topology["Angles"],
+        bonds=content.topology["Bonds"]
+    )
 
 
 # https://gist.github.com/astyonax/1eb7b54326157299f0846324b5f1d98c
