@@ -4,14 +4,17 @@ import typing
 import pandas as pd
 import pymatgen.io.lammps.data
 import data_analysis.data.types
+import data_analysis.data.constants
 
 
 def read_lammps_system_data(
         path: pathlib.Path,
         atom_style: str = "angle"
 ) -> data_analysis.data.types.LammpsSystemData:
-    """Reads a LAMMPS data file and returns a dictionary with the header information
-        and a pandas DataFrame with the atom coordinates and bonds information."""
+    """
+    Reads a LAMMPS data file and returns a dictionary with the header information
+    and a pandas DataFrame with the atom coordinates and bonds information.
+    """
     content = pymatgen.io.lammps.data.LammpsData.from_file(
         str(path),
         atom_style=atom_style,
@@ -48,7 +51,6 @@ def read_lammps_custom_trajectory_file(
                 # begin new timestep
                 timestep = int(file.readline())
                 particles_n = 0
-                columns = []
 
             if 'ITEM: NUMBER OF ATOMS' in line:
                 particles_n = int(file.readline())
@@ -66,3 +68,13 @@ def read_lammps_custom_trajectory_file(
                 yield timestep_df
 
             line = file.readline()
+
+
+def read_raw_trajectory_df(
+        path: pathlib.Path,
+        column_types: dict = data_analysis.data.constants.RAW_TRAJECTORY_DF_COLUMN_TYPES
+):
+    return pd.concat(data_analysis.data.read.read_lammps_custom_trajectory_file(
+        path=path,
+        column_types=column_types
+    ))
