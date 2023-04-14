@@ -1,13 +1,17 @@
 [tool.poetry]
-name = "system-creator"
+name = "experiment-runner"
 version = "0.1.0"
 description = ""
 authors = ["Yahor Paromau <yahor.paromau@gmail.com>"]
 readme = "README.md"
-packages = [{include = "system_creator"}]
+packages = [{include = "experiment_runner"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+spock-config = "^3.0.2"
+pydantic = "^1.10.7"
+tomlkit = "^0.11.7"
+gitpython = "^3.1.31"
 typer = "^0.7.0"
 
 

@@ -199,7 +199,7 @@ def create_fene_bead_spring_system(
         ))
 
     print(f"Writing output to {file_path} ...")
-    with open(file_path, "w") as file:
+    with open(file_path, "w+") as file:
         write_header(chains, file)
         write_body(chains, file)
 

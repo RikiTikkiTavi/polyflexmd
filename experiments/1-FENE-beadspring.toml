@@ -1,0 +1,12 @@
+simulation_model_path = "simulations/FENE-beadspring.lammps"
+experiments_path = "/home/egor/Projects/bachelor-thesis/data"
+
+[system_config]
+name = "anchored-fene-chain"
+n_chains=20
+n_monomers=128
+monomer_type=2
+bond_type=1
+angle_type=1
+bond_length=0.97
+box_length=200
