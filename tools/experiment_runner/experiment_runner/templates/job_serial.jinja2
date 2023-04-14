@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#SBATCH --job-name="{{ job_params.name }}"
+#SBATCH --output="{{ job_params.logs_path }}/slurm-%j.out"
+#SBATCH --error="{{ job_params.logs_path }}/slurm-%j.out"
+#SBATCH --account="{{ job_params.account }}"
+#SBATCH --time={{ job_params.time }}
+#SBATCH --partition={{ job_params.partition }}
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task={{ job_params.cpus_per_task }}
+#SBATCH --mem-per-cpu={{ job_params.mem_per_cpu }}
+
+module load modenv/hiera GCC/9.3.0 iccifort/2020.1.217 OpenMPI/4.0.3
+
+mpirun singularity exec \
+  --contain \
+  --no-home \
+  -B {{ experiment_params.mount_path_host }}:{{ experiment_params.mount_path_container }} \
+  --env OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK \
+  docker://lammps/lammps:stable_29Sep2021_ubuntu20.04_openmpi_py3 \
+  lmp_serial -in {{ experiment_params.lammps_input_path_container }} -log {{ job_params.logs_path }}/log.txt

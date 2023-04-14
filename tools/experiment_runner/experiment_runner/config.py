@@ -25,10 +25,20 @@ class AnchoredFENEChainConfig:
 
 
 @pydantic.dataclasses.dataclass
+class SlurmJobConfig:
+    account: str
+    max_exec_time: str
+    partition: str
+    cpus_per_task: int
+    mem_per_cpu: int
+
+
+@pydantic.dataclasses.dataclass
 class ExperimentConfig:
     simulation_model_path: pathlib.Path
     experiments_path: pathlib.Path
     system_config: AnchoredFENEChainConfig
+    slurm_job_config: SlurmJobConfig
 
 
 def read_experiment_config(config_file_path: pathlib.Path) -> ExperimentConfig:
