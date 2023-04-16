@@ -1,4 +1,5 @@
 import dataclasses
+import logging
 import pathlib
 import shutil
 import os
@@ -9,8 +10,11 @@ import git
 
 import jinja2
 
+_logger = logging.getLogger(__name__)
+
 
 def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: bool):
+    _logger.info(f"Reading config from {experiment_config_path} ...")
     conf = experiment_runner.config.read_experiment_config(experiment_config_path)
 
     repo_root_path = pathlib.Path(__file__).parent.resolve()
@@ -20,6 +24,10 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
 
     commit_sha = repo.git.rev_parse(repo.head.commit.hexsha, short=8)
     experiment_path = conf.experiments_path / model_name / commit_sha
+
+    _logger.info(
+        f"Deploying experiment: simulation={model_name} of version={commit_sha} into experiment_path={experiment_path} ..."
+    )
 
     if clear_experiment_path:
         if experiment_path.exists():

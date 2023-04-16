@@ -22,6 +22,7 @@ class AnchoredFENEChainConfig:
     angle_type: int
     bond_length: float
     box_length: int
+    seed: int
 
 
 @pydantic.dataclasses.dataclass

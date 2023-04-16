@@ -11,6 +11,7 @@ bond_type = 1
 angle_type = 1
 bond_length = 0.97
 box_length = 200
+seed = 11
 
 [slurm_job_config]
 account = "p_mdpolymer"

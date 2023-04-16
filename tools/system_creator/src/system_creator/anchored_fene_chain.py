@@ -1,7 +1,7 @@
 import dataclasses
 import pathlib
 import typing
-from typing import io, Generic, TypeVar
+from typing import Generic, TypeVar
 
 import numpy as np
 
@@ -74,6 +74,11 @@ class Box(typing.NamedTuple):
         return "\n".join(lines)
 
 
+class AnchoredFENESystem(typing.NamedTuple):
+    chains: list[Chain]
+    box: Box
+
+
 def calculate_monomer_type(monomer_ix: int, n_monomers: int, free_monomer_type: int):
     # Fixed monomers
     if monomer_ix <= 1:
@@ -105,7 +110,7 @@ def apply_boundary_conditions(
     return Coordinates.from_numpy(r), Coordinates.from_numpy(ir)
 
 
-def write_header(chains: list[Chain], box: Box, file: io.TextIO):
+def write_header(chains: list[Chain], box: Box, file: typing.TextIO):
     n_atoms = sum(len(c.monomers) for c in chains)
     n_bonds = sum(len(c.bonds) for c in chains)
     n_angles = sum(len(c.angles) for c in chains)
@@ -137,7 +142,7 @@ def write_header(chains: list[Chain], box: Box, file: io.TextIO):
     file.writelines(l + "\n" for l in header_lines)
 
 
-def write_body(chains: list[Chain], file: io.TextIO) -> None:
+def write_body(chains: list[Chain], file: typing.TextIO) -> None:
     file.write("\nAtoms\n\n")
     file.writelines(m.to_table_entry() + "\n" for c in chains for m in c.monomers)
 
@@ -148,6 +153,13 @@ def write_body(chains: list[Chain], file: io.TextIO) -> None:
     file.writelines(a.to_table_entry() + "\n" for c in chains for a in c.angles)
 
 
+def dump_fene_bead_spring_system(system: AnchoredFENESystem, file_path: pathlib.Path) -> None:
+    print(f"Writing output to {file_path} ...")
+    with open(file_path, "w") as file:
+        write_header(chains=system.chains, box=system.box, file=file)
+        write_body(system.chains, file)
+
+
 def create_fene_bead_spring_system(
         n_chains: int,
         n_monomers: int,
@@ -156,8 +168,10 @@ def create_fene_bead_spring_system(
         angle_type: int,
         bond_length: float,
         box_length: float,
-        file_path: pathlib.Path
-):
+        seed: int
+) -> AnchoredFENESystem:
+    np.random.seed(seed)
+
     chains: list[Chain] = []
 
     lo, hi = -box_length / 2, box_length / 2
@@ -215,7 +229,4 @@ def create_fene_bead_spring_system(
             angles=angles
         ))
 
-    print(f"Writing output to {file_path} ...")
-    with open(file_path, "w+") as file:
-        write_header(chains=chains, box=box, file=file)
-        write_body(chains, file)
+    return AnchoredFENESystem(chains=chains, box=box)
