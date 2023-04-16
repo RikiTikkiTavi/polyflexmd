@@ -6,7 +6,6 @@ import subprocess
 
 import experiment_runner.config
 import git
-import system_creator
 
 import jinja2
 
@@ -37,7 +36,7 @@ def run_experiment(
         # noinspection PyDataclass
         kwargs = dataclasses.asdict(conf.system_config)
         kwargs.pop("name")
-        system_creator.anchored_fene_chain.create_fene_bead_spring_system(
+        src.system_creator.anchored_fene_chain.create_fene_bead_spring_system(
             file_path=data_path / "initial_system.data",
             **kwargs
         )
