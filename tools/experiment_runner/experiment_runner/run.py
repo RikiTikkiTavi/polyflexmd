@@ -8,7 +8,6 @@ import experiment_runner.config
 import git
 
 import jinja2
-import system_creator
 
 
 def run_experiment(experiment_config_path: pathlib.Path):
@@ -80,6 +79,3 @@ def run_experiment(experiment_config_path: pathlib.Path):
         file.write(job_def)
 
     subprocess.run(f"sbatch {path_to_job_file}", check=True, shell=True)
-
-
-run_experiment(pathlib.Path("/home/egor/Projects/eea1-md-research/experiments/1-FENE-beadspring.toml"))
