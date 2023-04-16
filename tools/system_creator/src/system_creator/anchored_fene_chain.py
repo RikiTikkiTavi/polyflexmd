@@ -60,6 +60,19 @@ class Chain(typing.NamedTuple):
     angles: list[Angle]
 
 
+class Box(typing.NamedTuple):
+    x: tuple[float, float]
+    y: tuple[float, float]
+    z: tuple[float, float]
+
+    def to_table_entry(self) -> str:
+        lines = []
+        for d in ("x", "y", "z"):
+            lo, hi = getattr(self, d)
+            lines.append(f"{lo} {hi} {d}lo {d}hi")
+        return "\n".join(lines)
+
+
 def calculate_monomer_type(monomer_ix: int, n_monomers: int, free_monomer_type: int):
     # Fixed monomers
     if monomer_ix <= 1:
@@ -91,7 +104,7 @@ def apply_boundary_conditions(
     return Coordinates.from_numpy(r), Coordinates.from_numpy(ir)
 
 
-def write_header(chains: list[Chain], file: io.TextIO):
+def write_header(chains: list[Chain], box: Box, file: io.TextIO):
     n_atoms = sum(len(c.monomers) for c in chains)
     n_bonds = sum(len(c.bonds) for c in chains)
     n_angles = sum(len(c.angles) for c in chains)
@@ -111,9 +124,7 @@ def write_header(chains: list[Chain], file: io.TextIO):
         '0      dihedral types',
         '0      improper types',
         '',
-        '-100.000000 100.000000 xlo xhi',
-        '-100.000000 100.000000 ylo yhi',
-        '-100.000000 100.000000 zlo zhi',
+        box.to_table_entry(),
         '',
         'Masses',
         '1      1.000000',
@@ -146,6 +157,9 @@ def create_fene_bead_spring_system(
         file_path: pathlib.Path
 ):
     chains: list[Chain] = []
+
+    lo, hi = -box_length / 2, box_length / 2
+    box = Box(x=(lo, hi), y=(lo, hi), z=(lo, hi))
 
     for chain_ix in range(n_chains):
         chain_id = chain_ix + 1
@@ -200,18 +214,5 @@ def create_fene_bead_spring_system(
 
     print(f"Writing output to {file_path} ...")
     with open(file_path, "w+") as file:
-        write_header(chains, file)
+        write_header(chains=chains, box=box, file=file)
         write_body(chains, file)
-
-
-if __name__ == "__main__":
-    create_fene_bead_spring_system(
-        n_chains=20,
-        n_monomers=128,
-        monomer_type=2,
-        bond_type=1,
-        angle_type=1,
-        bond_length=0.97,
-        box_length=200,
-        file_path=pathlib.Path("/home/egor/Projects/bachelor-thesis/tools/system_creator/system_creator/test.data")
-    )
