@@ -27,12 +27,13 @@ class Coordinates(Generic[_T]):
 
 class Monomer(typing.NamedTuple):
     id: int
+    chain_id: int
     type: int
     r: Coordinates[float]
     ir: Coordinates[int]
 
     def to_table_entry(self) -> str:
-        return f"{self.id}  {self.type}  {self.r.to_table_entry()}  {self.ir.to_table_entry()}"
+        return f"{self.id}  {self.chain_id}  {self.type}  {self.r.to_table_entry()}  {self.ir.to_table_entry()}"
 
 
 class Bond(typing.NamedTuple):
@@ -127,6 +128,7 @@ def write_header(chains: list[Chain], box: Box, file: io.TextIO):
         box.to_table_entry(),
         '',
         'Masses',
+        '',
         '1      1.000000',
         '2      1.000000',
         '3      1.000000'
@@ -136,13 +138,13 @@ def write_header(chains: list[Chain], box: Box, file: io.TextIO):
 
 
 def write_body(chains: list[Chain], file: io.TextIO) -> None:
-    file.write("\nAtoms\n")
+    file.write("\nAtoms\n\n")
     file.writelines(m.to_table_entry() + "\n" for c in chains for m in c.monomers)
 
-    file.write("\nBonds\n")
+    file.write("\nBonds\n\n")
     file.writelines(b.to_table_entry() + "\n" for c in chains for b in c.bonds)
 
-    file.write("\nAngles\n")
+    file.write("\nAngles\n\n")
     file.writelines(a.to_table_entry() + "\n" for c in chains for a in c.angles)
 
 
@@ -182,6 +184,7 @@ def create_fene_bead_spring_system(
 
             current_monomer = Monomer(
                 id=monomer_id,
+                chain_id=chain_id,
                 type=current_monomer_type,
                 r=monomer_r,
                 ir=monomer_ir

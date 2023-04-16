@@ -12,8 +12,12 @@ import jinja2
 
 def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: bool):
     conf = experiment_runner.config.read_experiment_config(experiment_config_path)
+
+    repo_root_path = pathlib.Path(__file__).parent.resolve()
+
     model_name = conf.simulation_model_path.stem
     repo = git.Repo(search_parent_directories=True)
+
     commit_sha = repo.git.rev_parse(repo.head.commit.hexsha, short=8)
     experiment_path = conf.experiments_path / model_name / commit_sha
 
@@ -30,13 +34,20 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
     logs_path = experiment_path / "logs"
     logs_path.mkdir()
 
-    checkpoints_path = experiment_path / "checkpoints_path"
+    checkpoints_path = experiment_path / "checkpoints"
     checkpoints_path.mkdir()
 
-    # Copy simulation model into experiment dir
+    shutil.copy(
+        repo_root_path / conf.simulation_model_path,
+        experiment_path / conf.simulation_model_path.name
+    )
+
+    # Copy experiment config into experiment dir
     shutil.copy(experiment_config_path, experiment_path / experiment_config_path.name)
 
     experiment_path_container = pathlib.Path(f"/experiment/{model_name}/{commit_sha}")
+
+    logs_path_container = experiment_path_container / "logs"
 
     templates_path: pathlib.Path = pathlib.Path(
         f"{os.path.dirname(os.path.realpath(__file__))}/templates"
@@ -48,7 +59,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
         # noinspection PyDataclass
         kwargs = dataclasses.asdict(conf.system_config)
         kwargs.pop("name")
-        system_params = dict(**kwargs, file_path=data_path / "initial_system.data")
+        system_params = dict(**kwargs, file_path=experiment_path_container / "initial_system.data")
     else:
         raise Exception(f"System {conf.system_config.name} is not supported by system-creator.")
 
@@ -57,7 +68,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
         {
             "job_params": {
                 "name": f"{model_name}-{commit_sha}",
-                "logs_path": logs_path,
+                "logs_path": logs_path_container,
                 "account": conf.slurm_job_config.account,
                 "time": conf.slurm_job_config.max_exec_time,
                 "partition": conf.slurm_job_config.partition,
@@ -67,7 +78,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
             "experiment_params": {
                 "mount_path_host": experiment_path,
                 "mount_path_container": experiment_path_container,
-                "lammps_input_path_container": experiment_path_container / experiment_config_path.name,
+                "lammps_input_path_container": experiment_path_container / conf.simulation_model_path.name,
                 "system_creator_simg": conf.system_creator_simg
             },
             "system_params": system_params
@@ -76,7 +87,6 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
 
     path_to_job_file = experiment_path / "job_def.sh"
 
-    with open(path_to_job_file, "w") as file:
-        file.write(job_def)
+    path_to_job_file.write_text(job_def)
 
     subprocess.run(f"sbatch {path_to_job_file}", check=True, shell=True)

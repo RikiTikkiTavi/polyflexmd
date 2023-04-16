@@ -7,7 +7,7 @@ atom_style               angle
 special_bonds            fene
 boundary                 p p p
  
-read_data                "experiments/FENE_beadspring/data/FENE_initial_system.data"
+read_data                "/experiment/FENE-beadspring/data/initial_system.data"
  
 bond_style               fene
 bond_coeff               1 30.0 1.5 1.0 1.0    
@@ -38,12 +38,12 @@ timestep                 0.0025
 neighbor       0.3 bin
 neigh_modify   delay 1 every 1 check yes
 
-restart                  1000000  "experiments/FENE_beadspring/checkpoints/fene.restart"
+restart                  1000000  "/experiment/FENE-beadspring/checkpoints/fene.restart"
 
 # First let the polymers relax
 
-dump 1 all atom 10000 "experiments/FENE_beadspring/data/polymer_relax.vmd"
-dump 2 all custom 100000 "experiments/FENE_beadspring/data/polymer_relax.out" id type x y z ix iy iz
+dump 1 all atom 10000 "/experiment/FENE-beadspring/data/polymer_relax.vmd"
+dump 2 all custom 100000 "/experiment/FENE-beadspring/data/polymer_relax.out" id type x y z ix iy iz
 dump_modify 1 sort id
 dump_modify 2 sort id
 
@@ -54,8 +54,8 @@ run 10000000
 undump 1
 undump 2
 
-dump 1 all atom 100000 "experiments/FENE_beadspring/data/polymer.vmd"
-dump 2 all custom 10000 "experiments/FENE_beadspring/data/polymer.out" id type x y z ix iy iz
+dump 1 all atom 100000 "/experiment/FENE-beadspring/data/polymer.vmd"
+dump 2 all custom 10000 "/experiment/FENE-beadspring/data/polymer.out" id type x y z ix iy iz
 dump_modify 1 sort id
 dump_modify 2 sort id
 
