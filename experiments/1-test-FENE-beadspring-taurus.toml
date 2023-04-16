@@ -1,11 +1,11 @@
 simulation_model_path = "simulations/FENE-beadspring.lammps"
-experiments_path = "/home/egor/Projects/eea1-md-research/data"
-system_creator_simg = "/home/egor/Projects/eea1-md-research/tools/system_creator/system_creator.sif"
+experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/data/experiment_results"
+system_creator_simg = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/sifs/system_creator.sif"
 
 [system_config]
 name = "anchored-fene-chain"
-n_chains = 20
-n_monomers = 128
+n_chains = 3
+n_monomers = 28
 monomer_type = 2
 bond_type = 1
 angle_type = 1

@@ -10,18 +10,19 @@ import git
 import jinja2
 
 
-def run_experiment(experiment_config_path: pathlib.Path):
+def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: bool):
     conf = experiment_runner.config.read_experiment_config(experiment_config_path)
     model_name = conf.simulation_model_path.stem
     repo = git.Repo(search_parent_directories=True)
     commit_sha = repo.git.rev_parse(repo.head.commit.hexsha, short=8)
     experiment_path = conf.experiments_path / model_name / commit_sha
 
+    if clear_experiment_path:
+        if experiment_path.exists():
+            subprocess.run(f"rm -r {experiment_path}", shell=True)
+
     # Create experiment directory
     experiment_path.mkdir(parents=True, exist_ok=True)
-
-    # Clean experiment directory
-    subprocess.run(f"rm -r {experiment_path}/*", shell=True)
 
     data_path = experiment_path / "data"
     data_path.mkdir()
