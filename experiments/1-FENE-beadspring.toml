@@ -1,12 +1,20 @@
 simulation_model_path = "simulations/FENE-beadspring.lammps"
-experiments_path = "/home/egor/Projects/bachelor-thesis/data"
+experiments_path = "/home/egor/Projects/eea1-md-research/data"
+system_creator_simg = "/home/egor/Projects/eea1-md-research/tools/system_creator/system_creator.sif"
 
 [system_config]
 name = "anchored-fene-chain"
-n_chains=20
-n_monomers=128
-monomer_type=2
-bond_type=1
-angle_type=1
-bond_length=0.97
-box_length=200
+n_chains = 20
+n_monomers = 128
+monomer_type = 2
+bond_type = 1
+angle_type = 1
+bond_length = 0.97
+box_length = 200
+
+[slurm_job_config]
+account = "p_mdpolymer"
+max_exec_time = "24:00:00"
+partition = "julia"
+cpus_per_task = 56
+mem_per_cpu = 1000

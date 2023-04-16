@@ -39,6 +39,7 @@ class ExperimentConfig:
     experiments_path: pathlib.Path
     system_config: AnchoredFENEChainConfig
     slurm_job_config: SlurmJobConfig
+    system_creator_simg: pathlib.Path
 
 
 def read_experiment_config(config_file_path: pathlib.Path) -> ExperimentConfig:

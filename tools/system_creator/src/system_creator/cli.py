@@ -9,14 +9,14 @@ app = typer.Typer()
 
 @app.command(name="anchored-fene-chain")
 def create_fene_bead_spring_system(
-        file_path: pathlib.Path,
-        n_chains: int = typer.Option(...),
-        n_monomers: int = typer.Option(...),
-        monomer_type: int = typer.Option(...),
-        bond_type: int = typer.Option(...),
-        angle_type: int = typer.Option(...),
-        bond_length: float = typer.Option(...),
-        box_length: float = typer.Option(...),
+        file_path: pathlib.Path = typer.Option(..., "--file_path"),
+        n_chains: int = typer.Option(..., "--n_chains"),
+        n_monomers: int = typer.Option(..., "--n_monomers"),
+        monomer_type: int = typer.Option(..., "--monomer_type"),
+        bond_type: int = typer.Option(..., "--bond_type"),
+        angle_type: int = typer.Option(..., "--angle_type"),
+        bond_length: float = typer.Option(..., "--bond_length"),
+        box_length: float = typer.Option(..., "--box_length"),
 ):
     print(f"Creating system of {n_chains} FENE beadspring chains, each consisting of {n_monomers} monomers of "
           f"type {monomer_type} in the middle of the chain, with {angle_type} angle type, with {bond_length} bond "

@@ -12,6 +12,20 @@
 
 module load modenv/hiera GCC/9.3.0 iccifort/2020.1.217 OpenMPI/4.0.3
 
+
+singularity run --contain --no-home -B {{ experiment_params.mount_path_host }}:{{ experiment_params.mount_path_container }} {{experiment_params.system_creator_simg}}
+{%- for option_key, option_value in system_params.items() -%}
+    {% filter indent(width=1, first=True) -%}
+        {%- if option_value == "True" -%}
+        --{{ option_key }}
+        {%- elif option_value == "False" -%}
+        {%- else -%}
+        --{{ option_key }}="{{ option_value }}"
+        {%- endif -%}
+    {%- endfilter %}
+{%- endfor %}
+
+
 mpirun singularity exec \
   --contain \
   --no-home \
