@@ -36,8 +36,10 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
 
     if clear_experiment_path:
         if experiment_path.exists():
+            _logger.info(f"Clearing workdir {experiment_path} ...")
             subprocess.run(f"rm -r {experiment_path}", shell=True)
 
+    _logger.info(f"Creating directories ...")
     # Create experiment directory
     experiment_path.mkdir(parents=True, exist_ok=True)
 
@@ -72,7 +74,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
         # noinspection PyDataclass
         kwargs = dataclasses.asdict(conf.system_config)
         kwargs.pop("name")
-        system_params = dict(**kwargs, file_path=experiment_path_container / "initial_system.data")
+        system_params = dict(**kwargs, file_path=experiment_path_container / "data" / "initial_system.data")
     else:
         raise Exception(f"System {conf.system_config.name} is not supported by system-creator.")
 
@@ -81,7 +83,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
         {
             "job_params": {
                 "name": f"{model_name}-{commit_sha}",
-                "logs_path": logs_path_container,
+                "logs_path": logs_path,
                 "account": conf.slurm_job_config.account,
                 "time": conf.slurm_job_config.max_exec_time,
                 "partition": conf.slurm_job_config.partition,
@@ -92,7 +94,8 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
                 "mount_path_host": experiment_path,
                 "mount_path_container": experiment_path_container,
                 "lammps_input_path_container": experiment_path_container / conf.simulation_model_path.name,
-                "system_creator_simg": conf.system_creator_simg
+                "system_creator_simg": conf.system_creator_simg,
+                "logs_path": logs_path_container
             },
             "system_params": system_params
         }
