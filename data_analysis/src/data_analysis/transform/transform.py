@@ -44,34 +44,26 @@ def unfold_coordinates_df(
     return trajectory_df_unfolded
 
 
-def calculate_end_to_end(molecule_traj_step_df: pd.DataFrame, system_data: data_analysis.data.types.LammpsSystemData):
-    root_atom_data = molecule_traj_step_df \
-        .loc[molecule_traj_step_df["type"] == AtomGroup.ROOT.value] \
-        .sort_values("id") \
+def calculate_end_to_end(molecule_traj_step_df_unf: pd.DataFrame) -> pd.Series:
+    root_atom_data: pd.Series = molecule_traj_step_df_unf \
+        .loc[molecule_traj_step_df_unf["type"] == AtomGroup.ROOT.value] \
+        .sort_values("id", ascending=True) \
         .iloc[0]
 
-    leaf_atom_data = molecule_traj_step_df \
-        .loc[molecule_traj_step_df["type"] == AtomGroup.LEAF.value] \
+    leaf_atom_data: pd.Series = molecule_traj_step_df_unf \
+        .loc[molecule_traj_step_df_unf["type"] == AtomGroup.LEAF.value] \
         .sort_values("id", ascending=False) \
         .iloc[0]
 
-    root_coordinates_unfolded = np.zeros(3)
-    leaf_coordinates_unfolded = np.zeros(3)
+    dimensions = ['x', 'y', 'z']
 
-    for dim_i, dim_name in enumerate(('x', 'y', 'z')):
-        root_coordinates_unfolded[dim_i] = unfold_coordinate(
-            val=root_atom_data[dim_name],
-            i=root_atom_data[f"i{dim_name}"],
-            box_length=system_data.box.bounds[dim_i][1] - system_data.box.bounds[dim_i][0]
-        )
+    r_root = root_atom_data[dimensions].to_numpy()
+    r_leaf = leaf_atom_data[dimensions].to_numpy()
 
-        leaf_coordinates_unfolded[dim_i] = unfold_coordinate(
-            val=leaf_atom_data[dim_name],
-            i=leaf_atom_data[f"i{dim_name}"],
-            box_length=system_data.box.bounds[dim_i][1] - system_data.box.bounds[dim_i][0]
-        )
+    R_vec = r_leaf - r_root
+    R = np.linalg.norm(R_vec)
 
-    return np.linalg.norm(leaf_coordinates_unfolded - root_coordinates_unfolded)
+    return pd.Series(data=[*R_vec, R], index=["R_x", "R_y", "R_z", "R"])
 
 
 def join_raw_trajectory_df_with_system_data(
@@ -84,31 +76,43 @@ def join_raw_trajectory_df_with_system_data(
     )
 
 
-def calc_end_to_end_df(
-        trajectory_df: pd.DataFrame,
-        system_data: data_analysis.data.types.LammpsSystemData
-) -> pd.DataFrame:
-    return trajectory_df.groupby(["molecule-ID", "t"]).apply(
-        functools.partial(calculate_end_to_end, system_data=system_data)
-    ).rename("R")
+def calc_end_to_end_df(trajectory_df_unfolded: pd.DataFrame) -> pd.DataFrame:
+    return trajectory_df_unfolded.groupby(["molecule-ID", "t"]).parallel_apply(
+        calculate_end_to_end
+    )
 
 
-def calculate_ete_change_ens_avg(df_ete_t: pd.Series, df_ete_t_0: pd.Series) -> float:
-    return ((df_ete_t - df_ete_t_0) ** 2).mean()
+def calculate_ete_change_ens_avg(df_ete_t: pd.DataFrame, df_ete_t_0: pd.DataFrame) -> float:
+    R_vec_cols = ["R_x", "R_y", "R_z"]
+
+    df_ete_t_vec = df_ete_t[R_vec_cols].to_numpy()
+    df_ete_t_0_vec = df_ete_t_0[R_vec_cols].to_numpy()
+
+    return np.sum((df_ete_t_vec - df_ete_t_0_vec) ** 2, axis=1).mean()
 
 
-def calculate_ete_change_ens_avg_df(df_ete: pd.Series) -> pd.DataFrame:
+def calculate_ete_change_ens_avg_df(df_ete: pd.DataFrame) -> pd.DataFrame:
     t_min = df_ete.index.get_level_values("t").min()
-    ete_df_t_0 = df_ete.loc[:, t_min]
+    ete_df_t_0 = df_ete.loc[pd.IndexSlice[:, t_min], :]
 
     return df_ete \
         .groupby(level="t") \
-        .apply(functools.partial(calculate_ete_change_ens_avg, df_ete_t_0=ete_df_t_0)) \
-        .rename("<R(t)-R(0)>")
+        .apply(functools.partial(calculate_ete_change_ens_avg, df_ete_t_0=ete_df_t_0))
+
+
+def calculate_neigh_distance_avg(mol_traj_step_df_unf: pd.DataFrame) -> float:
+    dims = ['x', 'y', 'z']
+    mol_traj_step = mol_traj_step_df_unf[dims].to_numpy()
+    return np.sum((mol_traj_step[1:] - mol_traj_step[:-1]) ** 2, axis=1).mean()
 
 
 def calculate_neigh_distance_avg_df(trajectory_df_unfolded: pd.DataFrame) -> float:
     t_max = trajectory_df_unfolded["t"].max()
-    df_t_max = trajectory_df_unfolded.loc[trajectory_df_unfolded["t"] == t_max]
+    df_t_max: pd.DataFrame = trajectory_df_unfolded.loc[trajectory_df_unfolded["t"] == t_max]
 
-    return np.sum([(df_t_max[d].iloc[1:] - df_t_max[d].iloc[:-2]) ** 2 for d in ('x', 'y', 'z')], axis=1).mean()
+    l_avg_chains = []
+
+    for molecule_id, df_mol in df_t_max.groupby("molecule-ID"):
+        l_avg_chains.append(calculate_neigh_distance_avg(df_mol))
+
+    return np.mean(l_avg_chains)

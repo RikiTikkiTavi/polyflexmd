@@ -1,4 +1,5 @@
 import io
+import itertools
 import pathlib
 import typing
 import pandas as pd
@@ -78,3 +79,17 @@ def read_raw_trajectory_df(
         path=path,
         column_types=column_types
     ))
+
+
+def read_multiple_raw_trajectory_dfs(
+        paths: list[pathlib.Path],
+        column_types: dict = data_analysis.data.constants.RAW_TRAJECTORY_DF_COLUMN_TYPES
+):
+    return pd.concat(
+        itertools.chain.from_iterable(
+            data_analysis.data.read.read_lammps_custom_trajectory_file(
+                path=path,
+                column_types=column_types
+            ) for path in paths
+        )
+    )

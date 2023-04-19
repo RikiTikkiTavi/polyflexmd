@@ -539,6 +539,21 @@ files = [
 ]
 
 [[package]]
+name = "dill"
+version = "0.3.6"
+description = "serialize all of python"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "dill-0.3.6-py3-none-any.whl", hash = "sha256:a07ffd2351b8c678dfc4a856a3005f8067aea51d6ba6c700796a4d9e280f39f0"},
+    {file = "dill-0.3.6.tar.gz", hash = "sha256:e5db55f3687856d8fbdab002ed78544e1c4559a130302693d839dfe8f93f2373"},
+]
+
+[package.extras]
+graph = ["objgraph (>=1.7.2)"]
+
+[[package]]
 name = "emmet-core"
 version = "0.50.0"
 description = "Core Emmet Library"
@@ -1728,6 +1743,26 @@ files = [
     {file = "palettable-3.3.2-py2.py3-none-any.whl", hash = "sha256:a0f61839bf8a61943c187876e72326196628771a26e9dc220c7ae9e3705532a8"},
     {file = "palettable-3.3.2.tar.gz", hash = "sha256:6a867c425a2ff288eab4356bedec00de006dee36c99a6147c2e1b05de789ac9f"},
 ]
+
+[[package]]
+name = "pandarallel"
+version = "1.6.4"
+description = "An easy to use library to speed up computation (by parallelizing on multi CPUs) with pandas."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pandarallel-1.6.4.tar.gz", hash = "sha256:70091652485050241ffac37c3e94d21732697c63ee4613ae7bf85da076be41f2"},
+]
+
+[package.dependencies]
+dill = ">=0.3.1"
+pandas = ">=1"
+psutil = "*"
+
+[package.extras]
+dev = ["numpy", "pytest", "pytest-cov"]
+doc = ["mkdocs-material"]
 
 [[package]]
 name = "pandas"
@@ -3109,4 +3144,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9.5,<3.12"
-content-hash = "f12a9b88c09f70299139466fdd3d48cd1c804cbf7331a8fae6e054c1843589ab"
+content-hash = "78edd3ce5e9b7f2d1f72483fef3091fbe61d0bace5f2787380103a70ebf4ce61"
