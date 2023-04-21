@@ -1,6 +1,6 @@
 simulation_model_path = "simulations/FENE-beadspring.lammps"
 experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/data/experiment_results"
-system_creator_simg = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/sifs/system_creator-e15dbf54.sif"
+system_creator_simg = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/sifs/system_creator.sif"
 
 [system_config]
 name = "anchored-fene-chain"
