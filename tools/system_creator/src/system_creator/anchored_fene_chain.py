@@ -96,17 +96,33 @@ def calculate_monomer_real_position(bond_length: float, prev_position: typing.Op
     if prev_position is None:
         return np.array([0., 0., 0.])
     else:
-        rnd_vec = np.random.uniform(size=3)
-        unit_rnd_vec = rnd_vec / np.linalg.norm(rnd_vec)
-        rnd_vec_bond = unit_rnd_vec * bond_length
+        phi = np.random.uniform(low=0, high=2*np.pi)
+        theta = np.random.uniform(low=0, high=np.pi)
+        rnd_vec_bond = np.array([
+            np.sin(theta)*np.cos(phi),
+            np.sin(theta)*np.sin(phi),
+            np.cos(theta)
+        ])
         return prev_position.to_numpy() + rnd_vec_bond
 
 
 def apply_boundary_conditions(
         box_length: float, real_monomer_position: np.ndarray
 ) -> tuple[Coordinates[float], Coordinates[int]]:
-    ir = (real_monomer_position // box_length).astype(int)
+    ir = np.zeros(3)
+    dims = ["x", "y", "z"]
+    s = box_length / 2
+
+    for dim_i, dim_name in enumerate(dims):
+        if abs(real_monomer_position[dim_i]) < s:
+            ir[dim_i] = 0
+        elif real_monomer_position[dim_i] > 0:
+            ir[dim_i] = int(real_monomer_position[dim_i] // s)
+        elif real_monomer_position[dim_i] < 0:
+            ir[dim_i] = int(real_monomer_position[dim_i] // (-s))
+
     r = real_monomer_position - ir * box_length
+
     return Coordinates.from_numpy(r), Coordinates.from_numpy(ir)
 
 
