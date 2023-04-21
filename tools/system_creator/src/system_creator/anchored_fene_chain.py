@@ -109,7 +109,7 @@ def calculate_monomer_real_position(bond_length: float, prev_position: typing.Op
 def apply_boundary_conditions(
         box_length: float, real_monomer_position: np.ndarray
 ) -> tuple[Coordinates[float], Coordinates[int]]:
-    ir = np.zeros(3)
+    ir = np.zeros(3, dtype=int)
     dims = ["x", "y", "z"]
     s = box_length / 2
 
