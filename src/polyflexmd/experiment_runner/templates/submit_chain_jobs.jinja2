@@ -9,7 +9,7 @@ for (( i=0; i<arraylength; i++ )) ; do
   echo "Job ${job_nr}/${arraylength}: ${job_names[$i]}"
   if [ -n "${dependency}" ] ; then
       echo "Dependency: after job ${dependency}"
-      dependency="--dependency=afterany:${dependency}"
+      dependency="--dependency=afterok:${dependency}"
   fi
   job="sbatch ${dependency} ${job_names[$i]}"
   out=$(${job})

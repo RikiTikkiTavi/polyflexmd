@@ -115,7 +115,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
             "job": {
                 "name": f"{model_name}-report-{commit_sha}",
                 "logs_path": logs_path,
-                **dataclasses.asdict(conf.simulation_config.job)
+                **dataclasses.asdict(conf.report_config.job)
             },
             "venv_path": conf.report_config.venv_path,
             "input_notebook": repo_root_path / conf.report_config.notebook,

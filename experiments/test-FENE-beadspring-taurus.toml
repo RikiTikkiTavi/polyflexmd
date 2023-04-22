@@ -45,10 +45,3 @@ time = "5:00:00"
 partition = "romeo"
 cpus_per_task = 32
 mem_per_cpu = 1000
-
-[slurm_job_config]
-account = "p_mdpolymer"
-max_exec_time = "24:00:00"
-partition = "julia"
-cpus_per_task = 56
-mem_per_cpu = 1000
