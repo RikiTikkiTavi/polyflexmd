@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#SBATCH --job-name="{{ system_creator.job.name }}"
+#SBATCH --output="{{ system_creator.job.logs_path }}/slurm-%j.out"
+#SBATCH --error="{{ system_creator.job.logs_path }}/slurm-%j.out"
+#SBATCH --account="{{ system_creator.job.account }}"
+#SBATCH --time={{ system_creator.job.time }}
+#SBATCH --partition={{ system_creator.job.partition }}
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task={{ system_creator.job.cpus_per_task }}
+#SBATCH --mem-per-cpu={{ system_creator.job.mem_per_cpu }}
+
+module load modenv/hiera GCCcore/10.3.0 Python/3.9.5 GCC/10.3.0
+
+source {{ system_creator.venv_path }}/bin/activate
+
+python -m system_creator
+{%- for option_key, option_value in system_creator.system_params.items() -%}
+    {% filter indent(width=1, first=True) -%}
+        {%- if option_value == "True" -%}
+        --{{ option_key }}
+        {%- elif option_value == "False" -%}
+        {%- else -%}
+        --{{ option_key }}="{{ option_value }}"
+        {%- endif -%}
+    {%- endfilter %}
+{%- endfor %}

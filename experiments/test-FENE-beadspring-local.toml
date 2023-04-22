@@ -1,8 +1,19 @@
+[simulation_config]
 simulation_model_path = "simulations/FENE-beadspring.lammps"
-experiments_path = "/home/users/yparomau/PycharmProjects/eea1-md-bachelor-thesis/data"
-system_creator_simg = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/sifs/system_creator.sif"
+experiments_path = "/home/egor/Projects/polyflexmd/data"
 
-[system_config]
+[simulation_config.job]
+account = "p_mdpolymer"
+time = "24:00:00"
+partition = "julia"
+cpus_per_task = 56
+mem_per_cpu = 1000
+
+
+[system_creator_config]
+venv_path = "/home/egor/Projects/polyflexmd/.venv"
+
+[system_creator_config.system_config]
 name = "anchored-fene-chain"
 n_chains = 3
 n_monomers = 28
@@ -12,6 +23,28 @@ angle_type = 1
 bond_length = 0.97
 box_length = 200
 seed = 11
+
+[system_creator_config.job]
+account = "p_mdpolymer"
+time = "1:00:00"
+partition = "romeo"
+cpus_per_task = 2
+mem_per_cpu = 1000
+
+
+[report_config]
+venv_path = "/home/egor/Projects/polyflexmd/.venv"
+notebook = "notebooks/1-FENE-beadsring-ete.ipynb"
+kernel = "polyflexmd"
+
+[report_config.notebook_params]
+
+[report_config.job]
+account = "p_mdpolymer"
+time = "5:00:00"
+partition = "romeo"
+cpus_per_task = 32
+mem_per_cpu = 1000
 
 [slurm_job_config]
 account = "p_mdpolymer"

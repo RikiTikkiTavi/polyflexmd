@@ -1,0 +1,17 @@
+#!/bin/bash
+
+declare -a job_names=("{{ job_files | join('" "') }}")
+dependency=""
+arraylength=${#job_names[@]}
+
+for (( i=0; i<arraylength; i++ )) ; do
+  job_nr=$((i + 1))
+  echo "Job ${job_nr}/${arraylength}: ${job_names[$i]}"
+  if [ -n "${dependency}" ] ; then
+      echo "Dependency: after job ${dependency}"
+      dependency="--dependency=afterany:${dependency}"
+  fi
+  job="sbatch ${dependency} ${job_names[$i]}"
+  out=$(${job})
+  dependency=$(echo "${out}" | awk '{print $4}')
+done

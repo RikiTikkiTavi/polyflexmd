@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#SBATCH --job-name="{{ report.job.name }}"
+#SBATCH --output="{{ report.job.logs_path }}/slurm-%j.out"
+#SBATCH --error="{{ report.job.logs_path }}/slurm-%j.out"
+#SBATCH --account="{{ report.job.account }}"
+#SBATCH --time={{ report.job.time }}
+#SBATCH --partition={{ report.job.partition }}
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task={{ report.job.cpus_per_task }}
+#SBATCH --mem-per-cpu={{ report.job.mem_per_cpu }}
+
+module load modenv/hiera GCCcore/10.3.0 Python/3.9.5 GCC/10.3.0
+
+source {{ report.venv_path }}/bin/activate
+
+papermill {{ report.input_notebook }} {{ report.output_notebook }} --kernel {{ report.kernel }}
+{%- for option_key, option_value in report.notebook_params.items() -%}
+    {% filter indent(width=1, first=True) -%}
+        -p {{ option_key }} "{{ option_value }}"
+    {%- endfilter %}
+{%- endfor %}
+
+nbconvert --to=HTML --output="{{ report.report_name }}" --output-dir="{{ report.report_dir }}" "{{ report.output_notebook }}"
