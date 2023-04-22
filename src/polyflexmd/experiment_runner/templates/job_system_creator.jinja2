@@ -14,7 +14,7 @@ module load modenv/hiera GCCcore/10.3.0 Python/3.9.5 GCC/10.3.0
 
 source {{ system_creator.venv_path }}/bin/activate
 
-python -m system_creator
+python -m polyflexmd.system_creator
 {%- for option_key, option_value in system_creator.system_params.items() -%}
     {% filter indent(width=1, first=True) -%}
         {%- if option_value == "True" -%}
