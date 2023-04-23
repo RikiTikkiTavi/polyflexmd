@@ -119,8 +119,8 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
             },
             "venv_path": conf.report_config.venv_path,
             "input_notebook": repo_root_path / conf.report_config.notebook,
-            "output_notebook": experiment_path / conf.report_config.notebook,
-            "report_name": conf.report_config.notebook.name,
+            "output_notebook": experiment_path / conf.report_config.notebook.name,
+            "report_name": conf.report_config.notebook.stem,
             "report_dir": experiment_path,
             "kernel": conf.report_config.kernel,
             "notebook_params": {

@@ -21,4 +21,4 @@ papermill {{ report.input_notebook }} {{ report.output_notebook }} --kernel {{ r
     {%- endfilter %}
 {%- endfor %}
 
-nbconvert --to=HTML --output="{{ report.report_name }}" --output-dir="{{ report.report_dir }}" "{{ report.output_notebook }}"
+jupyter nbconvert --to=HTML --output="{{ report.report_name }}" --output-dir="{{ report.report_dir }}" "{{ report.output_notebook }}"
