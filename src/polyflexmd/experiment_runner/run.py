@@ -28,7 +28,10 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
     repo = git.Repo(search_parent_directories=True)
 
     commit_sha = repo.git.rev_parse(repo.head.commit.hexsha, short=8)
-    experiment_path = conf.simulation_config.experiments_path / model_name / commit_sha
+
+    experiment_name = experiment_config_path.stem
+
+    experiment_path = conf.simulation_config.experiments_path / model_name / experiment_name / commit_sha
 
     _logger.info(
         f"Deploying experiment: simulation={model_name} of VERSION={commit_sha} into experiment_path={experiment_path} ..."

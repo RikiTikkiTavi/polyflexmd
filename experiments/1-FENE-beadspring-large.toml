@@ -1,10 +1,22 @@
+[simulation_config]
 simulation_model_path = "simulations/FENE-beadspring.lammps"
 experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/data/experiment_results"
-system_creator_simg = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/sifs/system_creator.sif"
 
-[system_config]
+[simulation_config.job]
+account = "p_mdpolymer"
+time = "96:00:00"
+partition = "romeo"
+ntasks = 2
+cpus_per_task = 128
+mem_per_cpu = 1000
+
+
+[system_creator_config]
+venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
+
+[system_creator_config.system_config]
 name = "anchored-fene-chain"
-n_chains = 220
+n_chains = 120
 n_monomers = 128
 monomer_type = 2
 bond_type = 1
@@ -13,9 +25,26 @@ bond_length = 0.97
 box_length = 200
 seed = 11
 
-[slurm_job_config]
+[system_creator_config.job]
 account = "p_mdpolymer"
-max_exec_time = "48:00:00"
-partition = "julia"
-cpus_per_task = 252
+time = "1:00:00"
+partition = "romeo"
+ntasks = 1
+cpus_per_task = 2
+mem_per_cpu = 1000
+
+
+[report_config]
+venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
+notebook = "notebooks/1-FENE-beadsring-ete.ipynb"
+kernel = "polyflexmd"
+
+[report_config.notebook_params]
+
+[report_config.job]
+account = "p_mdpolymer"
+time = "5:00:00"
+partition = "romeo"
+ntasks = 1
+cpus_per_task = 32
 mem_per_cpu = 1000

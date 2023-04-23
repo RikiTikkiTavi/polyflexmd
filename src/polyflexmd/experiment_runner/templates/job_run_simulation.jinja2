@@ -6,16 +6,17 @@
 #SBATCH --account="{{ simulation.job.account }}"
 #SBATCH --time={{ simulation.job.time }}
 #SBATCH --partition={{ simulation.job.partition }}
-#SBATCH --ntasks=1
+#SBATCH --ntasks={{ simulation.job.ntasks }}
 #SBATCH --cpus-per-task={{ simulation.job.cpus_per_task }}
 #SBATCH --mem-per-cpu={{ simulation.job.mem_per_cpu }}
 
-module load modenv/hiera GCC/9.3.0 iccifort/2020.1.217 OpenMPI/4.0.3
+module purge
+module load modenv/hiera GCC/11.3.0 OpenMPI/4.1.4
 
-singularity exec \
+mpirun -np {{ simulation.job.ntasks }} singularity exec \
   --contain \
   --no-home \
   -B {{ simulation.mount_path_host }}:{{ simulation.mount_path_container }} \
   --env OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK \
   docker://lammps/lammps:stable_29Sep2021_ubuntu20.04_openmpi_py3 \
-  lmp_serial -in {{ simulation.lammps_input_path_container }} -log {{ simulation.logs_path }}/log.txt
+  lmp_mpi -in {{ simulation.lammps_input_path_container }} -log {{ simulation.logs_path }}/log.txt

@@ -102,7 +102,7 @@ def calculate_monomer_real_position(bond_length: float, prev_position: typing.Op
             np.sin(theta)*np.cos(phi),
             np.sin(theta)*np.sin(phi),
             np.cos(theta)
-        ])
+        ])*bond_length
         return prev_position.to_numpy() + rnd_vec_bond
 
 
