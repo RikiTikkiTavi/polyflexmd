@@ -1,6 +1,6 @@
 #FENE beadspring model
 
-processors 2 2 2
+# processors 2 2 2
 
 units                    lj
 atom_style               angle
