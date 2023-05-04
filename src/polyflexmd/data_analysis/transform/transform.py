@@ -116,3 +116,14 @@ def calculate_neigh_distance_avg_df(trajectory_df_unfolded: pd.DataFrame) -> flo
         l_avg_chains.append(calculate_neigh_distance_avg(df_mol))
 
     return np.mean(l_avg_chains)
+
+
+def calculate_contour_length(mol_traj_step_df_unf: pd.DataFrame) -> float:
+    dims = ['x', 'y', 'z']
+    mol_traj_step = mol_traj_step_df_unf[dims].to_numpy()
+    # noinspection PyTypeChecker
+    return np.sum(np.sqrt(np.sum((mol_traj_step[1:] - mol_traj_step[:-1]) ** 2, axis=1)))
+
+
+def calculate_contour_length_df(trajectory_df_unfolded: pd.DataFrame) -> pd.DataFrame:
+    return trajectory_df_unfolded.groupby(["molecule-ID", "t"]).apply(calculate_contour_length)
