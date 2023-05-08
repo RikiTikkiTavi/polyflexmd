@@ -13,10 +13,12 @@
 module purge
 module load modenv/hiera GCC/11.3.0 OpenMPI/4.1.4
 
-mpirun -np {{ simulation.job.ntasks }} singularity exec \
+singularity exec \
   --contain \
   --no-home \
   -B {{ simulation.mount_path_host }}:{{ simulation.mount_path_container }} \
   --env OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK \
   docker://lammps/lammps:stable_29Sep2021_ubuntu20.04_openmpi_py3 \
-  lmp_mpi -in {{ simulation.lammps_input_path_container }} -log {{ simulation.logs_path }}/log.txt
+  mpirun -np {{ simulation.job.ntasks }} lmp_mpi \
+    -in {{ simulation.lammps_input_path_container }} \
+    -log {{ simulation.logs_path }}/log.txt

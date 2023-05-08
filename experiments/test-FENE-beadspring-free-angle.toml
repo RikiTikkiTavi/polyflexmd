@@ -1,13 +1,13 @@
 [simulation_config]
 simulation_model_path = "simulations/FENE-beadspring-free-angle.lammps"
-experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/data/experiment_results"
+experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/.dev/test-results"
 
 [simulation_config.job]
 account = "p_mdpolymer"
-time = "64:00:00"
+time = "2:00:00"
 partition = "romeo"
-ntasks = 12
-cpus_per_task = 32
+ntasks = 1
+cpus_per_task = 64
 mem_per_cpu = 1000
 
 
@@ -16,7 +16,7 @@ venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
 
 [system_creator_config.system_config]
 name = "anchored-fene-chain"
-n_chains = 360
+n_chains = 10
 n_monomers = 128
 monomer_type = 2
 bond_type = 1
