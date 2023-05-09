@@ -55,7 +55,7 @@ dump dump_${i} all custom 100000 ${experiment_path}/data/polymer_relax-${i}.out 
 dump_modify dump_vmd_${i} sort id
 dump_modify dump_${i} sort id
 
-run 100000
+run 3000000
 
 
 # Now collect data
@@ -68,7 +68,7 @@ dump dump_${i} all custom 10000 ${experiment_path}/data/polymer-${i}.out id type
 dump_modify dump_vmd_${i} sort id
 dump_modify dump_${i} sort id
 
-run 10000
+run 5000000
 
 next kappa
 next i
