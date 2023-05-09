@@ -36,19 +36,3 @@ partition = "romeo"
 ntasks = 1
 cpus_per_task = 4
 mem_per_cpu = 1000
-
-
-[report_config]
-venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
-notebook = "notebooks/1-FENE-beadsring-ete.ipynb"
-kernel = "polyflexmd"
-
-[report_config.notebook_params]
-
-[report_config.job]
-account = "p_mdpolymer"
-time = "5:00:00"
-partition = "romeo"
-ntasks = 1
-cpus_per_task = 32
-mem_per_cpu = 1000
