@@ -67,10 +67,6 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
         conf, experiment_path / f"{experiment_config_path.stem}-rendered{experiment_config_path.suffix}"
     )
 
-    experiment_path_container = pathlib.Path(f"/experiment/{model_name}")
-
-    logs_path_container = experiment_path_container / "logs"
-
     templates_path: pathlib.Path = pathlib.Path(
         f"{os.path.dirname(os.path.realpath(__file__))}/templates"
     )
@@ -98,7 +94,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
             simulation_variables[f"n_{variable_name}s"] = len(variable_value)
         else:
             simulation_variables[variable_name] = variable_value
-    simulation_variables["experiment_path"] = experiment_path_container
+    simulation_variables["experiment_path"] = experiment_path
 
     job_system_creator = jinja_env.get_template("job_system_creator.jinja2").render({
         "system_creator": {
@@ -120,10 +116,8 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
                 **dataclasses.asdict(conf.simulation_config.job)
             },
             "variables": simulation_variables,
-            "mount_path_host": experiment_path,
-            "mount_path_container": experiment_path_container,
-            "logs_path": logs_path_container,
-            "lammps_input_path_container": experiment_path_container / conf.simulation_config.simulation_model_path.name
+            "logs_path": logs_path,
+            "lammps_input_path": experiment_path / conf.simulation_config.simulation_model_path.name
         }
     })
 
