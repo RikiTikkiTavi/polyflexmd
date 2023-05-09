@@ -11,14 +11,13 @@
 #SBATCH --mem-per-cpu={{ simulation.job.mem_per_cpu }}
 
 module purge
-module load modenv/hiera GCC/11.3.0 OpenMPI/4.1.4
+module load modenv/hiera GCC/9.3.0 OpenMPI/4.0.3
 
-singularity exec \
-  --contain \
-  --no-home \
+srun --mpi=pmix singularity exec \
   -B {{ simulation.mount_path_host }}:{{ simulation.mount_path_container }} \
   --env OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK \
   docker://lammps/lammps:stable_29Sep2021_ubuntu20.04_openmpi_py3 \
-  mpirun -np {{ simulation.job.ntasks }} lmp_mpi \
+  lmp_mpi \
     -in {{ simulation.lammps_input_path_container }} \
-    -log {{ simulation.logs_path }}/log.txt
+    -log {{ simulation.logs_path }}/log.txt {% if not simulation.variables.items().empty %}\{% endif %}{% for var_name, var_value in simulation.variables.items() %}
+    -var {{ var_name }} {{ var_value }} {% if not loop.last %}\{% endif %}{% endfor %}

@@ -1,0 +1,38 @@
+[simulation_config]
+simulation_model_path = "simulations/FENE-beadspring-vary-l_K.lammps"
+experiments_path = "/home/users/yparomau/PycharmProjects/polyflexmd/data"
+
+[simulation_config.variables]
+kappa = [1.0, 4.0, 7.0, 10.0, 13.0, 20.0, 30.0, 40.0, 50.0]
+
+
+[simulation_config.job]
+account = "p_mdpolymer"
+time = "64:00:00"
+partition = "romeo"
+ntasks = 12
+cpus_per_task = 32
+mem_per_cpu = 1000
+
+
+[system_creator_config]
+venv_path = "/home/users/yparomau/PycharmProjects/polyflexmd/.venv"
+
+[system_creator_config.system_config]
+name = "anchored-fene-chain"
+n_chains = 200
+n_monomers = 128
+monomer_type = 2
+bond_type = 1
+angle_type = 1
+bond_length = 0.97
+box_length = 200
+seed = 77
+
+[system_creator_config.job]
+account = "p_mdpolymer"
+time = "1:00:00"
+partition = "romeo"
+ntasks = 1
+cpus_per_task = 4
+mem_per_cpu = 1000

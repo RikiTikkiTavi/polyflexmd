@@ -63,6 +63,10 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
     # Copy experiment config into experiment dir
     shutil.copy(experiment_config_path, experiment_path / experiment_config_path.name)
 
+    polyflexmd.experiment_runner.config.write_experiment_config(
+        conf, experiment_path / f"{experiment_config_path.stem}-rendered{experiment_config_path.suffix}"
+    )
+
     experiment_path_container = pathlib.Path(f"/experiment/{model_name}")
 
     logs_path_container = experiment_path_container / "logs"
@@ -72,7 +76,6 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
     )
 
     # Process system params
-
     if conf.system_creator_config.system_config.name == "anchored-fene-chain":
         # noinspection PyDataclass
         kwargs = dataclasses.asdict(conf.system_creator_config.system_config)
@@ -87,25 +90,36 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
         comment_end_string='=}',
     )
 
+    # Process simulation variables
+    simulation_variables = dict()
+    for variable_name, variable_value in conf.simulation_config.variables.items():
+        if type(variable_value) is list:
+            simulation_variables[variable_name] = " ".join(str(v) for v in variable_value)
+            simulation_variables[f"n_{variable_name}s"] = len(variable_value)
+        else:
+            simulation_variables[variable_name] = variable_value
+    simulation_variables["experiment_path"] = experiment_path_container
+
     job_system_creator = jinja_env.get_template("job_system_creator.jinja2").render({
         "system_creator": {
             "job": {
-                "name": f"{model_name}-create_system-{commit_sha}",
+                "name": f"polyflexmd-{model_name}-create_system-{commit_sha}",
                 "logs_path": logs_path,
                 **dataclasses.asdict(conf.system_creator_config.job)
             },
             "system_params": system_params,
-            "venv_path": conf.report_config.venv_path
+            "venv_path": conf.system_creator_config.venv_path
         }
     })
 
     job_simulation = jinja_env.get_template("job_run_simulation.jinja2").render({
         "simulation": {
             "job": {
-                "name": f"{model_name}-{commit_sha}",
+                "name": f"polyflexmd-{model_name}-{commit_sha}",
                 "logs_path": logs_path,
                 **dataclasses.asdict(conf.simulation_config.job)
             },
+            "variables": simulation_variables,
             "mount_path_host": experiment_path,
             "mount_path_container": experiment_path_container,
             "logs_path": logs_path_container,
@@ -113,28 +127,33 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
         }
     })
 
-    job_report = jinja_env.get_template("job_generate_report.jinja2").render({
-        "report": {
-            "job": {
-                "name": f"{model_name}-report-{commit_sha}",
-                "logs_path": logs_path,
-                **dataclasses.asdict(conf.report_config.job)
-            },
-            "venv_path": conf.report_config.venv_path,
-            "input_notebook": repo_root_path / conf.report_config.notebook,
-            "output_notebook": experiment_path / conf.report_config.notebook.name,
-            "report_name": conf.report_config.notebook.stem,
-            "report_dir": experiment_path,
-            "kernel": conf.report_config.kernel,
-            "notebook_params": {
-                "PATH_EXPERIMENT": experiment_path,
-                **conf.report_config.notebook_params
-            }
-        }
-    })
+    job_file_names = ["job_system_creator.sh", "job_run_simulation.sh"]
+    job_defs = [job_system_creator, job_simulation]
 
-    job_file_names = ["job_system_creator.sh", "job_run_simulation.sh", "job_generate_report.sh"]
-    for job_file_name, job_def in zip(job_file_names, [job_system_creator, job_simulation, job_report]):
+    if conf.report_config is not None:
+        job_report = jinja_env.get_template("job_generate_report.jinja2").render({
+            "report": {
+                "job": {
+                    "name": f"polyflexmd-{model_name}-report-{commit_sha}",
+                    "logs_path": logs_path,
+                    **dataclasses.asdict(conf.report_config.job)
+                },
+                "venv_path": conf.report_config.venv_path,
+                "input_notebook": repo_root_path / conf.report_config.notebook,
+                "output_notebook": experiment_path / conf.report_config.notebook.name,
+                "report_name": conf.report_config.notebook.stem,
+                "report_dir": experiment_path,
+                "kernel": conf.report_config.kernel,
+                "notebook_params": {
+                    "PATH_EXPERIMENT": experiment_path,
+                    **conf.report_config.notebook_params
+                }
+            }
+        })
+        job_file_names.append("job_generate_report.sh")
+        job_defs.append(job_report)
+
+    for job_file_name, job_def in zip(job_file_names, job_defs):
         path_to_job_file = experiment_path / job_file_name
         path_to_job_file.write_text(job_def)
 

@@ -10,6 +10,7 @@ import pydantic.json
 import tomlkit
 import subprocess
 import git
+import tomlkit.items
 
 
 @pydantic.dataclasses.dataclass
@@ -47,6 +48,7 @@ class SimulationConfig:
     job: SlurmJobConfig
     simulation_model_path: pathlib.Path
     experiments_path: pathlib.Path
+    variables: typing.Optional[dict[str, Any]] = pydantic.Field(default_factory=dict)
 
 
 @pydantic.dataclasses.dataclass
@@ -62,7 +64,7 @@ class ReportConfig:
 class ExperimentConfig:
     simulation_config: SimulationConfig
     system_creator_config: SystemCreatorConfig
-    report_config: ReportConfig
+    report_config: typing.Optional[ReportConfig] = None
 
 
 def read_experiment_config(config_file_path: pathlib.Path) -> ExperimentConfig:
@@ -72,7 +74,7 @@ def read_experiment_config(config_file_path: pathlib.Path) -> ExperimentConfig:
     :return: config
     """
     with open(config_file_path) as conf_file:
-        conf = tomlkit.loads(config_file_path.read_text()).value
+        conf = tomlkit.loads(config_file_path.read_text()).unwrap()
         return ExperimentConfig(**conf)
 
 
@@ -87,7 +89,8 @@ def write_experiment_config(config: ExperimentConfig, output_path: pathlib.Path,
         toml_config.add(tomlkit.comment(f"Datetime: {datetime.today()}"))
 
     for section_name, section_content in json.loads(json.dumps(config, default=pydantic.json.pydantic_encoder)).items():
-        toml_config.append(section_name, section_content)
+        if section_content is not None:
+            toml_config.append(section_name, section_content)
 
     with open(output_path, "w") as file:
         tomlkit.dump(toml_config, file)

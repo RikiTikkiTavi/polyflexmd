@@ -56,7 +56,7 @@ def plot_cube(bounds: np.ndarray, ax: typing.Optional[plt.Axes] = None):
 def plot_initial_system(
         df_trajectory_unfolded: pd.DataFrame,
         system: types.LammpsSystemData,
-        n_molecules: int,
+        molecules: typing.Union[int, list[int]],
         plot_box: bool = False
 ) -> tuple[plt.Figure, plt.Axes]:
     fig: plt.Figure = plt.figure(figsize=(10, 10))
@@ -66,11 +66,14 @@ def plot_initial_system(
     # for i in range(n_molecules):
     #    axs.append(fig.add_subplot(n_molecules, 1, i))
 
-    molecules_sample: np.ndarray = np.random.choice(
-        a=df_trajectory_unfolded["molecule-ID"].unique(),
-        size=n_molecules,
-        replace=False
-    )
+    molecules_sample = np.array(molecules)
+
+    if type(molecules) is int:
+        molecules_sample: np.ndarray = np.random.choice(
+            a=df_trajectory_unfolded["molecule-ID"].unique(),
+            size=molecules,
+            replace=False
+        )
 
     initial_state_sample: pd.DataFrame = df_trajectory_unfolded.loc[
         (df_trajectory_unfolded["t"] == 0) &
@@ -80,12 +83,14 @@ def plot_initial_system(
     if plot_box:
         plot_cube(system.box.bounds, ax)
 
-    colors = list(islice(matplotlib.colors.TABLEAU_COLORS, n_molecules))
+    colors = list(islice(matplotlib.colors.TABLEAU_COLORS, len(molecules)))
 
     for color, (mol_id, df_mol) in zip(colors, initial_state_sample.groupby("molecule-ID")):
-        ax.scatter(df_mol["x"].iloc[0], df_mol["y"].iloc[0], df_mol["z"].iloc[0], s=100, color=color, edgecolors="red", linewidth=6)
+        ax.scatter(df_mol["x"].iloc[0], df_mol["y"].iloc[0], df_mol["z"].iloc[0], s=100, color=color, edgecolors="red",
+                   linewidth=6)
         ax.scatter(df_mol["x"], df_mol["y"], df_mol["z"], s=100, ec="w", label=f"molecule-ID={mol_id}")
-        ax.scatter(df_mol["x"].iloc[-1], df_mol["y"].iloc[-1], df_mol["z"].iloc[-1], s=100, color=color, edgecolors="lime",
+        ax.scatter(df_mol["x"].iloc[-1], df_mol["y"].iloc[-1], df_mol["z"].iloc[-1], s=100, color=color,
+                   edgecolors="lime",
                    linewidth=6)
         ax.plot(
             df_mol["x"],
@@ -97,3 +102,22 @@ def plot_initial_system(
     ax.legend()
 
     return fig, ax
+
+
+def create_trajectory_animation(
+        df_trajectory_unfolded: pd.DataFrame,
+        system: types.LammpsSystemData,
+        molecules: typing.Union[int, list[int]],
+        plot_box: bool = False
+):
+    molecules_sample = np.array(molecules)
+
+    if type(molecules) is int:
+        molecules_sample: np.ndarray = np.random.choice(
+            a=df_trajectory_unfolded["molecule-ID"].unique(),
+            size=molecules,
+            replace=False
+        )
+
+
+
