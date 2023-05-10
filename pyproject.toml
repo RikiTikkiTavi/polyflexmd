@@ -27,6 +27,7 @@ nbconvert = "^7.3.1"
 papermill = "^2.4.0"
 sympy = "^1.11.1"
 pandoc = "^2.3"
+dask = {extras = ["complete"], version = "^2023.4.1"}
 
 [build-system]
 requires = ["poetry-core"]
