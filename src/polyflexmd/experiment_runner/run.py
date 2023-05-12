@@ -140,6 +140,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
                 "kernel": conf.report_config.kernel,
                 "notebook_params": {
                     "PATH_EXPERIMENT": experiment_path,
+                    "NAME_EC": experiment_config_path.name,
                     **conf.report_config.notebook_params
                 }
             }

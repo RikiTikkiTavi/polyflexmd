@@ -7,8 +7,8 @@
 #SBATCH --time=8:00:00
 #SBATCH --partition=romeo
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=32
-#SBATCH --mem-per-cpu=5000
+#SBATCH --cpus-per-task=64
+#SBATCH --mem-per-cpu=7000
 
 module load modenv/hiera GCCcore/10.3.0 Python/3.9.5 GCC/10.3.0
 

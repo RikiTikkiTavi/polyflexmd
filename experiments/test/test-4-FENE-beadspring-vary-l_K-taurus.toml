@@ -4,14 +4,15 @@ experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/.dev/test-result
 
 [simulation_config.variables]
 kappa = [1.0, 4.0, 7.0, 10.0, 13.0, 20.0, 30.0, 40.0, 50.0]
-
+n_relax_steps = 100000
+n_equilibrium_steps = 100000
 
 [simulation_config.job]
 account = "p_mdpolymer"
 time = "1:00:00"
 partition = "romeo"
-ntasks = 4
-cpus_per_task = 32
+ntasks = 3
+cpus_per_task = 40
 mem_per_cpu = 1000
 
 
@@ -36,3 +37,18 @@ partition = "romeo"
 ntasks = 1
 cpus_per_task = 4
 mem_per_cpu = 1000
+
+[report_config]
+venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
+notebook = "notebooks/3-FENE-vary-l_K.ipynb"
+kernel = "polyflexmd"
+
+[report_config.notebook_params]
+
+[report_config.job]
+account = "p_mdpolymer"
+time = "1:00:00"
+partition = "romeo"
+ntasks = 1
+cpus_per_task = 32
+mem_per_cpu = 7000
