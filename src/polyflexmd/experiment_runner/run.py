@@ -117,7 +117,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
             },
             "variables": simulation_variables,
             "logs_path": logs_path,
-            "lammps_input_path": experiment_path / conf.simulation_config.simulation_model_path.name
+            "lammps_input_path": experiment_path / conf.simulation_config.simulation_model_path.name,
         }
     })
 

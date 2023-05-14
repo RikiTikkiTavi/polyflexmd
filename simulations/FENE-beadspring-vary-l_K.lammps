@@ -1,13 +1,11 @@
 #FENE beadspring model with varying kappa in angle potential
-# The following variables are expected to be set via `-var`:
-# variable experiment_path equal /experiment/...
-# variable kappa index 10 20 20 ...
 
-# processors 2 2 2
 
-variable i loop ${n_kappas}
+variable i uloop ${kappa_n_values}
 
     label SIMULATION_START
+
+    variable kappa equal ${kappa_start}+${kappa_delta}*(${i}-1)
 
     units                    lj
     atom_style               angle
@@ -73,7 +71,6 @@ variable i loop ${n_kappas}
 
     clear
 
-    next kappa
     next i
 
 jump SELF SIMULATION_START

@@ -31,6 +31,8 @@ class SlurmJobConfig:
     account: str
     time: str
     partition: str
+    nodes: int
+    tasks_per_node: int
     ntasks: int
     cpus_per_task: int
     mem_per_cpu: int

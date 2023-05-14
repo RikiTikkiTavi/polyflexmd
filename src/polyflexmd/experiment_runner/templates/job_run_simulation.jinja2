@@ -6,6 +6,8 @@
 #SBATCH --account="{{ simulation.job.account }}"
 #SBATCH --time={{ simulation.job.time }}
 #SBATCH --partition={{ simulation.job.partition }}
+#SBATCH --nodes={{ simulation.job.nodes }}
+#SBATCH --tasks-per-node={{ simulation.job.tasks_per_node }}
 #SBATCH --ntasks={{ simulation.job.ntasks }}
 #SBATCH --cpus-per-task={{ simulation.job.cpus_per_task }}
 #SBATCH --mem-per-cpu={{ simulation.job.mem_per_cpu }}
@@ -15,7 +17,8 @@ module load modenv/hiera GCC/9.3.0 OpenMPI/4.0.3 LAMMPS/3Mar2020-Python-3.8.2-ko
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
-srun lmp \
+srun --cpu_bind=cores --distribution=block:block lmp \
+  -partition {{ simulation.n_partitions }}x{{ simulation.n_tasks_per_partition }} \
   -in {{ simulation.lammps_input_path }} \
   -log {{ simulation.logs_path }}/log.txt {% if not simulation.variables.items().empty %}\{% endif %}{% for var_name, var_value in simulation.variables.items() %}
   -var {{ var_name }} {{ var_value }} {% if not loop.last %}\{% endif %}{% endfor %}
