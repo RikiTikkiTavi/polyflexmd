@@ -175,3 +175,13 @@ def calculate_contour_length(mol_traj_step_df_unf: pd.DataFrame) -> float:
 
 def calculate_contour_length_df(trajectory_df_unfolded: pd.DataFrame) -> pd.DataFrame:
     return trajectory_df_unfolded.groupby(["molecule-ID", "t"]).apply(calculate_contour_length)
+
+
+def calculate_ens_avg_df_ete_change_kappas(df_ete_kappas: pd.DataFrame) -> pd.DataFrame:
+    dfs_ete_change_kappas = []
+    for kappa, df_ete_kappa in df_ete_kappas.groupby("kappa"):
+        print(df_ete_kappa.droplevel("kappa"))
+        df_ete_change_kappa = pd.DataFrame(calculate_ete_change_ens_avg_df(df_ete_kappa.droplevel("kappa")), columns=["dR^2"])
+        df_ete_change_kappa["kappa"] = kappa
+        dfs_ete_change_kappas.append(df_ete_change_kappa)
+    return pd.concat(dfs_ete_change_kappas)
