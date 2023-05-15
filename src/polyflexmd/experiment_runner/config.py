@@ -50,6 +50,8 @@ class SimulationConfig:
     job: SlurmJobConfig
     simulation_model_path: pathlib.Path
     experiments_path: pathlib.Path
+    n_partitions: int
+    n_tasks_per_partition: int
     variables: typing.Optional[dict[str, Any]] = pydantic.Field(default_factory=dict)
 
 

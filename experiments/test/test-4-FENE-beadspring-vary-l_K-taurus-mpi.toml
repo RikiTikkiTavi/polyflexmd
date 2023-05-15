@@ -1,6 +1,8 @@
 [simulation_config]
 simulation_model_path = "simulations/FENE-beadspring-vary-l_K.lammps"
 experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/.dev/test-results"
+n_partitions = 2
+n_tasks_per_partition = 128
 
 [simulation_config.variables]
 kappa_start = 1.0

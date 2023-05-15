@@ -5,8 +5,6 @@ variable i uloop ${kappa_n_values}
 
     label SIMULATION_START
 
-    variable kappa equal ${kappa_start}+${kappa_delta}*(${i}-1)
-
     units                    lj
     atom_style               angle
     special_bonds            fene
@@ -21,6 +19,7 @@ variable i uloop ${kappa_n_values}
     log ${experiment_path}/logs/log.${i}.txt
 
     # Configure angle potential
+    variable kappa equal ${kappa_start}+${kappa_delta}*(${i}-1)
     angle_style cosine
     angle_coeff 1 ${kappa}
 

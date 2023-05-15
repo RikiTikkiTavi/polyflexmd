@@ -106,16 +106,54 @@ def calculate_neigh_distance_avg(mol_traj_step_df_unf: pd.DataFrame) -> float:
     return np.sum((mol_traj_step[1:] - mol_traj_step[:-1]) ** 2, axis=1).mean()
 
 
-def calculate_neigh_distance_avg_df(trajectory_df_unfolded: pd.DataFrame) -> float:
-    t_max = trajectory_df_unfolded["t"].max()
-    df_t_max: pd.DataFrame = trajectory_df_unfolded.loc[trajectory_df_unfolded["t"] == t_max]
+def calculate_neigh_distance_avg_df(
+        trajectory_df_unfolded: pd.DataFrame,
+        t_equilibrium: float
+) -> float:
+    trajectory_df_unfolded_equi = trajectory_df_unfolded.loc[trajectory_df_unfolded["t"] > t_equilibrium]
 
     l_avg_chains = []
 
-    for molecule_id, df_mol in df_t_max.groupby("molecule-ID"):
+    for molecule_id, df_mol in trajectory_df_unfolded_equi.groupby(["t", "molecule-ID"]):
         l_avg_chains.append(calculate_neigh_distance_avg(df_mol))
 
     return np.mean(l_avg_chains)
+
+
+def calculate_bond_lengths(mol_traj_step_df_unf: pd.DataFrame) -> np.ndarray:
+    dims = ['x', 'y', 'z']
+    mol_traj_step = mol_traj_step_df_unf[dims].to_numpy()
+    return np.sqrt(np.sum((mol_traj_step[1:] - mol_traj_step[:-1]) ** 2, axis=1))
+
+
+def extract_bond_lengths_df(
+        trajectory_df_unfolded: pd.DataFrame,
+        t_equilibrium: float,
+) -> list[float]:
+    trajectory_df_unfolded_equi = trajectory_df_unfolded.loc[trajectory_df_unfolded["t"] > t_equilibrium]
+
+    bond_lengths = []
+
+    for molecule_id, df_mol in trajectory_df_unfolded_equi.groupby(["t", "molecule-ID"]):
+        bond_lengths.extend(calculate_bond_lengths(df_mol))
+
+    return bond_lengths
+
+
+def extract_bond_lengths_df_kappas(
+        trajectory_df_unfolded_kappas: pd.DataFrame,
+        t_equilibrium: float
+):
+    return trajectory_df_unfolded_kappas \
+        .groupby("kappa") \
+        .apply(extract_bond_lengths_df, t_equilibrium=t_equilibrium) \
+        .apply(pd.Series) \
+        .reset_index() \
+        .melt(
+            id_vars=["kappa"],
+            var_name="i",
+            value_name="l_b"
+        ).set_index(["kappa", "i"])
 
 
 def calculate_contour_length(mol_traj_step_df_unf: pd.DataFrame) -> float:
