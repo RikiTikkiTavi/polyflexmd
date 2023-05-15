@@ -150,10 +150,20 @@ def extract_bond_lengths_df_kappas(
         .apply(pd.Series) \
         .reset_index() \
         .melt(
-            id_vars=["kappa"],
-            var_name="i",
-            value_name="l_b"
-        ).set_index(["kappa", "i"])
+        id_vars=["kappa"],
+        var_name="i",
+        value_name="l_b"
+    ).set_index(["kappa", "i"])
+
+
+def calculate_ete_sq_t_avg_df(df_ete_mean: pd.DataFrame, t_equilibrium: float) -> float:
+    df_ete_mean = df_ete_mean.reset_index()
+    df_ete_equi = df_ete_mean.loc[df_ete_mean["t"] > t_equilibrium]
+    return df_ete_equi["R^2"].mean()
+
+
+def calculate_ete_sq_t_avg_df_kappas(df_ete_mean_kappas: pd.DataFrame, t_equilibrium: float) -> pd.DataFrame:
+    return pd.DataFrame(df_ete_mean_kappas.groupby("kappa").apply(calculate_ete_sq_t_avg_df, t_equilibrium=t_equilibrium), columns=["R^2"])
 
 
 def calculate_contour_length(mol_traj_step_df_unf: pd.DataFrame) -> float:
