@@ -1,6 +1,6 @@
 [simulation_config]
 simulation_model_path = "simulations/FENE-beadspring-vary-l_K.lammps"
-experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/.dev/test-results"
+experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/data/experiment_results"
 n_partitions = 8
 n_tasks_per_partition = 128
 
@@ -8,12 +8,12 @@ n_tasks_per_partition = 128
 kappa_start = 1.0
 kappa_delta = 5
 kappa_n_values = 8
-n_relax_steps = 15000000
-n_equilibrium_steps = 5000000
+n_relax_steps = 30000000
+n_equilibrium_steps = 1000000
 
 [simulation_config.job]
 account = "p_mdpolymer"
-time = "72:00:00"
+time = "24:00:00"
 partition = "romeo"
 nodes = 8
 tasks_per_node = 128
