@@ -1,18 +1,24 @@
 [simulation_config]
 simulation_model_path = "simulations/FENE-beadspring-vary-l_K.lammps"
 experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/data/experiment_results"
+n_partitions = 8
+n_tasks_per_partition = 128
 
 [simulation_config.variables]
-kappa = [1.0, 4.0, 7.0, 10.0, 13.0, 20.0, 30.0, 40.0, 50.0]
-n_relax_steps = 3000000
-n_equilibrium_steps = 5000000
+kappa_start = 1.0
+kappa_delta = 5
+kappa_n_values = 8
+n_relax_steps = 33000000
+n_equilibrium_steps = 10000000
 
 [simulation_config.job]
 account = "p_mdpolymer"
-time = "64:00:00"
+time = "72:00:00"
 partition = "romeo"
-ntasks = 32
-cpus_per_task = 32
+nodes = 8
+tasks_per_node = 128
+ntasks = 1024
+cpus_per_task = 1
 mem_per_cpu = 1000
 
 
@@ -28,12 +34,14 @@ bond_type = 1
 angle_type = 1
 bond_length = 0.97
 box_length = 200
-seed = 77
+seed = 23
 
 [system_creator_config.job]
 account = "p_mdpolymer"
 time = "1:00:00"
 partition = "romeo"
+nodes = 1
+tasks_per_node = 1
 ntasks = 1
 cpus_per_task = 4
 mem_per_cpu = 1000
@@ -49,6 +57,8 @@ kernel = "polyflexmd"
 account = "p_mdpolymer"
 time = "24:00:00"
 partition = "romeo"
+nodes = 1
+tasks_per_node = 1
 ntasks = 1
 cpus_per_task = 64
 mem_per_cpu = 7000
