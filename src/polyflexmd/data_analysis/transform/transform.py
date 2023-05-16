@@ -180,8 +180,6 @@ def calculate_contour_length_df(trajectory_df_unfolded: pd.DataFrame) -> pd.Data
 def calculate_ens_avg_df_ete_change_kappas(df_ete_kappas: pd.DataFrame) -> pd.DataFrame:
     dfs_ete_change_kappas = []
     for kappa, df_ete_kappa in df_ete_kappas.groupby("kappa"):
-        print(df_ete_kappa.index.dtypes)
-        print(df_ete_kappa.droplevel("kappa").index.dtypes)
         df_ete_change_kappa = pd.DataFrame(calculate_ete_change_ens_avg_df(df_ete_kappa.droplevel("kappa")), columns=["dR^2"])
         df_ete_change_kappa["kappa"] = kappa
         dfs_ete_change_kappas.append(df_ete_change_kappa)
