@@ -21,3 +21,7 @@ def rouse_g_4(t: np.ndarray, tau_R: float, p_max: int, N_b: int, l_b: float) -> 
             continue
         s += 1 / p ** 2 * np.exp(-t * p ** 2 / tau_R)
     return 2 * N_b * l_b ** 2 * (1 - 8 / np.pi ** 2 * s)
+
+
+def rouse_relaxation_time(N: int, l: float, zeta: float, T: float, k_B: float) -> float:
+    return N ** 2 * l ** 2 * zeta / (3 * np.pi ** 2 * k_B * T)

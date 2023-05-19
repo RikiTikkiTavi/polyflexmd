@@ -37,6 +37,22 @@ def read_lammps_system_data(
     )
 
 
+def _read_atoms_step(
+        file: typing.TextIO,
+        particles_n: int,
+        column_types: dict[str, typing.Any],
+        columns: list[str],
+        timestep: int
+) -> typing.Generator[list[typing.Any], None, None]:
+    for i in range(particles_n):
+        row = [
+            column_types[col_name](raw_col_val)
+            for col_name, raw_col_val in zip(columns, file.readline().split())
+        ]
+        row.insert(0, timestep)
+        yield row
+
+
 # https://gist.github.com/astyonax/1eb7b54326157299f0846324b5f1d98c
 def read_lammps_custom_trajectory_file(
         path: pathlib.Path,
@@ -62,11 +78,16 @@ def read_lammps_custom_trajectory_file(
                 data_timestep = []
                 if not (particles_n and columns_n):
                     raise StopIteration
-                for i in range(particles_n):
-                    line: str = file.readline()
-                    data_timestep.append([timestep, *line.split()])
-                timestep_df = pd.DataFrame(data=data_timestep, columns=["t", *columns]).astype(column_types)
-                yield timestep_df
+                yield pd.DataFrame(
+                    data=_read_atoms_step(
+                        file=file,
+                        particles_n=particles_n,
+                        column_types=column_types,
+                        columns=columns,
+                        timestep=timestep
+                    ),
+                    columns=["t", *columns]
+                )
 
             line = file.readline()
 

@@ -93,7 +93,7 @@ def calculate_ete_change_ens_avg(df_ete_t: pd.DataFrame, df_ete_t_0: pd.DataFram
 
 def calculate_ete_change_ens_avg_df(df_ete: pd.DataFrame) -> pd.DataFrame:
     t_min = df_ete.index.get_level_values("t").min()
-    ete_df_t_0 = df_ete.loc[pd.IndexSlice[t_min, :], :]
+    ete_df_t_0 = df_ete.loc[pd.IndexSlice[:, t_min], :]
 
     return df_ete \
         .groupby(level="t") \
@@ -146,7 +146,7 @@ def extract_bond_lengths_df_kappas(
 ):
     return trajectory_df_unfolded_kappas \
         .groupby("kappa") \
-        .apply(extract_bond_lengths_df, t_equilibrium=t_equilibrium) \
+        .parallel_apply(extract_bond_lengths_df, t_equilibrium=t_equilibrium) \
         .apply(pd.Series) \
         .reset_index() \
         .melt(
