@@ -1,0 +1,71 @@
+#FENE beadspring model with varying kappa in angle potential
+
+
+variable i uloop ${kappa_n_values}
+
+    label SIMULATION_START
+
+    read_restart ${experiment_path}/checkpoints/fene.restart.${i}.*
+
+    bond_style               fene
+    bond_coeff               1 30.0 1.5 1.0 1.0    
+
+    log ${experiment_path}/logs/log.${i}.txt append
+
+    # Configure angle potential
+    variable kappa equal ${kappa_start}+${kappa_delta}*(${i}-1)
+    
+    angle_style cosine
+    angle_coeff 1 ${kappa}
+
+    # Setup groups
+    group anchor type 1
+    group end    type 3
+    group  free subtract all anchor   # all monomers except anchors are free
+
+
+    # Only free atoms are moved:
+    fix                      1 free nve
+    fix                      2 free langevin 1.0 1.0 1.0 904297
+
+
+    # For all fixed atoms, the force is set to zero:
+    fix                      4 anchor setforce 0.0 0.0 0.0
+
+
+    thermo                    1000
+    timestep                 0.0025
+    neighbor       0.3 bin
+    neigh_modify   delay 1 every 1 check yes
+
+    restart                  1000000  ${experiment_path}/checkpoints/fene.restart.${i}
+
+
+    # First let the polymers relax
+
+    dump dump_vmd_${i} all atom 10000 ${experiment_path}/data/polymer_relax-${i}.vmd
+    dump dump_${i} all custom 100000 ${experiment_path}/data/polymer_relax-${i}.out id type x y z ix iy iz
+    dump_modify dump_vmd_${i} sort id
+    dump_modify dump_${i} sort id
+
+    run ${n_relax_steps}
+
+
+    # Now collect data
+
+    undump dump_vmd_${i}
+    undump dump_${i}
+
+    dump dump_vmd_${i} all atom 100000 ${experiment_path}/data/polymer-${i}.vmd
+    dump dump_${i} all custom 10000 ${experiment_path}/data/polymer-${i}.out id type x y z ix iy iz
+    dump_modify dump_vmd_${i} sort id
+    dump_modify dump_${i} sort id
+
+    run ${n_equilibrium_steps}
+
+    clear
+
+    next i
+
+jump SELF SIMULATION_START
+
