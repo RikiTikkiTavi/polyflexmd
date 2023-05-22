@@ -40,9 +40,16 @@ class SlurmJobConfig:
 
 @pydantic.dataclasses.dataclass
 class SystemCreatorConfig:
+    system_type: str = Literal["create"]
     job: SlurmJobConfig
     venv_path: pathlib.Path
     system_config: AnchoredFENEChainConfig
+
+
+@pydantic.dataclasses.dataclass
+class SystemFromPrevExperimentConfig:
+    system_type: str = Literal["checkpoint"]
+    prev_experiment_path: pathlib.Path
 
 
 @pydantic.dataclasses.dataclass
@@ -64,10 +71,13 @@ class ReportConfig:
     notebook_params: dict
 
 
+_INITIAL_SYSTEM = TypeVar("_INITIAL_SYSTEM", SystemCreatorConfig, SystemFromPrevExperimentConfig)
+
+
 @pydantic.dataclasses.dataclass
-class ExperimentConfig:
+class ExperimentConfig(Generic[_INITIAL_SYSTEM]):
     simulation_config: SimulationConfig
-    system_creator_config: SystemCreatorConfig
+    initial_system_config: _INITIAL_SYSTEM = pydantic.Field(discriminator="system_type")
     report_config: typing.Optional[ReportConfig] = None
 
 
