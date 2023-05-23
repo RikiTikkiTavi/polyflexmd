@@ -1,0 +1,87 @@
+\documentclass[handout]{beamer}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{ {./img/} }
+\usetheme{default}
+
+\title{Molecular dynamics study of ideal polymer chains with variable persistence length}
+\subtitle{Short progress report}
+\author{Yahor Paromau, Holger Merlitz}
+\institute{ITP@IPF}
+\date{23.05.2023}
+
+\newcommand{\mean}[1]{\langle #1 \rangle}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}
+    \frametitle{Outline}
+    \tableofcontents
+\end{frame}
+
+\begin{frame}
+    \frametitle{Definitions, notations, units}
+    Mostly: following Svaneborg article \cite{svaneborg_2020}
+
+    Units: LJ
+
+    Notations:
+
+    \begin{itemize}
+        \item Contour length: $L$
+        \item End to End distance (ETE): $\vec{R}$
+        \item Change of ETE: $(\Delta R(t))^2 := [\vec{R}(t)-\vec{R}(0)]^2$
+        \item Friction coefficient, viscosity: $\zeta$ $[\frac{\textrm{mass}}{\textrm{time}}]$, $\eta$ $[\frac{\textrm{mass}}{\textrm{time} * \textrm{distance}}]$
+        \item subscript "$b$" to denote bead speciﬁc properties to distinguish these from Kuhn units:
+            \begin{itemize}
+                \item Kuhn lenght, bond length: $l_K$, $l_b$
+                \item Number of Kuhn segments, number of beads: $N_K$, $N_b$
+            \end{itemize}
+        \item Rouse relaxation time \cite{svaneborg_2020}: $\tau_R = \frac{1}{3 \pi^2} \frac{\zeta_{CM} \mean{R^2}}{k_B T} = \frac{1}{3 \pi^2} \frac{\zeta N_b^2 l_b^2}{k_B T}$
+        \item Relaxation time of single bead: $\tau_0 = \frac{\tau_R}{N^2}$ 
+    \end{itemize}
+
+\end{frame}
+    
+\begin{frame}
+    \frametitle{Assumptions}
+    \begin{itemize}
+        \item Variation of $0.2\%$ of $l_b$ is neglectible \cite{svaneborg_2020} 
+        
+        $\Rightarrow$ $l_b=const$, $L=(N_b-1) l_b$=const
+
+        \item ...
+    \end{itemize} 
+\end{frame}
+
+\begin{frame}
+    \frametitle{Rouse model}
+    \begin{equation}
+        \mean{R^2}=N_b l_b^2
+    \end{equation}
+    \begin{equation}
+        g_4(t) := \mean{(\Delta R(t))^2} = 2 N_b l_b^2 (1-\frac{8}{\pi^2}\sum_{p=1,3,...}e^{\frac{-t p^2}{\tau_R}})
+    \end{equation}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 1: Fully flexible chain $l_K=l_b$}
+
+\end{frame}
+
+\section{References}
+
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+\begin{frame}
+    \frametitle{References}
+    \bibliographystyle{IEEEtran}
+    \bibliography{refs}
+\end{frame}
+
+\end{document}
