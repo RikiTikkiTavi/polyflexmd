@@ -1,21 +1,22 @@
 #FENE beadspring model with varying kappa in angle potential
 
+shell mkdir ${experiment_path}/data/raw
 
 variable i uloop ${kappa_n_values}
 
     label LOOP_KAPPA_START
 
+    shell mkdir ${experiment_path}/logs/i_kappa=${i} ${experiment_path}/data/raw/i_kappa=${i} ${experiment_path}/checkpoints/i_kappa=${i}
+
     variable j loop ${d_end_n_values}
 
         label LOOP_M_END_START
 
-        variable data_dir equal ${experiment_path}/data/raw/i_kappa=${i}/j_d_end=${j}
-        variable logs_dir equal ${experiment_path}/logs/i_kappa=${i}/j_d_end=${j}
-        variable checkpoints_dir equal ${experiment_path}/checkpoints/i_kappa=${i}/j_d_end=${j}
+        shell mkdir ${experiment_path}/logs/i_kappa=${i}/j_d_end=${j} ${experiment_path}/data/raw/i_kappa=${i}/j_d_end=${j} ${experiment_path}/checkpoints/i_kappa=${i}/j_d_end=${j}
 
-        shell mkdir ${data_dir}
-        shell mkdir ${logs_dir}
-        shell mkdir ${checkpoints_dir}
+        variable data_dir string ${experiment_path}/data/raw/i_kappa=${i}/j_d_end=${j}
+        variable logs_dir string ${experiment_path}/logs/i_kappa=${i}/j_d_end=${j}
+        variable checkpoints_dir string ${experiment_path}/checkpoints/i_kappa=${i}/j_d_end=${j}
 
         units                    lj
         atom_style               angle
