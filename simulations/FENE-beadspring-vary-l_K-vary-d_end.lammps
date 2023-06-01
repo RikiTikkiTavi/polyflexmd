@@ -23,7 +23,7 @@ variable i uloop ${kappa_n_values}
         special_bonds            fene
         boundary                 p p p
         
-        read_data                ${data_dir}/initial_system.data
+        read_data                ${experiment_path}/data/initial_system.data
 
         # Set mass of the end atom
         mass 3 ${m_end}
@@ -44,7 +44,7 @@ variable i uloop ${kappa_n_values}
         group anchor type 1
         group end type 3
         group free subtract all anchor   # all monomers except anchors are free
-        group interim substract free end # free monomers except end
+        group interim subtract free end # free monomers except end
 
         # Only free atoms are moved:
         fix                      1 free nve
