@@ -13,11 +13,11 @@
 #SBATCH --mem-per-cpu={{ simulation.job.mem_per_cpu }}
 
 module purge
-module load modenv/hiera GCC/9.3.0 OpenMPI/4.0.3 LAMMPS/3Mar2020-Python-3.8.2-kokkos
+module load {{ simulation.lmod_modules }}
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
-srun --cpu_bind=cores --distribution=block:block lmp \
+srun --cpu_bind=cores --distribution=block:block {{ simulation.lammps_executable }} \
   -partition {{ simulation.n_partitions }}x{{ simulation.n_tasks_per_partition }} \
   -in {{ simulation.lammps_input_path }} \
   -log {{ simulation.logs_path }}/log.txt {% if not simulation.variables.items().empty %}\{% endif %}{% for var_name, var_value in simulation.variables.items() %}

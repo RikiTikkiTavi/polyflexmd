@@ -55,6 +55,8 @@ class SystemFromPrevExperimentConfig:
 @pydantic.dataclasses.dataclass
 class SimulationConfig:
     job: SlurmJobConfig
+    lammps_executable: str
+    lmod_modules: str
     simulation_model_path: pathlib.Path
     experiments_path: pathlib.Path
     n_partitions: int

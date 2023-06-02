@@ -189,6 +189,8 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
                 "lammps_input_path": experiment_path / conf.simulation_config.simulation_model_path.name,
                 "n_partitions": conf.simulation_config.n_partitions,
                 "n_tasks_per_partition": conf.simulation_config.n_tasks_per_partition,
+                "lmod_modules": conf.simulation_config.lmod_modules,
+                "lammps_executable": conf.simulation_config.lammps_executable
             }
         })
 
