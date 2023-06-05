@@ -165,6 +165,9 @@ def calculate_ete_sq_t_avg_df(df_ete_mean: pd.DataFrame, t_equilibrium: float) -
 def calculate_ete_sq_t_avg_df_kappas(df_ete_mean_kappas: pd.DataFrame, t_equilibrium: float) -> pd.DataFrame:
     return pd.DataFrame(df_ete_mean_kappas.groupby("kappa").apply(calculate_ete_sq_t_avg_df, t_equilibrium=t_equilibrium), columns=["R^2"])
 
+def calculate_ete_sq_t_avg_df_kappas_dend(df_ete_mean_kappas: pd.DataFrame, t_equilibrium: float) -> pd.DataFrame:
+    return pd.DataFrame(df_ete_mean_kappas.groupby(["kappa", "d_end"]).apply(calculate_ete_sq_t_avg_df, t_equilibrium=t_equilibrium), columns=["R^2"])
+
 
 def calculate_contour_length(mol_traj_step_df_unf: pd.DataFrame) -> float:
     dims = ['x', 'y', 'z']
@@ -184,3 +187,12 @@ def calculate_ens_avg_df_ete_change_kappas(df_ete_kappas: pd.DataFrame) -> pd.Da
         df_ete_change_kappa["kappa"] = kappa
         dfs_ete_change_kappas.append(df_ete_change_kappa)
     return pd.concat(dfs_ete_change_kappas)
+
+def calculate_ens_avg_df_ete_change_kappas_dend(df_ete_kappas_dend: pd.DataFrame) -> pd.DataFrame:
+    dfs_ete_change = []
+    for (kappa, d_end), df_ete in df_ete_kappas_dend.groupby(["kappa", "d_end"]):
+        df_ete_change = pd.DataFrame(calculate_ete_change_ens_avg_df(df_ete.droplevel(["kappa", "d_end"])), columns=["dR^2"])
+        df_ete_change["kappa"] = kappa
+        df_ete_change["d_end"] = d_end
+        dfs_ete_change.append(df_ete_change)
+    return pd.concat(dfs_ete_change)

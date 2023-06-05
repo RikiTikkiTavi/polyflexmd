@@ -10,7 +10,7 @@
 #SBATCH --cpus-per-task=64
 #SBATCH --mem-per-cpu=7000
 
-module load modenv/hiera GCCcore/10.3.0 Python/3.9.5 GCC/10.3.0
+module load modenv/hiera GCC/11.3.0 OpenMPI/4.1.4 Python/3.9.6
 
 source /scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv/bin/activate
 

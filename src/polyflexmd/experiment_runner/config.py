@@ -40,7 +40,7 @@ class SlurmJobConfig:
 
 @pydantic.dataclasses.dataclass
 class SystemCreatorConfig:
-    system_type: str = Literal["create"]
+    system_type: Literal["create"]
     job: SlurmJobConfig
     venv_path: pathlib.Path
     system_config: AnchoredFENEChainConfig
@@ -48,7 +48,7 @@ class SystemCreatorConfig:
 
 @pydantic.dataclasses.dataclass
 class SystemFromPrevExperimentConfig:
-    system_type: str = Literal["checkpoint"]
+    system_type: Literal["checkpoint"]
     prev_experiment_path: pathlib.Path
 
 

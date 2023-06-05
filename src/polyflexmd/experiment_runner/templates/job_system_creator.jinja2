@@ -10,11 +10,11 @@
 #SBATCH --cpus-per-task={{ system_creator.job.cpus_per_task }}
 #SBATCH --mem-per-cpu={{ system_creator.job.mem_per_cpu }}
 
-module load modenv/hiera GCCcore/10.3.0 Python/3.9.5 GCC/10.3.0
+module load {{ system_creator.lmod_modules }}
 
 source {{ system_creator.venv_path }}/bin/activate
 
-python -m polyflexmd.system_creator
+python -m polyflexmd.system_creator {{ system_creator.system_name }}
 {%- for option_key, option_value in system_creator.system_params.items() -%}
     {% filter indent(width=1, first=True) -%}
         {%- if option_value == "True" -%}

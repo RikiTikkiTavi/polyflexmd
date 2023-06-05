@@ -140,7 +140,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
 
     if conf.initial_system_config.system_type == "create":
         # Process system params
-        if conf.initial_system_config.system_config.name == "anchored-fene-chain":
+        if conf.initial_system_config.system_config.name in ("anchored-fene-chain", "anchored-fene-rod"):
             # noinspection PyDataclass
             kwargs = dataclasses.asdict(conf.initial_system_config.system_config)
             kwargs.pop("name")
@@ -173,6 +173,8 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
                     **dataclasses.asdict(conf.initial_system_config.job)
                 },
                 "system_params": system_params,
+                "lmod_modules": conf.simulation_config.lmod_modules,
+                "system_name": conf.initial_system_config.system_config.name,
                 "venv_path": conf.initial_system_config.venv_path
             }
         })
@@ -211,6 +213,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
                     "report_name": conf.report_config.notebook.stem,
                     "report_dir": experiment_path,
                     "kernel": conf.report_config.kernel,
+                    "lmod_modules": conf.simulation_config.lmod_modules,
                     "notebook_params": {
                         "PATH_EXPERIMENT": experiment_path,
                         "NAME_EC": experiment_config_path.name,
