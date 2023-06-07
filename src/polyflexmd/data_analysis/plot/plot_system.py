@@ -83,7 +83,7 @@ def plot_initial_system(
     if plot_box:
         plot_cube(system.box.bounds, ax)
 
-    colors = list(islice(matplotlib.colors.TABLEAU_COLORS, len(molecules)))
+    colors = list(islice(matplotlib.colors.TABLEAU_COLORS, len(molecules_sample)))
 
     for color, (mol_id, df_mol) in zip(colors, initial_state_sample.groupby("molecule-ID")):
         ax.scatter(df_mol["x"].iloc[0], df_mol["y"].iloc[0], df_mol["z"].iloc[0], s=100, color=color, edgecolors="red",
