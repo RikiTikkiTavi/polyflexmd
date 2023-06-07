@@ -17,8 +17,11 @@ module load {{ simulation.lmod_modules }}
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
+cd {{ simulation.experiment_path }}
+
 srun --cpu_bind=cores --distribution=block:block {{ simulation.lammps_executable }} \
   -partition {{ simulation.n_partitions }}x{{ simulation.n_tasks_per_partition }} \
   -in {{ simulation.lammps_input_path }} \
+  -screen {{ simulation.logs_path }}/screen.txt \
   -log {{ simulation.logs_path }}/log.txt {% if not simulation.variables.items().empty %}\{% endif %}{% for var_name, var_value in simulation.variables.items() %}
   -var {{ var_name }} {{ var_value }} {% if not loop.last %}\{% endif %}{% endfor %}
