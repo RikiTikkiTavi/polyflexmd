@@ -1,0 +1,77 @@
+# Config of simulation
+[simulation_config]
+simulation_model_path = "simulations/FENE-beadspring-vary-l_K-vary-d_end.lammps"
+experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/data/experiment_results"
+lmod_modules = "modenv/hiera GCC/11.3.0 OpenMPI/4.1.4 Python/3.9.6"
+lammps_executable = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/bin/lammps-patch_23Jun2022_update4/lmp_omp_romeo_opt"
+n_partitions = 8
+n_tasks_per_partition = 64
+
+[simulation_config.variables]
+kappa_start = 48.4
+kappa_delta = 1.2
+kappa_n_values = 8
+
+m_end = 1.5
+
+d_end_start = 1.2
+d_end_delta = 0.2
+d_end_n_values = 5
+
+n_relax_steps = 20000000
+n_equilibrium_steps = 10000000
+
+[simulation_config.job]
+account = "p_mdpolymer"
+time = "72:00:00"
+partition = "romeo"
+nodes = 4
+tasks_per_node = 128
+ntasks = 512
+cpus_per_task = 1
+mem_per_cpu = 1000
+
+# Config of system creator
+[initial_system_config]
+venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
+system_type = "create"
+
+[initial_system_config.system_config]
+name = "anchored-fene-rod"
+n_chains = 500
+n_monomers = 64
+monomer_type = 2
+bond_type = 1
+angle_type = 1
+bond_length = 0.97
+box_length = 200
+seed = 23
+d_angle = 5.0
+
+[initial_system_config.job]
+account = "p_mdpolymer"
+time = "1:00:00"
+partition = "romeo"
+nodes = 1
+tasks_per_node = 1
+ntasks = 1
+cpus_per_task = 2
+mem_per_cpu = 2000
+
+# Config of system report
+[report_config]
+venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
+notebook = "notebooks/4-FENE-vary-l_K-vary-d_end-flexible.ipynb"
+kernel = "polyflexmd"
+
+[report_config.notebook_params]
+
+[report_config.job]
+account = "p_mdpolymer"
+time = "24:00:00"
+partition = "romeo"
+nodes = 1
+tasks_per_node = 1
+ntasks = 1
+cpus_per_task = 64
+mem_per_cpu = 7000
