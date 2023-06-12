@@ -4,13 +4,13 @@ simulation_model_path = "simulations/FENE-beadspring-vary-l_K-vary-d_end.lammps"
 experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/data/experiment_results"
 lmod_modules = "modenv/hiera GCC/11.3.0 OpenMPI/4.1.4 Python/3.9.6"
 lammps_executable = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/bin/lammps-patch_23Jun2022_update4/lmp_omp_romeo_opt"
-n_partitions = 8
+n_partitions = 4
 n_tasks_per_partition = 64
 
 [simulation_config.variables]
 kappa_start = 1.0
-kappa_delta = 1.5
-kappa_n_values = 5
+kappa_delta = 1.7
+kappa_n_values = 4
 
 m_end = 1.5
 
@@ -25,9 +25,9 @@ n_equilibrium_steps = 10000000
 account = "p_mdpolymer"
 time = "72:00:00"
 partition = "romeo"
-nodes = 4
+nodes = 2
 tasks_per_node = 128
-ntasks = 512
+ntasks = 256
 cpus_per_task = 1
 mem_per_cpu = 1000
 
