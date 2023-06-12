@@ -8,17 +8,17 @@ n_partitions = 8
 n_tasks_per_partition = 64
 
 [simulation_config.variables]
-kappa_start = 1.0
-kappa_delta = 1.2
-kappa_n_values = 8
+kappa_start = 49.2
+kappa_delta = 4
+kappa_n_values = 3
 
 m_end = 1.5
 
-d_end_start = 1.2
-d_end_delta = 0.2
-d_end_n_values = 5
+d_end_start = 5
+d_end_delta = 5
+d_end_n_values = 3
 
-n_relax_steps = 33000000
+n_relax_steps = 20000000
 n_equilibrium_steps = 10000000
 
 [simulation_config.job]
@@ -38,7 +38,7 @@ system_type = "create"
 
 [initial_system_config.system_config]
 name = "anchored-fene-rod"
-n_chains = 20
+n_chains = 500
 n_monomers = 64
 monomer_type = 2
 bond_type = 1
@@ -46,7 +46,7 @@ angle_type = 1
 bond_length = 0.97
 box_length = 200
 seed = 23
-d_angle = 20.0
+d_angle = 5.0
 
 [initial_system_config.job]
 account = "p_mdpolymer"
@@ -61,7 +61,7 @@ mem_per_cpu = 2000
 # Config of system report
 [report_config]
 venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
-notebook = "notebooks/4-FENE-vary-l_K-vary-d_end-flexible.ipynb"
+notebook = "notebooks/4-FENE-vary-l_K-vary-d_end-process.ipynb"
 kernel = "polyflexmd"
 
 [report_config.notebook_params]
@@ -69,9 +69,9 @@ kernel = "polyflexmd"
 [report_config.job]
 account = "p_mdpolymer"
 time = "24:00:00"
-partition = "romeo"
+partition = "julia"
 nodes = 1
 tasks_per_node = 1
 ntasks = 1
-cpus_per_task = 64
-mem_per_cpu = 7000
+cpus_per_task = 56
+mem_per_cpu = 26800
