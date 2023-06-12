@@ -46,7 +46,7 @@ angle_type = 1
 bond_length = 0.97
 box_length = 200
 seed = 23
-d_angle = 40.0
+d_angle = 50.0
 
 [initial_system_config.job]
 account = "p_mdpolymer"
