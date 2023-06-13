@@ -10,7 +10,7 @@ variable i uloop ${kappa_n_values}
     special_bonds            fene
     boundary                 p p p
     
-    if ${}
+
     read_data                ${experiment_path}/data/initial_system.data
 
 
