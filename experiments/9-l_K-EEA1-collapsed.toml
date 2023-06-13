@@ -40,15 +40,15 @@ box_length = 200
 seed = 133
 d_angle = 25.0
 
-[system_creator_config.job]
+[initial_system_config.job]
 account = "p_mdpolymer"
 time = "1:00:00"
 partition = "romeo"
 nodes = 1
 tasks_per_node = 1
 ntasks = 1
-cpus_per_task = 4
-mem_per_cpu = 1000
+cpus_per_task = 2
+mem_per_cpu = 2000
 
 [report_config]
 venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
