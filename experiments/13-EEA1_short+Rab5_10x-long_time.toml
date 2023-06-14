@@ -1,0 +1,79 @@
+# l_K/L of corresponding free EEA1 matches free EEA1 in Grill, however observed l_K/L can eventually be different
+# because of 10x friction coefficient of the end monomer, which models binding with Rab5.
+# Config of simulation
+[simulation_config]
+simulation_model_path = "simulations/FENE-beadspring-vary-l_K-vary-d_end.lammps"
+experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/data/experiment_results"
+lmod_modules = "modenv/hiera GCC/11.3.0 OpenMPI/4.1.4 Python/3.9.6"
+lammps_executable = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/bin/lammps-patch_23Jun2022_update4/lmp_omp_romeo_opt"
+n_partitions = 1
+n_tasks_per_partition = 125
+
+[simulation_config.variables]
+kappa_start = 190.2
+kappa_delta = 0.0
+kappa_n_values = 1
+
+m_end = 1.5
+
+d_end_start = 15
+d_end_delta = 0.0
+d_end_n_values = 1
+
+n_relax_steps = 20000000
+n_equilibrium_steps = 500000000
+
+[simulation_config.job]
+account = "p_mdpolymer"
+time = "144:00:00"
+partition = "romeo"
+nodes = 1
+tasks_per_node = 125
+ntasks = 125
+cpus_per_task = 1
+mem_per_cpu = 1000
+
+# Config of system creator
+[initial_system_config]
+venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
+system_type = "create"
+
+[initial_system_config.system_config]
+name = "anchored-fene-rod"
+n_chains = 50
+n_monomers = 64
+monomer_type = 2
+bond_type = 1
+angle_type = 1
+bond_length = 0.97
+box_length = 200
+seed = 23
+d_angle = 25.0
+
+[initial_system_config.job]
+account = "p_mdpolymer"
+time = "1:00:00"
+partition = "romeo"
+nodes = 1
+tasks_per_node = 1
+ntasks = 1
+cpus_per_task = 2
+mem_per_cpu = 2000
+
+# Config of system report
+[report_config]
+venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
+notebook = "notebooks/4-FENE-vary-l_K-vary-d_end-process.ipynb"
+kernel = "polyflexmd"
+
+[report_config.notebook_params]
+
+[report_config.job]
+account = "p_mdpolymer"
+time = "24:00:00"
+partition = "julia"
+nodes = 1
+tasks_per_node = 1
+ntasks = 1
+cpus_per_task = 56
+mem_per_cpu = 26800
