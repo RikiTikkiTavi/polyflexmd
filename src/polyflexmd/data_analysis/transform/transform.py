@@ -1,9 +1,13 @@
+import typing
+
 import numpy as np
 import pandas as pd
 import enum
 import polyflexmd.data_analysis.data.types as types
 import pathlib
 import functools
+
+import scipy.optimize
 
 
 class AtomGroup(enum.Enum):
@@ -163,10 +167,15 @@ def calculate_ete_sq_t_avg_df(df_ete_mean: pd.DataFrame, t_equilibrium: float) -
 
 
 def calculate_ete_sq_t_avg_df_kappas(df_ete_mean_kappas: pd.DataFrame, t_equilibrium: float) -> pd.DataFrame:
-    return pd.DataFrame(df_ete_mean_kappas.groupby("kappa").apply(calculate_ete_sq_t_avg_df, t_equilibrium=t_equilibrium), columns=["R^2"])
+    return pd.DataFrame(
+        df_ete_mean_kappas.groupby("kappa").apply(calculate_ete_sq_t_avg_df, t_equilibrium=t_equilibrium),
+        columns=["R^2"])
+
 
 def calculate_ete_sq_t_avg_df_kappas_dend(df_ete_mean_kappas: pd.DataFrame, t_equilibrium: float) -> pd.DataFrame:
-    return pd.DataFrame(df_ete_mean_kappas.groupby(["kappa", "d_end"]).apply(calculate_ete_sq_t_avg_df, t_equilibrium=t_equilibrium), columns=["R^2"])
+    return pd.DataFrame(
+        df_ete_mean_kappas.groupby(["kappa", "d_end"]).apply(calculate_ete_sq_t_avg_df, t_equilibrium=t_equilibrium),
+        columns=["R^2"])
 
 
 def calculate_contour_length(mol_traj_step_df_unf: pd.DataFrame) -> float:
@@ -183,16 +192,70 @@ def calculate_contour_length_df(trajectory_df_unfolded: pd.DataFrame) -> pd.Data
 def calculate_ens_avg_df_ete_change_kappas(df_ete_kappas: pd.DataFrame) -> pd.DataFrame:
     dfs_ete_change_kappas = []
     for kappa, df_ete_kappa in df_ete_kappas.groupby("kappa"):
-        df_ete_change_kappa = pd.DataFrame(calculate_ete_change_ens_avg_df(df_ete_kappa.droplevel("kappa")), columns=["dR^2"])
+        df_ete_change_kappa = pd.DataFrame(calculate_ete_change_ens_avg_df(df_ete_kappa.droplevel("kappa")),
+                                           columns=["dR^2"])
         df_ete_change_kappa["kappa"] = kappa
         dfs_ete_change_kappas.append(df_ete_change_kappa)
     return pd.concat(dfs_ete_change_kappas)
 
+
 def calculate_ens_avg_df_ete_change_kappas_dend(df_ete_kappas_dend: pd.DataFrame) -> pd.DataFrame:
     dfs_ete_change = []
     for (kappa, d_end), df_ete in df_ete_kappas_dend.groupby(["kappa", "d_end"]):
-        df_ete_change = pd.DataFrame(calculate_ete_change_ens_avg_df(df_ete.droplevel(["kappa", "d_end"])), columns=["dR^2"])
+        df_ete_change = pd.DataFrame(calculate_ete_change_ens_avg_df(df_ete.droplevel(["kappa", "d_end"])),
+                                     columns=["dR^2"])
         df_ete_change["kappa"] = kappa
         df_ete_change["d_end"] = d_end
         dfs_ete_change.append(df_ete_change)
     return pd.concat(dfs_ete_change)
+
+
+def bond_auto_correlation(idx_matrix: np.ndarray, l_p: float) -> np.ndarray:
+    return np.exp(-np.abs(idx_matrix[:, 0] - idx_matrix[:, 1]) / l_p)
+
+
+def estimate_kuhn_length(traj_step_df_unf: pd.DataFrame, l_K_guess: float) -> pd.Series:
+    # Extract bond vectors
+    dims = ['x', 'y', 'z']
+
+    angle_matrices_molecules = []
+
+    for molecule_id, mol_traj_step_df_unf in traj_step_df_unf.groupby("molecule-ID"):
+        mol_traj_step: np.ndarray = mol_traj_step_df_unf[dims].to_numpy()
+        bonds_molecule = mol_traj_step[1:] - mol_traj_step[:-1]
+        bonds_molecule_normalized = bonds_molecule / np.sqrt(np.sum(bonds_molecule ** 2, axis=1))
+        angle_matrices_molecules.append(bonds_molecule_normalized * bonds_molecule_normalized.T)
+
+    angle_matrix_avg = np.mean(angle_matrices_molecules)
+
+    x_data = np.array(list(np.ndindex(*angle_matrix_avg.shape)))
+    y_data = np.array(angle_matrix_avg[idx] for idx in x_data)
+
+    popt, pcov = scipy.optimize.curve_fit(bond_auto_correlation, x_data, y_data, p0=l_K_guess/2)
+
+    l_p = popt[0]
+    dl_p = np.sqrt(np.diag(pcov))
+
+    return pd.Series({"l_K": l_p*2, "d_l_K": dl_p*2})
+
+
+def estimate_kuhn_length_df(
+        df_trajectory: pd.DataFrame,
+        group_by_params: list[str],
+        time_col: str = "t",
+        t_equilibrium: float = 0.0,
+        l_K_guess: float = 50.0
+) -> typing.Union[pd.DataFrame, pd.Series]:
+    if t_equilibrium > 0.0:
+        df_trajectory = df_trajectory.loc[df_trajectory[time_col] > t_equilibrium]
+
+    l_K_result = df_trajectory.groupby([time_col, *group_by_params]).apply(
+        functools.partial(estimate_kuhn_length, l_K_guess=l_K_guess)
+    )
+
+    if len(group_by_params) > 0:
+        return l_K_result.groupby(group_by_params)[["l_K", "d_l_K"]].mean()
+    else:
+        return l_K_result.mean()
+
+
