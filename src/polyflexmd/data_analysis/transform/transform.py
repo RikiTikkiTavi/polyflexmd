@@ -210,8 +210,8 @@ def calculate_ens_avg_df_ete_change_kappas_dend(df_ete_kappas_dend: pd.DataFrame
     return pd.concat(dfs_ete_change)
 
 
-def bond_auto_correlation(idx_matrix: np.ndarray, l_p: float) -> np.ndarray:
-    return np.exp(-np.abs(idx_matrix[:, 0] - idx_matrix[:, 1]) / l_p)
+def bond_auto_correlation(idx: np.ndarray, l_p: float) -> np.ndarray:
+    return np.exp(-np.abs(idx[0] - idx[1]) / l_p)
 
 
 def estimate_kuhn_length(traj_step_df_unf: pd.DataFrame, l_K_guess: float) -> pd.Series:
@@ -223,15 +223,15 @@ def estimate_kuhn_length(traj_step_df_unf: pd.DataFrame, l_K_guess: float) -> pd
     for molecule_id, mol_traj_step_df_unf in traj_step_df_unf.groupby("molecule-ID"):
         mol_traj_step: np.ndarray = mol_traj_step_df_unf[dims].to_numpy()
         bonds_molecule = mol_traj_step[1:] - mol_traj_step[:-1]
-        bonds_molecule_normalized = bonds_molecule / np.sqrt(np.sum(bonds_molecule ** 2, axis=1))
-        angle_matrices_molecules.append(bonds_molecule_normalized * bonds_molecule_normalized.T)
+        bonds_molecule_normalized = bonds_molecule / np.sqrt(np.sum(bonds_molecule ** 2, axis=1))[:, np.newaxis]
+        angle_matrices_molecules.append(bonds_molecule_normalized @ bonds_molecule_normalized.T)
 
-    angle_matrix_avg = np.mean(angle_matrices_molecules)
+    angle_matrix_avg = np.mean(angle_matrices_molecules, axis=0)
 
-    x_data = np.array(list(np.ndindex(*angle_matrix_avg.shape)))
-    y_data = np.array(angle_matrix_avg[idx] for idx in x_data)
+    x_data = np.array(list(np.ndindex(*angle_matrix_avg.shape))).T
+    y_data = np.array([angle_matrix_avg[idx] for idx in np.ndindex(*angle_matrix_avg.shape)])
 
-    popt, pcov = scipy.optimize.curve_fit(bond_auto_correlation, x_data, y_data, p0=l_K_guess/2)
+    popt, pcov = scipy.optimize.curve_fit(bond_auto_correlation, x_data, y_data, p0=l_K_guess / 2, bounds=[.1, 1000])
 
     l_p = popt[0]
     dl_p = np.sqrt(np.diag(pcov))
