@@ -214,13 +214,13 @@ def bond_auto_correlation(idx: np.ndarray, l_p: float) -> np.ndarray:
     return np.exp(-np.abs(idx[0] - idx[1]) / l_p)
 
 
-def estimate_kuhn_length(traj_step_df_unf: pd.DataFrame, l_K_guess: float) -> pd.Series:
+def estimate_kuhn_length(traj_df_unf: pd.DataFrame, l_K_guess: float, time_col: str = "t", ) -> pd.Series:
     # Extract bond vectors
     dims = ['x', 'y', 'z']
 
     angle_matrices_molecules = []
 
-    for molecule_id, mol_traj_step_df_unf in traj_step_df_unf.groupby("molecule-ID"):
+    for molecule_id, mol_traj_step_df_unf in traj_df_unf.groupby([time_col, "molecule-ID"]):
         mol_traj_step: np.ndarray = mol_traj_step_df_unf[dims].to_numpy()
         bonds_molecule = mol_traj_step[1:] - mol_traj_step[:-1]
         bonds_molecule_normalized = bonds_molecule / np.sqrt(np.sum(bonds_molecule ** 2, axis=1))[:, np.newaxis]
@@ -231,12 +231,17 @@ def estimate_kuhn_length(traj_step_df_unf: pd.DataFrame, l_K_guess: float) -> pd
     x_data = np.array(list(np.ndindex(*angle_matrix_avg.shape))).T
     y_data = np.array([angle_matrix_avg[idx] for idx in np.ndindex(*angle_matrix_avg.shape)])
 
-    popt, pcov = scipy.optimize.curve_fit(bond_auto_correlation, x_data, y_data, p0=l_K_guess / 2, bounds=[.1, 1000])
+    popt, pcov = scipy.optimize.curve_fit(
+        bond_auto_correlation,
+        x_data, y_data, p0=l_K_guess / 2, bounds=[.1, 1000]
+    )
 
     l_p = popt[0]
-    dl_p = np.sqrt(np.diag(pcov))
+    dl_p = np.sqrt(np.diag(pcov))[0]
 
-    return pd.Series({"l_K": l_p*2, "d_l_K": dl_p*2})
+    # dl_p corresponds to 1 sigma
+
+    return pd.Series({"l_K": l_p * 2, "d_l_K": dl_p * 2 * 3})
 
 
 def estimate_kuhn_length_df(
@@ -249,13 +254,8 @@ def estimate_kuhn_length_df(
     if t_equilibrium > 0.0:
         df_trajectory = df_trajectory.loc[df_trajectory[time_col] > t_equilibrium]
 
-    l_K_result = df_trajectory.groupby([time_col, *group_by_params]).apply(
-        functools.partial(estimate_kuhn_length, l_K_guess=l_K_guess)
+    l_K_result = df_trajectory.groupby(group_by_params).parallel_apply(
+        functools.partial(estimate_kuhn_length, l_K_guess=l_K_guess, time_col=time_col)
     )
 
-    if len(group_by_params) > 0:
-        return l_K_result.groupby(group_by_params)[["l_K", "d_l_K"]].mean()
-    else:
-        return l_K_result.mean()
-
-
+    return l_K_result
