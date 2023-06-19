@@ -96,6 +96,7 @@ def calculate_ete_change_ens_avg(df_ete_t: pd.DataFrame, df_ete_t_0: pd.DataFram
 
 
 def calculate_ete_change_ens_avg_df(df_ete: pd.DataFrame) -> pd.DataFrame:
+
     t_min = df_ete.index.get_level_values("t").min()
     ete_df_t_0 = df_ete.loc[pd.IndexSlice[:, t_min], :]
 
