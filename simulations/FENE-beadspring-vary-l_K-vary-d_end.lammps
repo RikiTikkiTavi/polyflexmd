@@ -99,7 +99,7 @@ variable i uloop ${kappa_n_values}
         run ${n_equilibrium_steps_1}
 
         # MSD-normal-change region dump with lower frequency
-        dump_modify dump_${i}-${j} every v_dump_frequency_2 append yes
+        dump_modify dump_${i}-${j} every ${dump_frequency_2} append yes
 
         run ${n_equilibrium_steps_2}
         

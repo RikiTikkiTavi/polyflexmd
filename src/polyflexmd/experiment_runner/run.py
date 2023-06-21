@@ -168,7 +168,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
         job_system_creator = jinja_env.get_template("job_system_creator.jinja2").render({
             "system_creator": {
                 "job": {
-                    "name": f"polyflexmd-{model_name}-create_system-{commit_sha}",
+                    "name": f"polyflexmd-{experiment_name}-create_system-{commit_sha}",
                     "logs_path": logs_path,
                     **dataclasses.asdict(conf.initial_system_config.job)
                 },
@@ -182,7 +182,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
         job_simulation = jinja_env.get_template("job_run_simulation.jinja2").render({
             "simulation": {
                 "job": {
-                    "name": f"polyflexmd-{model_name}-{commit_sha}",
+                    "name": f"polyflexmd-{experiment_name}-{commit_sha}",
                     "logs_path": logs_path,
                     **dataclasses.asdict(conf.simulation_config.job)
                 },
@@ -204,7 +204,7 @@ def run_experiment(experiment_config_path: pathlib.Path, clear_experiment_path: 
             job_report = jinja_env.get_template("job_generate_report.jinja2").render({
                 "report": {
                     "job": {
-                        "name": f"polyflexmd-{model_name}-report-{commit_sha}",
+                        "name": f"polyflexmd-{experiment_name}-report-{commit_sha}",
                         "logs_path": logs_path,
                         **dataclasses.asdict(conf.report_config.job)
                     },
