@@ -26,7 +26,7 @@ n_equilibrium_steps_1 = 2000000
 dump_frequency_1 = 100
 
 n_equilibrium_steps_2 = 28000000
-dump_frequency_1 = 10000
+dump_frequency_2 = 10000
 
 [simulation_config.job]
 account = "p_mdpolymer"
