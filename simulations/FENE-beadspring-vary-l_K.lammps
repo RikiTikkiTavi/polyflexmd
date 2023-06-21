@@ -62,12 +62,22 @@ variable i uloop ${kappa_n_values}
     undump dump_vmd_${i}
     undump dump_${i}
 
+    # atom-style dump for visualization
     dump dump_vmd_${i} all atom 100000 ${experiment_path}/data/polymer-${i}.vmd
-    dump dump_${i} all custom 10000 ${experiment_path}/data/polymer-${i}.out id type x y z ix iy iz
     dump_modify dump_vmd_${i} sort id
+
+    # MSD-quick-change region dump with higher dump frequency
+
+    # custom style dump for data analysis
+    dump dump_${i} all custom ${dump_frequency_1} ${experiment_path}/data/polymer-${i}.out id type x y z ix iy iz
     dump_modify dump_${i} sort id
 
-    run ${n_equilibrium_steps}
+    run ${n_equilibrium_steps_1}
+
+    # MSD-normal-change region dump with lower frequency
+    dump_modify dump_${i} every v_dump_frequency_2 append yes
+
+    run ${n_equilibrium_steps_2}
 
     clear
 
