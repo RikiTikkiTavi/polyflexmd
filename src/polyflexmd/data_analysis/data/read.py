@@ -114,3 +114,64 @@ def read_multiple_raw_trajectory_dfs(
             ) for path in paths
         )
     )
+
+
+class VariableTrajectoryPath(typing.NamedTuple):
+    variables: list[tuple[str, float]]
+    paths: list[pathlib.Path]
+
+
+def get_experiment_trajectories_paths(
+        experiment_raw_data_path: pathlib.Path,
+        style: typing.Literal["l_K+d_end", "l_K", "simple"],
+        kappas: typing.Optional[list[float]] = None,
+        d_ends: typing.Optional[list[float]] = None,
+        continue_: bool = False,
+        read_relax: bool = True
+) -> typing.Generator[VariableTrajectoryPath, None, None]:
+
+    suffix = "-continue" if continue_ else ""
+
+    if style == "l_K+d_end":
+        for i in range(1, len(kappas) + 1):
+            for j in range(1, len(d_ends) + 1):
+                p = experiment_raw_data_path / f"i_kappa={i}" / f"j_d_end={j}"
+                paths_trajectories = [
+                    p / f"polymer-{i}-{j}{suffix}.out"
+                ]
+                if read_relax:
+                    paths_trajectories.insert(0, p / f"polymer_relax-{i}-{j}{suffix}.out")
+
+                yield VariableTrajectoryPath(
+                    variables=[("kappa", kappas[i - 1]), ("d_end", d_ends[i - 1])],
+                    paths=paths_trajectories
+                )
+
+    elif style == "l_K":
+        for i in range(1, len(kappas) + 1):
+            p = experiment_raw_data_path / f"i_kappa={i}"
+            paths_trajectories = [
+                p / f"polymer-{i}{suffix}.out"
+            ]
+            if read_relax:
+                paths_trajectories.insert(0, p / f"polymer_relax-{i}{suffix}.out")
+
+            yield VariableTrajectoryPath(
+                variables=[("kappa", kappas[i - 1])],
+                paths=paths_trajectories
+            )
+
+    elif style == "simple":
+        paths_trajectories = [
+            experiment_raw_data_path / f"polymer.out"
+        ]
+        if read_relax:
+            paths_trajectories.insert(0, experiment_raw_data_path / f"polymer_relax{suffix}.out")
+
+        yield VariableTrajectoryPath(
+            variables=[],
+            paths=paths_trajectories
+        )
+
+    else:
+        raise Exception(f"Unsupported style: {style}")
