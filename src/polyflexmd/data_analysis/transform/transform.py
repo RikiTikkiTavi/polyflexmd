@@ -260,3 +260,20 @@ def estimate_kuhn_length_df(
     )
 
     return l_K_result
+
+
+def time_LJ_to_REAL(t_LJ, L_contour):
+    import scipy.constants
+    T_GRILL = 23+273
+    eps = scipy.constants.k / T_GRILL
+
+    M_r_EEA1 = 162 # kg/mol
+    N_beads = 64
+    m_bead = 1
+    m_EEA1 = M_r_EEA1 / scipy.constants.N_A
+    m = m_EEA1 / (N_beads*m_bead)
+
+    L_GRILL=230*10e-9 # m
+    sigma = L_GRILL / L_contour
+
+    return t_LJ / np.sqrt(eps/(m*sigma**2))
