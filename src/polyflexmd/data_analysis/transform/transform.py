@@ -96,7 +96,6 @@ def calculate_ete_change_ens_avg(df_ete_t: pd.DataFrame, df_ete_t_0: pd.DataFram
 
 
 def calculate_ete_change_ens_avg_df(df_ete: pd.DataFrame) -> pd.DataFrame:
-
     t_min = df_ete.index.get_level_values("t").min()
     ete_df_t_0 = df_ete.loc[pd.IndexSlice[:, t_min], :]
 
@@ -264,16 +263,57 @@ def estimate_kuhn_length_df(
 
 def time_LJ_to_REAL(t_LJ, L_contour):
     import scipy.constants
-    T_GRILL = 23+273
+    T_GRILL = 23 + 273
     eps = scipy.constants.k / T_GRILL
 
-    M_r_EEA1 = 162 # kg/mol
+    M_r_EEA1 = 162  # kg/mol
     N_beads = 64
     m_bead = 1
     m_EEA1 = M_r_EEA1 / scipy.constants.N_A
-    m = m_EEA1 / (N_beads*m_bead)
+    m = m_EEA1 / (N_beads * m_bead)
 
-    L_GRILL=230*10e-9 # m
+    L_GRILL = 230 * 10e-9  # m
     sigma = L_GRILL / L_contour
 
-    return t_LJ / np.sqrt(eps/(m*sigma**2))
+    return t_LJ / np.sqrt(eps / (m * sigma ** 2))
+
+
+def create_orthogonal_basis_with_given_vector(v: np.ndarray) -> np.ndarray:
+    assert v.shape == (3,)
+
+    v = v / np.linalg.norm(v)
+
+    e_x = np.array([1.0, 0.0, 0.0])
+    e_y = np.array([0.0, 1.0, 0.0])
+
+    if not np.allclose(e_x, v):
+        b = np.cross(e_x, v)
+    else:
+        b = np.cross(e_x + e_y, v)
+
+    b = b / np.linalg.norm(b)
+
+    c = np.cross(v, b)
+    c = c / np.linalg.norm(c)
+
+    assert np.allclose(c.dot(v), 0)
+    assert np.allclose(c.dot(b), 0)
+    assert np.allclose(b.dot(v), 0)
+
+    basis = np.array([c, b, v])
+
+    assert np.allclose(basis @ basis.T, np.identity(3))
+
+    return np.array([c, b, v])
+
+
+def basis_change_from_cartesian(basis_new: np.ndarray, v_old: np.ndarray):
+    return np.linalg.solve(basis_new.T, v_old)
+
+def main():
+    vec = np.array([-0.15992717, -0.01745058, -0.95656614])
+    basis_new = create_orthogonal_basis_with_given_vector(vec)
+    R_vec_old = np.array([21.1113, 3.337980, -51.8683])
+    R_vec_new = basis_change_from_cartesian(basis_new, R_vec_old)
+    print(f"R_vec old: {R_vec_old}; Norm: {np.linalg.norm(R_vec_old)}")
+    print(f"R_vec new: {R_vec_new}; Norm: {np.linalg.norm(R_vec_new)}")
