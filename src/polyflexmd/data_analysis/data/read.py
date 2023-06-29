@@ -2,6 +2,8 @@ import io
 import itertools
 import pathlib
 import typing
+
+import numpy as np
 import pandas as pd
 import pymatgen.io.lammps.data
 import polyflexmd.data_analysis.data.types as types
@@ -10,7 +12,8 @@ import polyflexmd.data_analysis.data.constants as constants
 
 def read_lammps_system_data(
         path: pathlib.Path,
-        atom_style: str = "angle"
+        atom_style: str = "angle",
+        molecule_id_type: np.dtype = np.ushort,
 ) -> types.LammpsSystemData:
     """
     Reads a LAMMPS data file and returns a dictionary with the header information
@@ -27,6 +30,8 @@ def read_lammps_system_data(
         "ny": "iy",
         "nz": "iz"
     }, axis=1, inplace=True)
+
+    content.atoms["molecule-ID"] = content.atoms["molecule-ID"].astype(molecule_id_type)
 
     return types.LammpsSystemData(
         box=content.box,
@@ -45,19 +50,20 @@ def _read_atoms_step(
         timestep: int
 ) -> typing.Generator[list[typing.Any], None, None]:
     for i in range(particles_n):
-        row = [
-            column_types[col_name](raw_col_val)
-            for col_name, raw_col_val in zip(columns, file.readline().split())
-        ]
+        #row = [
+        #    column_types[col_name](raw_col_val)
+        #    for col_name, raw_col_val in zip(columns, file.readline().split())
+        #]
+        row = file.readline().split()
         row.insert(0, timestep)
         yield row
 
 
 # https://gist.github.com/astyonax/1eb7b54326157299f0846324b5f1d98c
-def read_lammps_custom_trajectory_file(
+def read_lammps_custom_trajectory_file_generator(
         path: pathlib.Path,
         column_types: dict[str, typing.Any]
-) -> typing.Generator[pd.DataFrame, None, None]:
+) -> typing.Generator[tuple[list[str], typing.Generator[list[typing.Any], None, None]], None, None]:
     with path.open('r') as file:
 
         line = file.readline()
@@ -78,15 +84,15 @@ def read_lammps_custom_trajectory_file(
                 data_timestep = []
                 if not (particles_n and columns_n):
                     raise StopIteration
-                yield pd.DataFrame(
-                    data=_read_atoms_step(
+                yield (
+                    ["t", *columns],
+                    _read_atoms_step(
                         file=file,
                         particles_n=particles_n,
                         column_types=column_types,
                         columns=columns,
                         timestep=timestep
-                    ),
-                    columns=["t", *columns]
+                    )
                 )
 
             line = file.readline()
@@ -96,28 +102,40 @@ def read_raw_trajectory_df(
         path: pathlib.Path,
         column_types: dict = constants.RAW_TRAJECTORY_DF_COLUMN_TYPES
 ):
-    return pd.concat(read_lammps_custom_trajectory_file(
-        path=path,
-        column_types=column_types
-    ))
+    col_rows_iter_1, col_rows_iter_2 = itertools.tee(
+        read_lammps_custom_trajectory_file_generator(path, column_types),
+        2
+    )
+    columns = next(col_rows_iter_1)[0]
+    rows = itertools.chain.from_iterable(rows_gen for _, rows_gen in col_rows_iter_2)
+    return pd.DataFrame(data=rows, columns=columns, copy=False).astype(column_types)
 
 
 def read_multiple_raw_trajectory_dfs(
         paths: list[pathlib.Path],
         column_types: dict = constants.RAW_TRAJECTORY_DF_COLUMN_TYPES
 ):
-    return pd.concat(
-        itertools.chain.from_iterable(
-            read_lammps_custom_trajectory_file(
-                path=path,
-                column_types=column_types
-            ) for path in paths
+    rows_iterables = []
+
+    for path in paths:
+        col_rows_iter_1, col_rows_iter_2 = itertools.tee(
+            read_lammps_custom_trajectory_file_generator(path, column_types),
+            2
         )
-    )
+        columns = next(col_rows_iter_1)[0]
+        rows = itertools.chain.from_iterable(rows_gen for _, rows_gen in col_rows_iter_2)
+        rows_iterables.append(rows)
+
+    return pd.DataFrame(
+        data=itertools.chain.from_iterable(rows_iterables),
+        columns=columns,
+        copy=False
+    ).astype(column_types)
 
 
 class VariableTrajectoryPath(typing.NamedTuple):
     variables: list[tuple[str, float]]
+    possible_values: list[list[float]]
     paths: list[pathlib.Path]
 
 
@@ -129,7 +147,6 @@ def get_experiment_trajectories_paths(
         continue_: bool = False,
         read_relax: bool = True
 ) -> typing.Generator[VariableTrajectoryPath, None, None]:
-
     suffix = "-continue" if continue_ else ""
 
     if style == "l_K+d_end":
@@ -143,13 +160,14 @@ def get_experiment_trajectories_paths(
                     paths_trajectories.insert(0, p / f"polymer_relax-{i}-{j}{suffix}.out")
 
                 yield VariableTrajectoryPath(
-                    variables=[("kappa", kappas[i - 1]), ("d_end", d_ends[i - 1])],
-                    paths=paths_trajectories
+                    variables=[("kappa", kappas[i - 1]), ("d_end", d_ends[j - 1])],
+                    paths=paths_trajectories,
+                    possible_values=[kappas, d_ends]
                 )
 
     elif style == "l_K":
         for i in range(1, len(kappas) + 1):
-            p = experiment_raw_data_path / f"i_kappa={i}"
+            p = experiment_raw_data_path
             paths_trajectories = [
                 p / f"polymer-{i}{suffix}.out"
             ]
@@ -158,7 +176,8 @@ def get_experiment_trajectories_paths(
 
             yield VariableTrajectoryPath(
                 variables=[("kappa", kappas[i - 1])],
-                paths=paths_trajectories
+                paths=paths_trajectories,
+                possible_values=[kappas]
             )
 
     elif style == "simple":
@@ -170,7 +189,8 @@ def get_experiment_trajectories_paths(
 
         yield VariableTrajectoryPath(
             variables=[],
-            paths=paths_trajectories
+            paths=paths_trajectories,
+            possible_values=[]
         )
 
     else:

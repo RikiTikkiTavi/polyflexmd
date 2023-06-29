@@ -80,10 +80,16 @@ def join_raw_trajectory_df_with_system_data(
     )
 
 
-def calc_end_to_end_df(trajectory_df_unfolded: pd.DataFrame) -> pd.DataFrame:
-    return trajectory_df_unfolded.groupby(["molecule-ID", "t"]).parallel_apply(
-        calculate_end_to_end
-    )
+def calc_end_to_end_df(
+        trajectory_df_unfolded: pd.DataFrame,
+        group_by_params: typing.Iterable[str] = tuple(),
+        parallel: bool = False
+) -> pd.DataFrame:
+    gb = trajectory_df_unfolded.groupby([*group_by_params, "molecule-ID"])
+    if parallel:
+        return gb.parallel_apply(lambda dfg: dfg.groupby(["t"]).apply(calculate_end_to_end))
+    else:
+        return gb.apply(lambda dfg: dfg.groupby(["t"]).apply(calculate_end_to_end))
 
 
 def calculate_ete_change_ens_avg(df_ete_t: pd.DataFrame, df_ete_t_0: pd.DataFrame) -> float:
@@ -309,6 +315,7 @@ def create_orthogonal_basis_with_given_vector(v: np.ndarray) -> np.ndarray:
 
 def basis_change_from_cartesian(basis_new: np.ndarray, v_old: np.ndarray):
     return np.linalg.solve(basis_new.T, v_old)
+
 
 def main():
     vec = np.array([-0.15992717, -0.01745058, -0.95656614])
