@@ -8,7 +8,7 @@ packages = [{include = "polyflexmd", from="./src"}]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
-typer = "^0.7.0"
+typer = "^0.9.0"
 numpy = "^1.24.2"
 spock-config = "^3.0.2"
 pydantic = "^1.10.7"
