@@ -22,6 +22,10 @@ def process_experiment_data(
             DataStyle,
             typer.Option(case_sensitive=False)
         ],
+        n_workers: typing.Annotated[
+            int,
+            typer.Option()
+        ] = 16,
         read_relax: typing.Annotated[
             bool,
             typer.Option(),
@@ -31,14 +35,23 @@ def process_experiment_data(
             typer.Option()
         ] = True
 ):
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)s - %(levelname)s - %(name)s :: %(message)s', datefmt='%d.%m.%Y %I:%M:%S'
+    )
 
     polyflexmd.data_analysis.pipelines.experiment.process_experiment_data(
         path_experiment=path_experiment,
+        n_workers=n_workers,
         style=style.value,
         read_relax=read_relax,
         enable_l_K_estimate=l_K_estimate
     )
+
+
+@app.command(hidden=True)
+def secret():
+    raise NotImplementedError()
 
 
 if __name__ == "__main__":

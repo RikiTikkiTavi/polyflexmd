@@ -1,3 +1,5 @@
+import multiprocessing
+import time
 import typing
 
 import numpy as np
@@ -8,6 +10,8 @@ import pathlib
 import functools
 
 import scipy.optimize
+
+import polyflexmd.data_analysis.theory.kremer_grest
 
 
 class AtomGroup(enum.Enum):
@@ -220,26 +224,48 @@ def bond_auto_correlation(idx: np.ndarray, l_p: float) -> np.ndarray:
     return np.exp(-np.abs(idx[0] - idx[1]) / l_p)
 
 
-def estimate_kuhn_length(traj_df_unf: pd.DataFrame, l_K_guess: float, time_col: str = "t", ) -> pd.Series:
-    # Extract bond vectors
+def _extract_angles_from_chain(df: pd.DataFrame) -> np.array:
     dims = ['x', 'y', 'z']
+    mol_traj_step: np.ndarray = df[dims].to_numpy()
+    bonds_molecule = mol_traj_step[1:] - mol_traj_step[:-1]
+    bonds_molecule_normalized = bonds_molecule / np.sqrt(np.sum(bonds_molecule ** 2, axis=1))[:, np.newaxis]
+    return bonds_molecule_normalized @ bonds_molecule_normalized.T
 
-    angle_matrices_molecules = []
 
-    for molecule_id, mol_traj_step_df_unf in traj_df_unf.groupby([time_col, "molecule-ID"]):
-        mol_traj_step: np.ndarray = mol_traj_step_df_unf[dims].to_numpy()
-        bonds_molecule = mol_traj_step[1:] - mol_traj_step[:-1]
-        bonds_molecule_normalized = bonds_molecule / np.sqrt(np.sum(bonds_molecule ** 2, axis=1))[:, np.newaxis]
-        angle_matrices_molecules.append(bonds_molecule_normalized @ bonds_molecule_normalized.T)
+def estimate_kuhn_length(
+        traj_df_unf: pd.DataFrame,
+        l_K_guess: typing.Optional[float] = None,
+        l_b: typing.Optional[float] = None,
+        n_processes: int = 16,
+        time_col: str = "t"
+) -> pd.Series:
+
+    if l_b is not None and l_K_guess is None and "kappa" in traj_df_unf.columns:
+        l_K_guess = polyflexmd.data_analysis.theory.kremer_grest.bare_kuhn_length(
+            kappa=float(traj_df_unf.iloc[0]["kappa"]),
+            l_b=l_b
+        )
+
+    p: multiprocessing.Pool
+    with multiprocessing.Pool(processes=n_processes) as p:
+        angle_matrices_molecules = p.map(
+            _extract_angles_from_chain,
+            [df for _, df in traj_df_unf.groupby([time_col, "molecule-ID"])]
+        )
 
     angle_matrix_avg = np.mean(angle_matrices_molecules, axis=0)
 
     x_data = np.array(list(np.ndindex(*angle_matrix_avg.shape))).T
     y_data = np.array([angle_matrix_avg[idx] for idx in np.ndindex(*angle_matrix_avg.shape)])
 
+    l_p_guess = l_K_guess / 2
+
     popt, pcov = scipy.optimize.curve_fit(
         bond_auto_correlation,
-        x_data, y_data, p0=l_K_guess / 2, bounds=[.1, 1000]
+        x_data,
+        y_data,
+        p0=l_p_guess,
+        bounds=[l_p_guess / 5, l_p_guess * 5],
     )
 
     l_p = popt[0]
@@ -253,15 +279,19 @@ def estimate_kuhn_length(traj_df_unf: pd.DataFrame, l_K_guess: float, time_col: 
 def estimate_kuhn_length_df(
         df_trajectory: pd.DataFrame,
         group_by_params: list[str],
+        l_b: typing.Optional[float] = None,
+        n_processes: int = 16,
         time_col: str = "t",
-        t_equilibrium: float = 0.0,
-        l_K_guess: float = 50.0
+        t_equilibrium: float = 0.0
 ) -> typing.Union[pd.DataFrame, pd.Series]:
     if t_equilibrium > 0.0:
         df_trajectory = df_trajectory.loc[df_trajectory[time_col] > t_equilibrium]
 
-    l_K_result = df_trajectory.groupby(group_by_params).parallel_apply(
-        functools.partial(estimate_kuhn_length, l_K_guess=l_K_guess, time_col=time_col)
+    l_K_result = df_trajectory.groupby(group_by_params).apply(
+        estimate_kuhn_length,
+        time_col=time_col,
+        l_b=l_b,
+        n_processes=n_processes
     )
 
     return l_K_result

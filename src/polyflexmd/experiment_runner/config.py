@@ -73,6 +73,14 @@ class ReportConfig:
     notebook_params: dict
 
 
+@pydantic.dataclasses.dataclass
+class DataProcessingConfig:
+    job: SlurmJobConfig
+    venv_path: pathlib.Path
+    command: pathlib.Path
+    params: dict
+
+
 _INITIAL_SYSTEM = TypeVar("_INITIAL_SYSTEM", SystemCreatorConfig, SystemFromPrevExperimentConfig)
 
 
@@ -81,6 +89,7 @@ class ExperimentConfig(Generic[_INITIAL_SYSTEM]):
     simulation_config: SimulationConfig
     initial_system_config: _INITIAL_SYSTEM = pydantic.Field(discriminator="system_type")
     report_config: typing.Optional[ReportConfig] = None
+    data_processing_config: typing.Optional[DataProcessingConfig] = None
 
 
 def read_experiment_config(config_file_path: pathlib.Path) -> ExperimentConfig:

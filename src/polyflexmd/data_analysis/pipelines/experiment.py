@@ -1,5 +1,6 @@
 import logging
 import pathlib
+import time
 import typing
 
 import numpy as np
@@ -12,21 +13,23 @@ import polyflexmd.data_analysis.data.read
 import polyflexmd.data_analysis.data.constants
 import polyflexmd.data_analysis.transform.transform as transform
 
+
 _logger = logging.getLogger(__name__)
 
 
 def process_experiment_data(
         path_experiment: pathlib.Path,
         style: typing.Literal["l_K+d_end", "l_K", "simple"],
+        n_workers: int = 16,
         read_relax: bool = False,
-        enable_l_K_estimate: bool = True
+        enable_l_K_estimate: bool = True,
 ):
     _logger.info(f"Processing data of experiment: {path_experiment}")
     _logger.info(f"Data style: {style}")
     _logger.info(f"Read relax: {read_relax}")
 
     pandarallel.initialize(
-        nb_workers=8,
+        nb_workers=n_workers,
         progress_bar=False,
         use_memory_fs=None
     )
@@ -139,11 +142,12 @@ def process_experiment_data(
             group_by_params=group_by_params,
             parallel=True
         )
-        print(f"Writing {path_ete} ...")
+        _logger.info(f"Writing {path_ete} ...")
         df_ete.to_csv(path_ete, index=True)
 
     # l_K estimate
     if enable_l_K_estimate:
+
         path_df_l_K = path_data_processed / "l_K-estimate.csv"
 
         if path_df_l_K.exists():
@@ -151,11 +155,15 @@ def process_experiment_data(
         else:
             _logger.info(f"{path_df_l_K} does not exist;")
             _logger.info(f"Estimating l_K from trajectories ...")
+            t_start = time.time()
             l_ks_estimate = transform.estimate_kuhn_length_df(
                 df_trajectory=df_trajectories,
                 group_by_params=["kappa", "d_end"],
-                t_equilibrium=config.simulation_config.variables["n_relax_steps"]
+                t_equilibrium=config.simulation_config.variables["n_relax_steps"],
+                l_b=config.initial_system_config.system_config.bond_length,
+                n_processes=n_workers
             )
+            _logger.debug(f"Estimatation of l_K took: {time.time()-t_start}s")
             _logger.info(f"Writing {path_df_l_K}")
             l_ks_estimate.to_csv(path_df_l_K, index=True)
 
