@@ -13,6 +13,7 @@ import polyflexmd.data_analysis.data.read
 import polyflexmd.data_analysis.data.constants
 import polyflexmd.data_analysis.transform.transform as transform
 
+import polyflexmd.data_analysis.theory.kremer_grest
 
 _logger = logging.getLogger(__name__)
 
@@ -161,7 +162,8 @@ def process_experiment_data(
                 group_by_params=["kappa", "d_end"],
                 t_equilibrium=config.simulation_config.variables["n_relax_steps"],
                 l_b=config.initial_system_config.system_config.bond_length,
-                n_processes=n_workers
+                n_processes=n_workers,
+                N_beads=config.initial_system_config.system_config.n_monomers
             )
             _logger.debug(f"Estimatation of l_K took: {time.time()-t_start}s")
             _logger.info(f"Writing {path_df_l_K}")

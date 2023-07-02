@@ -226,25 +226,27 @@ def bond_auto_correlation(idx: np.ndarray, l_p: float) -> np.ndarray:
 
 def _extract_angles_from_chain(df: pd.DataFrame) -> np.array:
     dims = ['x', 'y', 'z']
-    mol_traj_step: np.ndarray = df[dims].to_numpy()
+    mol_traj_step: np.ndarray = df[dims].to_numpy(dtype=np.float32)
     bonds_molecule = mol_traj_step[1:] - mol_traj_step[:-1]
     bonds_molecule_normalized = bonds_molecule / np.sqrt(np.sum(bonds_molecule ** 2, axis=1))[:, np.newaxis]
-    return bonds_molecule_normalized @ bonds_molecule_normalized.T
+    angle_matrix = bonds_molecule_normalized @ bonds_molecule_normalized.T
+    return angle_matrix[np.triu_indices(angle_matrix.shape[0], k=1)]
 
 
 def estimate_kuhn_length(
         traj_df_unf: pd.DataFrame,
+        N_beads: int,
         l_K_guess: typing.Optional[float] = None,
         l_b: typing.Optional[float] = None,
         n_processes: int = 16,
-        time_col: str = "t"
+        time_col: str = "t",
 ) -> pd.Series:
 
     if l_b is not None and l_K_guess is None and "kappa" in traj_df_unf.columns:
-        l_K_guess = polyflexmd.data_analysis.theory.kremer_grest.bare_kuhn_length(
+        l_K_guess = np.float32(polyflexmd.data_analysis.theory.kremer_grest.bare_kuhn_length(
             kappa=float(traj_df_unf.iloc[0]["kappa"]),
             l_b=l_b
-        )
+        ))
 
     p: multiprocessing.Pool
     with multiprocessing.Pool(processes=n_processes) as p:
@@ -254,17 +256,20 @@ def estimate_kuhn_length(
         )
 
     angle_matrix_avg = np.mean(angle_matrices_molecules, axis=0)
+    angle_matrix_std = np.std(angle_matrices_molecules, axis=0)
 
-    x_data = np.array(list(np.ndindex(*angle_matrix_avg.shape))).T
-    y_data = np.array([angle_matrix_avg[idx] for idx in np.ndindex(*angle_matrix_avg.shape)])
+    indexes = np.triu_indices(N_beads-1, k=1)
+    x_data = np.array(indexes, dtype=np.ushort)
 
     l_p_guess = l_K_guess / 2
 
     popt, pcov = scipy.optimize.curve_fit(
         bond_auto_correlation,
         x_data,
-        y_data,
+        angle_matrix_avg,
         p0=l_p_guess,
+        sigma=angle_matrix_std,
+        absolute_sigma=True,
         bounds=[l_p_guess / 5, l_p_guess * 5],
     )
 
@@ -279,6 +284,7 @@ def estimate_kuhn_length(
 def estimate_kuhn_length_df(
         df_trajectory: pd.DataFrame,
         group_by_params: list[str],
+        N_beads: int,
         l_b: typing.Optional[float] = None,
         n_processes: int = 16,
         time_col: str = "t",
@@ -291,7 +297,8 @@ def estimate_kuhn_length_df(
         estimate_kuhn_length,
         time_col=time_col,
         l_b=l_b,
-        n_processes=n_processes
+        n_processes=n_processes,
+        N_beads=N_beads
     )
 
     return l_K_result
