@@ -232,6 +232,7 @@ def _extract_angles_from_chain(df: pd.DataFrame) -> np.array:
     angle_matrix = bonds_molecule_normalized @ bonds_molecule_normalized.T
     return angle_matrix
 
+
 def estimate_kuhn_length(
         traj_df_unf: pd.DataFrame,
         N_beads: int,
@@ -240,7 +241,6 @@ def estimate_kuhn_length(
         n_processes: int = 16,
         time_col: str = "t",
 ) -> pd.Series:
-
     if l_b is not None and l_K_guess is None and "kappa" in traj_df_unf.columns:
         l_K_guess = np.float32(polyflexmd.data_analysis.theory.kremer_grest.bare_kuhn_length(
             kappa=float(traj_df_unf.iloc[0]["kappa"]),
@@ -255,17 +255,17 @@ def estimate_kuhn_length(
         )
 
     angle_matrix_avg = np.mean(angle_matrices_molecules, axis=0)
-    #angle_matrix_std = np.std(angle_matrices_molecules, axis=0)
+    # angle_matrix_std = np.std(angle_matrices_molecules, axis=0)
 
-    indexes_up = np.triu_indices(N_beads-1, k=1)
-    indexes_down = np.tril_indices(N_beads-1, k=-1)
+    indexes_up = np.triu_indices(N_beads - 1, k=1)
+    indexes_down = np.tril_indices(N_beads - 1, k=-1)
     x_data = np.hstack([indexes_up, indexes_down])
     row_idx, col_idx = x_data
     y_data = angle_matrix_avg[row_idx, col_idx]
     # y_std = angle_matrix_std[row_idx, col_idx]
 
-    x_data = np.array(np.triu_indices(N_beads-1, k=1))
-    y_data = angle_matrix_avg
+    # x_data = np.array(np.triu_indices(N_beads - 1, k=1))
+    # y_data = angle_matrix_avg
 
     l_p_guess = l_K_guess / 2
 
@@ -274,8 +274,8 @@ def estimate_kuhn_length(
         x_data,
         y_data,
         p0=l_p_guess,
-        #sigma=y_std,
-        #absolute_sigma=True,
+        # sigma=y_std,
+        # absolute_sigma=True,
         bounds=[l_p_guess / 5, l_p_guess * 5],
     )
 
@@ -360,10 +360,53 @@ def basis_change_from_cartesian(basis_new: np.ndarray, v_old: np.ndarray):
     return np.linalg.solve(basis_new.T, v_old)
 
 
-def main():
-    vec = np.array([-0.15992717, -0.01745058, -0.95656614])
-    basis_new = create_orthogonal_basis_with_given_vector(vec)
-    R_vec_old = np.array([21.1113, 3.337980, -51.8683])
-    R_vec_new = basis_change_from_cartesian(basis_new, R_vec_old)
-    print(f"R_vec old: {R_vec_old}; Norm: {np.linalg.norm(R_vec_old)}")
-    print(f"R_vec new: {R_vec_new}; Norm: {np.linalg.norm(R_vec_new)}")
+def change_basis_df_ete(df_ete: pd.DataFrame, df_main_axis: pd.DataFrame):
+    dims = ["x", "y", "z"]
+    dims_R = ["R_x", "R_y", "R_z"]
+    dfs = []
+    for mol_id, df_mol in df_ete.groupby("molecule-ID"):
+        vec_axs = df_main_axis.loc[df_main_axis["molecule-ID"] == mol_id].iloc[1][dims].to_numpy()
+        basis_new = create_orthogonal_basis_with_given_vector(vec_axs)
+        R_vecs = []
+        for R_vec in df_mol[dims_R].to_numpy():
+            R_vec_new = basis_change_from_cartesian(basis_new, R_vec)
+            R_vecs.append(R_vec_new)
+        df_mol[dims_R] = R_vecs
+        dfs.append(df_mol)
+
+    return pd.concat(dfs)
+
+
+def calculate_msd_by_dimension(
+        df_ete_step: pd.DataFrame,
+        df_ete_step_0: pd.DataFrame,
+        dimensions: list[str]
+) -> pd.Series:
+    df_ete_step_vec = df_ete_step[dimensions].to_numpy()
+    df_ete_step_0_vec = df_ete_step_0[dimensions].to_numpy()
+    MSD_dims = (df_ete_step_vec - df_ete_step_0_vec) ** 2
+    MSD_dims_avg = MSD_dims.mean(axis=0)
+    MSD_vec_avg = np.sum(MSD_dims, axis=1).mean()
+    return pd.Series([*MSD_dims_avg, MSD_vec_avg], index=["dR_x^2", "dR_y^2", "dR_z^2", "dR^2"])
+
+
+def calculate_msd_by_dimension_df(
+        df_ete: pd.DataFrame,
+        group_by_params: list[str],
+        time_param: str = "t",
+        dimensions: tuple[str, str, str] = ("R_x", "R_y", "R_z")
+) -> pd.DataFrame:
+    df_ete = df_ete.reset_index(drop=False).drop("R", axis=1)
+    dfs = []
+    for params, df_group in df_ete.groupby(group_by_params):
+        t_min = df_group[time_param].min()
+        df_group_t_0 = df_group.loc[df_group["t"] == t_min]
+        df_group_MSD = df_group.groupby(time_param).apply(
+            calculate_msd_by_dimension,
+            df_ete_step_0=df_group_t_0,
+            dimensions=list(dimensions)
+        )
+        df_group_MSD[group_by_params] = params
+        dfs.append(df_group_MSD)
+
+    return pd.concat(dfs)
