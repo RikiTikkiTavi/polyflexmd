@@ -1,3 +1,4 @@
+import logging
 import multiprocessing
 import time
 import typing
@@ -12,6 +13,8 @@ import functools
 import scipy.optimize
 
 import polyflexmd.data_analysis.theory.kremer_grest
+
+_logger = logging.getLogger(__name__)
 
 
 class AtomGroup(enum.Enum):
@@ -242,10 +245,12 @@ def estimate_kuhn_length(
         time_col: str = "t",
 ) -> pd.Series:
     if l_b is not None and l_K_guess is None and "kappa" in traj_df_unf.columns:
+        kappa = float(traj_df_unf.iloc[0]["kappa"])
         l_K_guess = np.float32(polyflexmd.data_analysis.theory.kremer_grest.bare_kuhn_length(
-            kappa=float(traj_df_unf.iloc[0]["kappa"]),
+            kappa=kappa,
             l_b=l_b
         ))
+        _logger.debug(f"l_K guess for kappa={kappa:.2f}: {l_K_guess}")
 
     p: multiprocessing.Pool
     with multiprocessing.Pool(processes=n_processes) as p:
@@ -365,7 +370,7 @@ def change_basis_df_ete(df_ete: pd.DataFrame, df_main_axis: pd.DataFrame):
     dims_R = ["R_x", "R_y", "R_z"]
     dfs = []
     for mol_id, df_mol in df_ete.groupby("molecule-ID"):
-        vec_axs = df_main_axis.loc[df_main_axis["molecule-ID"] == mol_id].iloc[1][dims].to_numpy()
+        vec_axs = df_main_axis.loc[df_main_axis["molecule-ID"] == mol_id].iloc[0][dims].to_numpy()
         basis_new = create_orthogonal_basis_with_given_vector(vec_axs)
         R_vecs = []
         for R_vec in df_mol[dims_R].to_numpy():

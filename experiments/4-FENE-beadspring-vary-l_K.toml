@@ -2,14 +2,14 @@
 simulation_model_path = "simulations/FENE-beadspring-vary-l_K.lammps"
 experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/data/experiment_results"
 n_partitions = 8
-n_tasks_per_partition = 128
+n_tasks_per_partition = 125
 
 [simulation_config.variables]
 kappa_start = 1.0
-kappa_delta = 5
+kappa_delta = 8
 kappa_n_values = 8
-n_relax_steps = 33000000
-n_equilibrium_steps = 10000000
+n_relax_steps = 55000000
+n_equilibrium_steps = 40000000
 
 [simulation_config.job]
 account = "p_mdpolymer"
@@ -27,8 +27,8 @@ venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
 
 [system_creator_config.system_config]
 name = "anchored-fene-chain"
-n_chains = 200
-n_monomers = 128
+n_chains = 500
+n_monomers = 64
 monomer_type = 2
 bond_type = 1
 angle_type = 1
