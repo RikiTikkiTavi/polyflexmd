@@ -220,8 +220,8 @@ def calculate_ens_avg_df_ete_change_kappas_dend(df_ete_kappas_dend: pd.DataFrame
     return pd.concat(dfs_ete_change)
 
 
-def bond_auto_correlation(idx: np.ndarray, l_p: float) -> np.ndarray:
-    return np.exp(-np.abs(idx[0] - idx[1]) / l_p)
+def bond_auto_correlation(idx: np.ndarray, l_p: float, l_b: float) -> np.ndarray:
+    return np.exp(-np.abs(idx[0] - idx[1]) * l_b / l_p)
 
 
 def _extract_angles_from_chain(df: pd.DataFrame) -> np.array:
@@ -230,8 +230,7 @@ def _extract_angles_from_chain(df: pd.DataFrame) -> np.array:
     bonds_molecule = mol_traj_step[1:] - mol_traj_step[:-1]
     bonds_molecule_normalized = bonds_molecule / np.sqrt(np.sum(bonds_molecule ** 2, axis=1))[:, np.newaxis]
     angle_matrix = bonds_molecule_normalized @ bonds_molecule_normalized.T
-    return angle_matrix[np.triu_indices(angle_matrix.shape[0], k=1)]
-
+    return angle_matrix
 
 def estimate_kuhn_length(
         traj_df_unf: pd.DataFrame,
@@ -256,20 +255,27 @@ def estimate_kuhn_length(
         )
 
     angle_matrix_avg = np.mean(angle_matrices_molecules, axis=0)
-    angle_matrix_std = np.std(angle_matrices_molecules, axis=0)
+    #angle_matrix_std = np.std(angle_matrices_molecules, axis=0)
 
-    indexes = np.triu_indices(N_beads-1, k=1)
-    x_data = np.array(indexes, dtype=np.ushort)
+    indexes_up = np.triu_indices(N_beads-1, k=1)
+    indexes_down = np.tril_indices(N_beads-1, k=-1)
+    x_data = np.hstack([indexes_up, indexes_down])
+    row_idx, col_idx = x_data
+    y_data = angle_matrix_avg[row_idx, col_idx]
+    # y_std = angle_matrix_std[row_idx, col_idx]
+
+    x_data = np.array(np.triu_indices(N_beads-1, k=1))
+    y_data = angle_matrix_avg
 
     l_p_guess = l_K_guess / 2
 
     popt, pcov = scipy.optimize.curve_fit(
-        bond_auto_correlation,
+        functools.partial(bond_auto_correlation, l_b=l_b),
         x_data,
-        angle_matrix_avg,
+        y_data,
         p0=l_p_guess,
-        sigma=angle_matrix_std,
-        absolute_sigma=True,
+        #sigma=y_std,
+        #absolute_sigma=True,
         bounds=[l_p_guess / 5, l_p_guess * 5],
     )
 

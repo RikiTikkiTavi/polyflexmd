@@ -128,19 +128,14 @@ def process_experiment_data(
 
     if path_ete.exists():
         _logger.info(f"{path_ete} exists => Reading processed ...")
-        df_ete = pd.read_csv(path_ete, index_col=["kappa", "d_end", "molecule-ID", "t"])
+        df_ete = pd.read_csv(path_ete, index_col=[*group_by_parameters, "molecule-ID", "t"])
     else:
         _logger.info(f"{path_ete} does not exist;")
         _logger.info(f"Calculating ETE ...")
-        group_by_params = []
-        if style.startswith("l_K"):
-            group_by_params.append("kappa"),
-        if style == "l_K+d_end":
-            group_by_params.append("d_end")
-        _logger.debug(f"Group by params for ete calculation: {group_by_params}")
+        _logger.debug(f"Group by params for ete calculation: {group_by_parameters}")
         df_ete = transform.calc_end_to_end_df(
             df_trajectories,
-            group_by_params=group_by_params,
+            group_by_params=group_by_parameters,
             parallel=True
         )
         _logger.info(f"Writing {path_ete} ...")
@@ -159,7 +154,7 @@ def process_experiment_data(
             t_start = time.time()
             l_ks_estimate = transform.estimate_kuhn_length_df(
                 df_trajectory=df_trajectories,
-                group_by_params=["kappa", "d_end"],
+                group_by_params=group_by_parameters,
                 t_equilibrium=config.simulation_config.variables["n_relax_steps"],
                 l_b=config.initial_system_config.system_config.bond_length,
                 n_processes=n_workers,
