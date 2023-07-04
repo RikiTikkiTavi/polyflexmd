@@ -38,8 +38,9 @@ def plot_MSD(
         label=label,
         color=color,
         marker=marker,
-        linewidths=2,
-        edgecolors="black"
+        linewidths=1,
+        edgecolors="black",
+        s=10
     )
 
     title_prefix = "MSD"
