@@ -8,7 +8,7 @@ n_tasks_per_partition = 125
 
 [simulation_config.variables]
 kappa_start = 1.0
-kappa_delta = 8
+kappa_delta = 10
 kappa_n_values = 8
 n_relax_steps = 30000000
 n_equilibrium_steps = 35000000
