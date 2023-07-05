@@ -227,22 +227,17 @@ def bond_auto_correlation(idx: np.ndarray, l_p: float, l_b: float) -> np.ndarray
     return np.exp(-np.abs(idx[0] - idx[1]) * l_b / l_p)
 
 
-def _extract_angles_from_chain(df: pd.DataFrame) -> np.array:
-    dims = ['x', 'y', 'z']
-    mol_traj_step: np.ndarray = df[dims].to_numpy(dtype=np.float32)
-    bonds_molecule = mol_traj_step[1:] - mol_traj_step[:-1]
-    bonds_molecule_normalized = bonds_molecule / np.sqrt(np.sum(bonds_molecule ** 2, axis=1))[:, np.newaxis]
-    angle_matrix = bonds_molecule_normalized @ bonds_molecule_normalized.T
-    return angle_matrix
+def extract_cos_matrix_from_chain(positions: np.ndarray) -> np.array:
+    bonds_molecule = positions[1:] - positions[:-1]
+    bonds_molecule /= np.linalg.norm(bonds_molecule, axis=1)[:, np.newaxis]
+    return bonds_molecule @ bonds_molecule.T
 
 
 def estimate_kuhn_length(
         traj_df_unf: pd.DataFrame,
         N_beads: int,
         l_K_guess: typing.Optional[float] = None,
-        l_b: typing.Optional[float] = None,
-        n_processes: int = 16,
-        time_col: str = "t",
+        l_b: typing.Optional[float] = None
 ) -> pd.Series:
     if l_b is not None and l_K_guess is None and "kappa" in traj_df_unf.columns:
         kappa = float(traj_df_unf.iloc[0]["kappa"])
@@ -252,25 +247,19 @@ def estimate_kuhn_length(
         ))
         _logger.debug(f"l_K guess for kappa={kappa:.2f}: {l_K_guess}")
 
-    p: multiprocessing.Pool
-    with multiprocessing.Pool(processes=n_processes) as p:
-        angle_matrices_molecules = p.map(
-            _extract_angles_from_chain,
-            [df for _, df in traj_df_unf.groupby([time_col, "molecule-ID"])]
-        )
+    cos_matrices_molecules = [
+        extract_cos_matrix_from_chain(df[['x', 'y', 'z']].to_numpy())
+        for _, df in traj_df_unf.groupby("molecule-ID")
+    ]
 
-    angle_matrix_avg = np.mean(angle_matrices_molecules, axis=0)
+    cos_matrix_avg = np.mean(cos_matrices_molecules, axis=0)
     # angle_matrix_std = np.std(angle_matrices_molecules, axis=0)
 
     indexes_up = np.triu_indices(N_beads - 1, k=1)
     indexes_down = np.tril_indices(N_beads - 1, k=-1)
     x_data = np.hstack([indexes_up, indexes_down])
     row_idx, col_idx = x_data
-    y_data = angle_matrix_avg[row_idx, col_idx]
-    # y_std = angle_matrix_std[row_idx, col_idx]
-
-    # x_data = np.array(np.triu_indices(N_beads - 1, k=1))
-    # y_data = angle_matrix_avg
+    y_data = cos_matrix_avg[row_idx, col_idx]
 
     l_p_guess = l_K_guess / 2
 
@@ -281,7 +270,7 @@ def estimate_kuhn_length(
         p0=l_p_guess,
         # sigma=y_std,
         # absolute_sigma=True,
-        bounds=[l_p_guess / 5, l_p_guess * 5],
+        bounds=[l_p_guess / 100, l_p_guess * 5],
     )
 
     l_p = popt[0]
@@ -297,22 +286,19 @@ def estimate_kuhn_length_df(
         group_by_params: list[str],
         N_beads: int,
         l_b: typing.Optional[float] = None,
-        n_processes: int = 16,
         time_col: str = "t",
         t_equilibrium: float = 0.0
 ) -> typing.Union[pd.DataFrame, pd.Series]:
     if t_equilibrium > 0.0:
         df_trajectory = df_trajectory.loc[df_trajectory[time_col] > t_equilibrium]
 
-    l_K_result = df_trajectory.groupby(group_by_params).apply(
+    l_K_results = df_trajectory.groupby([*group_by_params, time_col]).parallel_apply(
         estimate_kuhn_length,
-        time_col=time_col,
         l_b=l_b,
-        n_processes=n_processes,
         N_beads=N_beads
     )
 
-    return l_K_result
+    return l_K_results
 
 
 def time_LJ_to_REAL(t_LJ, L_contour):

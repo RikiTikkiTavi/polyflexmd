@@ -33,7 +33,11 @@ def process_experiment_data(
         l_K_estimate: typing.Annotated[
             bool,
             typer.Option()
-        ] = True
+        ] = True,
+        save_angle_matrix: typing.Annotated[
+            bool,
+            typer.Option()
+        ] = False
 ):
     logging.basicConfig(
         level=logging.DEBUG,
@@ -45,7 +49,8 @@ def process_experiment_data(
         n_workers=n_workers,
         style=style.value,
         read_relax=read_relax,
-        enable_l_K_estimate=l_K_estimate
+        enable_l_K_estimate=l_K_estimate,
+        save_angle_matrix=save_angle_matrix
     )
 
 

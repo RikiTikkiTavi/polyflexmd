@@ -24,6 +24,7 @@ def process_experiment_data(
         n_workers: int = 16,
         read_relax: bool = False,
         enable_l_K_estimate: bool = True,
+        save_angle_matrix: bool = False
 ):
     _logger.info(f"Processing data of experiment: {path_experiment}")
     _logger.info(f"Data style: {style}")
@@ -157,7 +158,6 @@ def process_experiment_data(
                 group_by_params=group_by_parameters,
                 t_equilibrium=config.simulation_config.variables["n_relax_steps"],
                 l_b=config.initial_system_config.system_config.bond_length,
-                n_processes=n_workers,
                 N_beads=config.initial_system_config.system_config.n_monomers
             )
             _logger.debug(f"Estimatation of l_K took: {time.time()-t_start}s")
