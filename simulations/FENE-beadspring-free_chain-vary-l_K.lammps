@@ -41,6 +41,9 @@ variable i uloop ${kappa_n_values}
 
     # First let the polymers relax
 
+    # Add balancing
+    fix 5 all balance 1000000 1.05 shift xyz 20 1.05
+
     dump dump_vmd_${i} all atom 10000 ${experiment_path}/data/polymer_relax-${i}.vmd
     dump dump_${i} all custom 100000 ${experiment_path}/data/polymer_relax-${i}.out id type x y z ix iy iz
     dump_modify dump_vmd_${i} sort id
@@ -48,8 +51,7 @@ variable i uloop ${kappa_n_values}
 
     run ${n_relax_steps}
 
-    # Balance processors
-    balance 0.9 x uniform y uniform z uniform
+    unfix 5
 
     # Now collect data
 
