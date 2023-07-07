@@ -25,19 +25,11 @@ variable i uloop ${kappa_n_values}
     angle_coeff 1 ${kappa}
 
     # Setup groups
-    group anchor type 1
     group end    type 3
-    group  free subtract all anchor   # all monomers except anchors are free
-
 
     # Only free atoms are moved:
-    fix                      1 free nve
-    fix                      2 free langevin 1.0 1.0 1.0 904297
-
-
-    # For all fixed atoms, the force is set to zero:
-    fix                      4 anchor setforce 0.0 0.0 0.0
-
+    fix                      1 all nve
+    fix                      2 all langevin 1.0 1.0 1.0 904297
 
     thermo                    1000
     timestep                 0.0025
@@ -46,8 +38,6 @@ variable i uloop ${kappa_n_values}
 
     restart                  1000000  ${experiment_path}/checkpoints/fene.restart.${i}
 
-    # Add balancing
-    fix 5 all balance 1000000 1.05 shift xyz 20 1.05
 
     # First let the polymers relax
 
@@ -58,7 +48,8 @@ variable i uloop ${kappa_n_values}
 
     run ${n_relax_steps}
 
-    unfix 5
+    # Balance processors
+    balance 0.9 x uniform y uniform z uniform
 
     # Now collect data
 

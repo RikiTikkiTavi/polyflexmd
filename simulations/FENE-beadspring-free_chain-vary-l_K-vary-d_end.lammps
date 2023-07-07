@@ -1,0 +1,108 @@
+#FENE beadspring model with varying kappa in angle potential
+
+shell mkdir ${experiment_path}/data/raw
+
+variable i uloop ${kappa_n_values}
+
+    label LOOP_KAPPA_START
+
+    shell mkdir ${experiment_path}/logs/i_kappa=${i} ${experiment_path}/data/raw/i_kappa=${i} ${experiment_path}/checkpoints/i_kappa=${i}
+
+    variable j loop ${d_end_n_values}
+
+        label LOOP_M_END_START
+
+        shell mkdir ${experiment_path}/logs/i_kappa=${i}/j_d_end=${j} ${experiment_path}/data/raw/i_kappa=${i}/j_d_end=${j} ${experiment_path}/checkpoints/i_kappa=${i}/j_d_end=${j}
+
+        variable data_dir string ${experiment_path}/data/raw/i_kappa=${i}/j_d_end=${j}
+        variable logs_dir string ${experiment_path}/logs/i_kappa=${i}/j_d_end=${j}
+        variable checkpoints_dir string ${experiment_path}/checkpoints/i_kappa=${i}/j_d_end=${j}
+
+        units                    lj
+        atom_style               angle
+        special_bonds            fene
+        boundary                 p p p
+        
+        read_data                ${experiment_path}/data/initial_system.data
+
+        # Set mass of the end atom
+        mass 3 ${m_end}
+
+        # Config bond potential
+        bond_style               fene
+        bond_coeff               1 30.0 1.5 1.0 1.0    
+
+        # Config logging
+        log ${logs_dir}/log-${i}-${j}.txt
+
+        # Configure angle potential
+        variable kappa equal ${kappa_start}+${kappa_delta}*(${i}-1)
+        angle_style cosine
+        angle_coeff 1 ${kappa}
+
+        # Setup groups
+        group end type 3
+        group interim subtract all end # free monomers except end
+
+        fix                      1 all nve
+        fix                      2 interim langevin 1.0 1.0 1.0 904297
+
+        # Calculate d_end
+        variable d_end equal ${d_end_start}+${d_end_delta}*(${j}-1)
+
+        # Calculate dump for end monomer = tau_m_end
+        variable tau_m_end equal ${m_end}/${d_end}
+        
+        # Move end atom with damp=tau_m_end
+        fix                      3 end langevin 1.0 1.0 ${tau_m_end} 904297
+
+        thermo                    1000
+        timestep                 0.0025
+        neighbor       0.3 bin
+        neigh_modify   delay 1 every 1 check yes
+
+        restart                  1000000  ${checkpoints_dir}/restart.${i}-${j}
+
+
+        # First let the polymers relax
+
+        dump dump_vmd_${i}-${j} all atom 10000 ${data_dir}/polymer_relax-${i}-${j}.vmd
+        dump dump_${i}-${j} all custom 100000 ${data_dir}/polymer_relax-${i}-${j}.out id type x y z ix iy iz
+        dump_modify dump_vmd_${i}-${j} sort id
+        dump_modify dump_${i}-${j} sort id
+
+        run ${n_relax_steps}
+
+
+        # Now collect data
+
+        undump dump_vmd_${i}-${j}
+        undump dump_${i}-${j}
+
+        # atom-style dump for visualization
+        dump dump_vmd_${i}-${j} all atom 100000 ${data_dir}/polymer-${i}-${j}.vmd
+        dump_modify dump_vmd_${i}-${j} sort id
+
+        # MSD-quick-change region dump with higher dump frequency
+
+        # custom style dump for data analysis
+        dump dump_${i}-${j} all custom ${dump_frequency_1} ${data_dir}/polymer-${i}-${j}.out id type x y z ix iy iz
+        dump_modify dump_${i}-${j} sort id
+
+        run ${n_equilibrium_steps_1}
+
+        # MSD-normal-change region dump with lower frequency
+        dump_modify dump_${i}-${j} every ${dump_frequency_2} append yes
+
+        run ${n_equilibrium_steps_2}
+        
+        clear
+
+        next j
+
+        jump SELF LOOP_M_END_START
+
+    next i
+
+    jump SELF LOOP_KAPPA_START
+
