@@ -1,6 +1,6 @@
 [simulation_config]
 simulation_model_path = "simulations/FENE-beadspring-vary-l_K.lammps"
-experiments_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/data/experiment_results"
+experiments_path = "/beegfs/ws/0/s4610340-polyflexmd/data/experiment_results"
 lmod_modules = "modenv/hiera GCC/11.3.0 OpenMPI/4.1.4 Python/3.9.6"
 lammps_executable = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/bin/lammps-patch_23Jun2022_update4/lmp_omp_romeo_opt"
 n_partitions = 8
@@ -31,7 +31,7 @@ mem_per_cpu = 1000
 
 
 [initial_system_config]
-venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
+venv_path = "/beegfs/ws/0/s4610340-polyflexmd/polyflexmd/.venv"
 system_type = "create"
 
 [initial_system_config.system_config]
@@ -57,7 +57,7 @@ cpus_per_task = 2
 mem_per_cpu = 2000
 
 [report_config]
-venv_path = "/scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv"
+venv_path = "/beegfs/ws/0/s4610340-polyflexmd/polyflexmd/.venv"
 notebook = "notebooks/3-FENE-vary-l_K.ipynb"
 kernel = "polyflexmd"
 
