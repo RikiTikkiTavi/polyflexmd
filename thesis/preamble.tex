@@ -1,15 +1,14 @@
-
 \documentclass[
-    paper=A4,pagesize=automedia,fontsize=12pt,
-    BCOR=15mm,DIV=22,
-    twoside,headinclude,footinclude=false,
-    ngerman,fleqn,             % fleqn = linksbündige Ausrichtung von Formeln
-    bibtotocnumbered,          % Literaturverz. im Inhaltsverz. eintragen
-    liststotoc,                % Abbildungsverz. im Inhaltsverz. eintragen
-    listsleft,                 % Abbildungsverz. an der längsten Nummer ausrichten
-    pointlessnumbers,          % kein Punkt nach Überschriftsnummerierung
-    cleardoublepage=empty      % Vakatseiten ohne Paginierung
-]{scrlayer-scrpage}
+ paper=A4,pagesize=automedia,fontsize=12pt,
+ BCOR=15mm,DIV=22,
+ twoside,headinclude,footinclude=false,
+ ngerman,fleqn,             % fleqn = linksbündige Ausrichtung von Formeln
+ bibtotocnumbered,          % Literaturverz. im Inhaltsverz. eintragen
+ liststotoc,                % Abbildungsverz. im Inhaltsverz. eintragen
+ listsleft,                 % Abbildungsverz. an der längsten Nummer ausrichten
+ pointlessnumbers,          % kein Punkt nach Überschriftsnummerierung
+ cleardoublepage=empty      % Vakatseiten ohne Paginierung
+]{scrbook}
 \setlength\parindent{0em}
 
 % Kodierung, Schrift und Sprache auswählen
@@ -19,12 +18,11 @@
 % damit man Text aus dem PDF korrekt rauskopieren kann
 \usepackage{cmap}
 % Layout: Kopf-/Fußzeilen, anderthalbfacher Zeilenabstand
-\usepackage{scrlayer-scrpage}
-\pagestyle{scrheadings}
-\clearscrheadfoot
-\ihead{\headmark}\ohead{\pagemark}
-\automark[subsection]{section}
-\setheadsepline{0.5pt}
+\usepackage{scrlayer-scrpage} \pagestyle{scrheadings}
+                      \clearscrheadfoot
+                      \ihead{\headmark}\ohead{\pagemark}
+                      \automark[subsection]{section}
+                      \setheadsepline{0.5pt}
 \usepackage{setspace} \onehalfspacing
 \deffootnote{1em}{1em}{\textsuperscript{\thefootnotemark }}
 % Grafiken, Tabellen, Mathematikumgebungen
