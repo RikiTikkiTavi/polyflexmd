@@ -120,7 +120,8 @@ def process_timestep(df: dask.dataframe.DataFrame):
 
 def read_lammps_trajectory(
         path: pathlib.Path,
-        column_types: dict = constants.RAW_TRAJECTORY_DF_COLUMN_TYPES
+        column_types: dict = constants.RAW_TRAJECTORY_DF_COLUMN_TYPES,
+        time_steps_per_partition: int = 100000
 ) -> dask.dataframe.DataFrame:
     _logger.debug(f"Reading {path}...")
     df_bag = dask.bag.read_text(str(path), linedelimiter="\n", blocksize="128MiB").to_dataframe(columns=["row"])
@@ -129,12 +130,13 @@ def read_lammps_trajectory(
     columns.insert(0, "t")
     _logger.debug(f"Creating dataframe from {path}...")
     grouper = df_bag["row"].str.contains("ITEM: TIMESTEP").cumsum()
-    groups_count = len(grouper.unique().compute())
     df_groups = df_bag.groupby(grouper)
     df: dask.dataframe.DataFrame = df_groups.apply(
         process_timestep,
         meta=pd.DataFrame(columns=columns).astype(column_types)
-    ).reset_index(drop=True).repartition(npartitions=groups_count // 10)
+    )
+    divisions = df["t"].loc[df["t"] % time_steps_per_partition == 0].unique().compute().to_list()
+    df = df.set_index("t", divisions=divisions)
     return df
 
 

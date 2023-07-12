@@ -46,12 +46,16 @@ def process_experiment_data(
         format='%(asctime)s - %(levelname)s - %(name)s :: %(message)s', datefmt='%d.%m.%Y %I:%M:%S'
     )
     logging.getLogger("fsspec.local").setLevel(logging.INFO)
+    logging.getLogger("distributed.scheduler").setLevel(logging.WARNING)
+    logging.getLogger("distributed.core").setLevel(logging.WARNING)
+    logging.getLogger("distributed.nanny").setLevel(logging.WARNING)
+    logging.getLogger("distributed.utils_perf").setLevel(logging.WARNING)
 
     import dask.distributed
 
     client = dask.distributed.Client(n_workers=n_workers, processes=True)
 
-    print(client)
+    _logger.info(client)
 
     polyflexmd.data_analysis.pipelines.experiment.process_experiment_data(
         path_experiment=path_experiment,

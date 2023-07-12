@@ -31,13 +31,8 @@ def read_and_process_trajectory(
 
     df_trajectory_unfolded = df_trajectory_unfolded.drop(["ix", "iy", "iz"], axis=1)
 
-    cat_columns = []
-
     for (var_name, var_value), var_possible_values in zip(trajectory.variables, trajectory.possible_values):
         df_trajectory_unfolded[var_name] = var_value
-        cat_columns.append(var_name)
-
-    df_trajectory_unfolded = df_trajectory_unfolded.categorize(columns=cat_columns)
 
     return df_trajectory_unfolded
 
@@ -50,4 +45,5 @@ def read_and_process_trajectories(
         read_and_process_trajectory(path, system)
         for path in trajectories
     ]
+    df: dask.dataframe.DataFrame = dask.dataframe.concat(dataframes, interleave_partitions=True)
     return dask.dataframe.concat(dataframes)

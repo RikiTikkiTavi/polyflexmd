@@ -94,14 +94,10 @@ def join_raw_trajectory_df_with_system_data(
 
 def calc_end_to_end_df(
         trajectory_df_unfolded: pd.DataFrame,
-        group_by_params: typing.Iterable[str] = tuple(),
-        parallel: bool = False
-) -> pd.DataFrame:
-    gb = trajectory_df_unfolded.groupby([*group_by_params, "molecule-ID"])
-    if parallel:
-        return gb.parallel_apply(lambda dfg: dfg.groupby(["t"]).apply(calculate_end_to_end))
-    else:
-        return gb.apply(lambda dfg: dfg.groupby(["t"]).apply(calculate_end_to_end))
+        group_by_params: typing.Iterable[str] = tuple()
+) -> dask.dataframe.DataFrame:
+    gb = trajectory_df_unfolded.groupby(["t", *group_by_params, "molecule-ID"])
+    return gb.apply(calculate_end_to_end, meta=pd.DataFrame(columns=["R_x", "R_y", "R_z", "R"]))
 
 
 def calculate_ete_change_ens_avg(df_ete_t: pd.DataFrame, df_ete_t_0: pd.DataFrame) -> float:
@@ -244,13 +240,13 @@ def estimate_kuhn_length(
         l_K_guess: typing.Optional[float] = None,
         l_b: typing.Optional[float] = None
 ) -> pd.Series:
+
     if l_b is not None and l_K_guess is None and "kappa" in traj_df_unf.columns:
         kappa = float(traj_df_unf.iloc[0]["kappa"])
         l_K_guess = np.float32(polyflexmd.data_analysis.theory.kremer_grest.bare_kuhn_length(
             kappa=kappa,
             l_b=l_b
         ))
-        _logger.debug(f"l_K guess for kappa={kappa:.2f}: {l_K_guess}")
 
     cos_matrices_molecules = [
         extract_cos_matrix_from_chain(df[['x', 'y', 'z']].to_numpy())
@@ -283,24 +279,27 @@ def estimate_kuhn_length(
 
     # dl_p corresponds to 1 sigma
 
-    return pd.Series({"l_K": l_p * 2, "d_l_K": dl_p * 2 * 3})
+    l_K = l_p * 2
+    d_l_K = dl_p * 2 * 3
+
+    _logger.debug(f"Estimated l_K={l_K} +- {d_l_K} vs Guess l_K={l_K_guess}")
+
+    return pd.Series({"l_K": l_K, "d_l_K": d_l_K})
 
 
 def estimate_kuhn_length_df(
-        df_trajectory: pd.DataFrame,
+        df_trajectory: dask.dataframe.DataFrame,
         group_by_params: list[str],
         N_beads: int,
         l_b: typing.Optional[float] = None,
-        time_col: str = "t",
-        t_equilibrium: float = 0.0
-) -> typing.Union[pd.DataFrame, pd.Series]:
-    if t_equilibrium > 0.0:
-        df_trajectory = df_trajectory.loc[df_trajectory[time_col] > t_equilibrium]
+        time_col: str = "t"
+) -> dask.dataframe.DataFrame:
 
-    l_K_results = df_trajectory.groupby([*group_by_params, time_col]).parallel_apply(
+    l_K_results = df_trajectory.groupby([*group_by_params, time_col]).apply(
         estimate_kuhn_length,
         l_b=l_b,
-        N_beads=N_beads
+        N_beads=N_beads,
+        meta=pd.DataFrame(columns=["l_K", "d_l_K"])
     )
 
     return l_K_results

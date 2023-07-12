@@ -114,6 +114,10 @@ def process_experiment_data(
             traj_glob,
             dtype=traj_column_types
         )
+        divisions = df_trajectories["t"].loc[
+            df_trajectories["t"] % 100000 == 0
+        ].unique().compute().sort_values().tolist()
+        df_trajectories = df_trajectories.set_index("t", divisions=divisions)
 
     else:
         _logger.info(f"{path_traj_dir} does not exist;")
@@ -130,9 +134,9 @@ def process_experiment_data(
         )
         path_traj_dir.mkdir(exist_ok=True, parents=True)
         _logger.info(f"Writing {traj_glob} ...")
-        df_trajectories.to_csv(traj_glob, single_file=False, index=False)
+        df_trajectories.to_csv(traj_glob, single_file=False, index=True)
 
-    df_trajectories = df_trajectories.compute()
+    # df_trajectories = df_trajectories.compute()
 
     # ETE
     path_ete = path_data_processed / "ete.csv"
@@ -147,8 +151,7 @@ def process_experiment_data(
         df_ete = transform.calc_end_to_end_df(
             df_trajectories,
             group_by_params=group_by_parameters,
-            parallel=True
-        )
+        ).compute()
         _logger.info(f"Writing {path_ete} ...")
         df_ete.to_csv(path_ete, index=True)
 
@@ -166,10 +169,9 @@ def process_experiment_data(
             l_ks_estimate = transform.estimate_kuhn_length_df(
                 df_trajectory=df_trajectories,
                 group_by_params=group_by_parameters,
-                t_equilibrium=config.simulation_config.variables["n_relax_steps"],
                 l_b=config.initial_system_config.system_config.bond_length,
                 N_beads=config.initial_system_config.system_config.n_monomers
-            )
+            ).compute()
             _logger.debug(f"Estimatation of l_K took: {time.time() - t_start}s")
             _logger.info(f"Writing {path_df_l_K}")
             l_ks_estimate.to_csv(path_df_l_K, index=True)
@@ -185,6 +187,8 @@ def process_experiment_data(
 
         df_ete_equi = df_ete.iloc[
             df_ete.index.get_level_values("t") >= config.simulation_config.variables["n_relax_steps"]]
+
+        df_ete_equi = df_ete_equi.reset_index().set_index([*group_by_parameters, "molecule-ID", "t"])
 
         if style == "l_K":
             df_msd = transform.calculate_ens_avg_df_ete_change_kappas(df_ete_equi)
