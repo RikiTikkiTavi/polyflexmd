@@ -49,7 +49,7 @@ def process_experiment_data(
 
     import dask.distributed
 
-    client = dask.distributed.Client(dashboard_address=None)
+    client = dask.distributed.Client(n_workers=n_workers, processes=True)
 
     print(client)
 

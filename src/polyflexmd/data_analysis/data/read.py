@@ -1,5 +1,6 @@
 import io
 import itertools
+import logging
 import pathlib
 import typing
 
@@ -13,6 +14,7 @@ import dask.array
 import dask.dataframe
 import dask.bag
 
+_logger = logging.getLogger(__name__)
 
 def read_lammps_system_data(
         path: pathlib.Path,
@@ -102,7 +104,6 @@ def read_lammps_custom_trajectory_file_generator(
             line = file.readline()
 
 
-@dask.delayed
 def process_timestep(df: dask.dataframe.DataFrame):
     timestep = df.iloc[1][0]
     columns = df.iloc[8][0].split()[2:]
@@ -121,13 +122,20 @@ def read_lammps_trajectory(
         path: pathlib.Path,
         column_types: dict = constants.RAW_TRAJECTORY_DF_COLUMN_TYPES
 ) -> dask.dataframe.DataFrame:
-    df_bag = dask.bag.read_text(path, linedelimiter="\n").to_dataframe(columns=["row"])
+    _logger.debug(f"Reading {path}...")
+    df_bag = dask.bag.read_text(str(path), linedelimiter="\n", blocksize="128MiB").to_dataframe(columns=["row"])
+    _logger.debug(f"Extracting columns from {path}...")
     columns = df_bag.loc[df_bag["row"].str.contains("ITEM: ATOMS")].head(1).iloc[0]["row"].split()[2:]
     columns.insert(0, "t")
-    return df_bag.groupby(df_bag["row"].str.contains("ITEM: TIMESTEP").cumsum()).apply(
+    _logger.debug(f"Creating dataframe from {path}...")
+    grouper = df_bag["row"].str.contains("ITEM: TIMESTEP").cumsum()
+    groups_count = len(grouper.unique().compute())
+    df_groups = df_bag.groupby(grouper)
+    df: dask.dataframe.DataFrame = df_groups.apply(
         process_timestep,
         meta=pd.DataFrame(columns=columns).astype(column_types)
-    ).reset_index(drop=True)
+    ).reset_index(drop=True).repartition(npartitions=groups_count // 10)
+    return df
 
 
 def read_raw_trajectory_df(
@@ -147,22 +155,12 @@ def read_multiple_raw_trajectory_dfs(
         paths: list[pathlib.Path],
         column_types: dict = constants.RAW_TRAJECTORY_DF_COLUMN_TYPES
 ) -> dask.dataframe.DataFrame:
-    rows_bags = []
+    dfs = []
 
     for path in paths:
-        col_rows_iter_1, col_rows_iter_2 = itertools.tee(
-            read_lammps_custom_trajectory_file_generator(path, column_types),
-            2
-        )
-        columns, row = next(col_rows_iter_1)
-        for _, step_rows in col_rows_iter_2:
-            rows_bags.append(dask.bag.from_sequence(step_rows, npartitions=1))
+        dfs.append(read_lammps_trajectory(path, column_types=column_types))
 
-    df = dask.bag.concat(rows_bags).to_dataframe(
-        meta=pd.DataFrame(columns=columns).astype(column_types)
-    )
-
-    return df
+    return dask.dataframe.concat(dfs)
 
 
 class VariableTrajectoryPath(typing.NamedTuple):

@@ -3,6 +3,7 @@ import multiprocessing
 import time
 import typing
 
+import dask.dataframe
 import numpy as np
 import pandas as pd
 import enum
@@ -45,6 +46,7 @@ def unfold_coordinates_df(
         trajectory_df: pd.DataFrame,
         system_data: types.LammpsSystemData
 ) -> pd.DataFrame:
+    _logger.debug("Unfolding coordinates ...")
 
     dimensions = ('x', 'y', 'z')
 
@@ -58,11 +60,13 @@ def unfold_coordinates_df(
 def calculate_end_to_end(molecule_traj_step_df_unf: pd.DataFrame) -> pd.Series:
     root_atom_data: pd.Series = molecule_traj_step_df_unf \
         .loc[molecule_traj_step_df_unf["type"] == AtomGroup.ROOT.value] \
+        .head(5) \
         .sort_values("id", ascending=True) \
         .iloc[0]
 
     leaf_atom_data: pd.Series = molecule_traj_step_df_unf \
         .loc[molecule_traj_step_df_unf["type"] == AtomGroup.LEAF.value] \
+        .head(5) \
         .sort_values("id", ascending=False) \
         .iloc[0]
 
@@ -81,6 +85,7 @@ def join_raw_trajectory_df_with_system_data(
         raw_trajectory_df: pd.DataFrame,
         system_data: types.LammpsSystemData
 ) -> pd.DataFrame:
+    _logger.debug("Joining with system data ...")
     return raw_trajectory_df.join(
         system_data.atoms["molecule-ID"],
         on="id"

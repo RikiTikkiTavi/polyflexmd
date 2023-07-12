@@ -1,3 +1,4 @@
+import copy
 import logging
 import pathlib
 import time
@@ -97,21 +98,25 @@ def process_experiment_data(
         df_main_axis.to_csv(path_df_main_axis, index=False)
 
     # Trajectories
-    path_traj_processed = path_data_processed / "trajectories.csv"
+    path_traj_dir = path_data_processed / "trajectories"
+    traj_glob = f"{str(path_traj_dir)}/trajectories-*.csv"
+    # path_traj_processed = path_data_processed / "trajectories.csv"
 
-    if path_traj_processed.exists():
-        _logger.info(f"{path_traj_processed} exists => Reading processed ...")
-        df_trajectories = pd.read_csv(
-            path_traj_processed,
-            dtype={
-                **polyflexmd.data_analysis.data.constants.RAW_TRAJECTORY_DF_COLUMN_TYPES,
-                "molecule-ID": np.ushort,
-                "kappa": "category",
-                "d_end": "category",
-            }
+    if path_traj_dir.exists():
+        _logger.info(f"{path_traj_dir} exists => Reading processed ...")
+        traj_column_types = copy.deepcopy(polyflexmd.data_analysis.data.constants.RAW_TRAJECTORY_DF_COLUMN_TYPES)
+        traj_column_types.pop("ix")
+        traj_column_types.pop("iy")
+        traj_column_types.pop("iz")
+        for param in group_by_parameters:
+            traj_column_types[param] = "category"
+        df_trajectories = dask.dataframe.read_csv(
+            traj_glob,
+            dtype=traj_column_types
         )
+
     else:
-        _logger.info(f"{path_traj_processed} does not exist;")
+        _logger.info(f"{path_traj_dir} does not exist;")
         _logger.info("Reading and processing trajectories ...")
         df_trajectories = polyflexmd.data_analysis.pipelines.trajectory.read_and_process_trajectories(
             trajectories=polyflexmd.data_analysis.data.read.get_experiment_trajectories_paths(
@@ -123,9 +128,11 @@ def process_experiment_data(
             ),
             system=initial_system
         )
-        _logger.info(f"Writing {path_traj_processed} ...")
-        df_trajectories.to_csv(path_traj_processed, single_file=True, index=False)
-        df_trajectories = df_trajectories.compute()
+        path_traj_dir.mkdir(exist_ok=True, parents=True)
+        _logger.info(f"Writing {traj_glob} ...")
+        df_trajectories.to_csv(traj_glob, single_file=False, index=False)
+
+    df_trajectories = df_trajectories.compute()
 
     # ETE
     path_ete = path_data_processed / "ete.csv"
