@@ -29,6 +29,8 @@ pandoc = "^2.3"
 mpi4py = "^3.1.4"
 jupyter-contrib-nbextensions = "^0.7.0"
 jupyter-nbextensions-configurator = "^0.6.3"
+dask = {extras = ["distributed"], version = "^2023.7.0"}
+bokeh = "^3.2.0"
 
 [build-system]
 requires = ["poetry-core"]

@@ -15,6 +15,8 @@ import polyflexmd.data_analysis.transform.transform as transform
 
 import polyflexmd.data_analysis.theory.kremer_grest
 
+import dask.dataframe
+
 _logger = logging.getLogger(__name__)
 
 
@@ -122,7 +124,8 @@ def process_experiment_data(
             system=initial_system
         )
         _logger.info(f"Writing {path_traj_processed} ...")
-        df_trajectories.to_csv(path_traj_processed, index=False)
+        df_trajectories.to_csv(path_traj_processed, single_file=True, index=False)
+        df_trajectories = df_trajectories.compute()
 
     # ETE
     path_ete = path_data_processed / "ete.csv"
@@ -160,7 +163,7 @@ def process_experiment_data(
                 l_b=config.initial_system_config.system_config.bond_length,
                 N_beads=config.initial_system_config.system_config.n_monomers
             )
-            _logger.debug(f"Estimatation of l_K took: {time.time()-t_start}s")
+            _logger.debug(f"Estimatation of l_K took: {time.time() - t_start}s")
             _logger.info(f"Writing {path_df_l_K}")
             l_ks_estimate.to_csv(path_df_l_K, index=True)
 

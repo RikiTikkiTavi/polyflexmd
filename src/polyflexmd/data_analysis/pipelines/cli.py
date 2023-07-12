@@ -8,6 +8,8 @@ import typer
 
 app = typer.Typer(invoke_without_command=False)
 
+_logger = logging.getLogger(__name__)
+
 
 class DataStyle(str, Enum):
     l_K = "l_K"
@@ -43,6 +45,13 @@ def process_experiment_data(
         level=logging.DEBUG,
         format='%(asctime)s - %(levelname)s - %(name)s :: %(message)s', datefmt='%d.%m.%Y %I:%M:%S'
     )
+    logging.getLogger("fsspec.local").setLevel(logging.INFO)
+
+    import dask.distributed
+
+    client = dask.distributed.Client(dashboard_address=None)
+
+    print(client)
 
     polyflexmd.data_analysis.pipelines.experiment.process_experiment_data(
         path_experiment=path_experiment,

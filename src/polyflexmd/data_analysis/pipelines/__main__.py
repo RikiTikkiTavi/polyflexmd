@@ -1,3 +1,4 @@
 import polyflexmd.data_analysis.pipelines.cli
 
-polyflexmd.data_analysis.pipelines.cli.app()
+if __name__ == "__main__":
+    polyflexmd.data_analysis.pipelines.cli.app()

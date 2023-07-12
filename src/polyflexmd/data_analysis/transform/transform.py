@@ -45,14 +45,14 @@ def unfold_coordinates_df(
         trajectory_df: pd.DataFrame,
         system_data: types.LammpsSystemData
 ) -> pd.DataFrame:
-    trajectory_df_unfolded = trajectory_df.copy()
+
     dimensions = ('x', 'y', 'z')
 
     for dim_i, dim_name in enumerate(dimensions):
         box_length = system_data.box.bounds[dim_i][1] - system_data.box.bounds[dim_i][0]
-        trajectory_df_unfolded[dim_name] = trajectory_df[dim_name] + trajectory_df[f"i{dim_name}"] * box_length
+        trajectory_df[dim_name] = trajectory_df[dim_name] + trajectory_df[f"i{dim_name}"] * box_length
 
-    return trajectory_df_unfolded
+    return trajectory_df
 
 
 def calculate_end_to_end(molecule_traj_step_df_unf: pd.DataFrame) -> pd.Series:

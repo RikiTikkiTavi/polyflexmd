@@ -9,6 +9,10 @@ import pymatgen.io.lammps.data
 import polyflexmd.data_analysis.data.types as types
 import polyflexmd.data_analysis.data.constants as constants
 
+import dask.array
+import dask.dataframe
+import dask.bag
+
 
 def read_lammps_system_data(
         path: pathlib.Path,
@@ -50,10 +54,10 @@ def _read_atoms_step(
         timestep: int
 ) -> typing.Generator[list[typing.Any], None, None]:
     for i in range(particles_n):
-        #row = [
+        # row = [
         #    column_types[col_name](raw_col_val)
         #    for col_name, raw_col_val in zip(columns, file.readline().split())
-        #]
+        # ]
         row = file.readline().split()
         row.insert(0, timestep)
         yield row
@@ -98,6 +102,34 @@ def read_lammps_custom_trajectory_file_generator(
             line = file.readline()
 
 
+@dask.delayed
+def process_timestep(df: dask.dataframe.DataFrame):
+    timestep = df.iloc[1][0]
+    columns = df.iloc[8][0].split()[2:]
+
+    header = ["t", *columns]
+    rows = []
+    for _, row in df.iloc[9:].to_records(index=True):
+        values = row.split()
+        values.insert(0, timestep)
+        rows.append(values)
+
+    return pd.DataFrame(rows, columns=header).astype(constants.RAW_TRAJECTORY_DF_COLUMN_TYPES)
+
+
+def read_lammps_trajectory(
+        path: pathlib.Path,
+        column_types: dict = constants.RAW_TRAJECTORY_DF_COLUMN_TYPES
+) -> dask.dataframe.DataFrame:
+    df_bag = dask.bag.read_text(path, linedelimiter="\n").to_dataframe(columns=["row"])
+    columns = df_bag.loc[df_bag["row"].str.contains("ITEM: ATOMS")].head(1).iloc[0]["row"].split()[2:]
+    columns.insert(0, "t")
+    return df_bag.groupby(df_bag["row"].str.contains("ITEM: TIMESTEP").cumsum()).apply(
+        process_timestep,
+        meta=pd.DataFrame(columns=columns).astype(column_types)
+    ).reset_index(drop=True)
+
+
 def read_raw_trajectory_df(
         path: pathlib.Path,
         column_types: dict = constants.RAW_TRAJECTORY_DF_COLUMN_TYPES
@@ -114,23 +146,23 @@ def read_raw_trajectory_df(
 def read_multiple_raw_trajectory_dfs(
         paths: list[pathlib.Path],
         column_types: dict = constants.RAW_TRAJECTORY_DF_COLUMN_TYPES
-):
-    rows_iterables = []
+) -> dask.dataframe.DataFrame:
+    rows_bags = []
 
     for path in paths:
         col_rows_iter_1, col_rows_iter_2 = itertools.tee(
             read_lammps_custom_trajectory_file_generator(path, column_types),
             2
         )
-        columns = next(col_rows_iter_1)[0]
-        rows = itertools.chain.from_iterable(rows_gen for _, rows_gen in col_rows_iter_2)
-        rows_iterables.append(rows)
+        columns, row = next(col_rows_iter_1)
+        for _, step_rows in col_rows_iter_2:
+            rows_bags.append(dask.bag.from_sequence(step_rows, npartitions=1))
 
-    return pd.DataFrame(
-        data=itertools.chain.from_iterable(rows_iterables),
-        columns=columns,
-        copy=False
-    ).astype(column_types)
+    df = dask.bag.concat(rows_bags).to_dataframe(
+        meta=pd.DataFrame(columns=columns).astype(column_types)
+    )
+
+    return df
 
 
 class VariableTrajectoryPath(typing.NamedTuple):
