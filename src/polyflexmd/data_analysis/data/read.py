@@ -134,6 +134,7 @@ def read_lammps_trajectories(
         paths: list[VariableTrajectoryPath],
         column_types: dict = constants.RAW_TRAJECTORY_DF_COLUMN_TYPES,
         time_steps_per_partition: int = 100000,
+        total_time_steps: typing.Optional[int] = None
 ) -> dask.dataframe.DataFrame:
     _logger.info(f"Reading {paths}...")
 
@@ -141,27 +142,46 @@ def read_lammps_trajectories(
     variable_names = (name for name, _ in paths[0].variables)
     paths = [p for vtp in paths for p in vtp.paths]
 
-    df_bag = dask.bag.read_text(paths, linedelimiter="\n", blocksize="128MiB", include_path=True).to_dataframe(
-        columns=["row", "path"])
+    df_bag = dask.bag.read_text(
+        paths, linedelimiter="\n", blocksize="50MiB", include_path=True
+    ).to_dataframe(
+        columns=["row", "path"]
+    )
+
+    _logger.debug(f"N raw partitions: {df_bag.npartitions}")
 
     _logger.debug("Partitioning raw by timestep ...")
     index = df_bag["row"].str.contains("ITEM: TIMESTEP").cumsum()
     df_bag["i"] = index
-    df_bag = df_bag.set_index("i", divisions=index.unique().compute().sort_values().tolist())
+    i_values = index.unique().compute().sort_values()
+    i_values_div = i_values.loc[i_values % 5 == 0].tolist()
+    if i_values_div[-1] < i_values.iloc[-1]:
+        i_values_div.append(i_values.iloc[-1])
+
+    # 5 timesteps per partition
+    df_bag = df_bag.set_index("i", divisions=i_values.loc[i_values % 5 == 0].tolist())
     df_bag.persist()
 
     columns = df_bag.loc[df_bag["row"].str.contains("ITEM: ATOMS")].head(1).iloc[0]["row"].split()[2:]
     columns.insert(0, "t")
 
+    def _mapper(data: pd.DataFrame) -> pd.DataFrame:
+        df_processed = data.groupby(["i", "path"]).apply(
+            process_timestep,
+            path_to_var=paths_d
+        )
+        return df_processed
+
     _logger.debug("Extracting timesteps ...")
-    df: dask.dataframe.DataFrame = df_bag.groupby(["i", "path"]).apply(
-        process_timestep,
-        path_to_var=paths_d,
+    df: dask.dataframe.DataFrame = df_bag.map_partitions(
+        _mapper,
         meta=pd.DataFrame(columns=[*columns, *variable_names]).astype(column_types)
     )
 
     _logger.debug("Partitioning processed by t ...")
+    _logger.debug("Calculating divisions by t ...")
     divisions = df["t"].loc[df["t"] % time_steps_per_partition == 0].unique().compute().sort_values().tolist()
+    _logger.debug("Set index t and divisions ...")
     df = df.set_index("t", divisions=divisions)
 
     return df

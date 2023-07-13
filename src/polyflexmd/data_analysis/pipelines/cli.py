@@ -6,6 +6,11 @@ import logging
 import polyflexmd.data_analysis.pipelines.experiment
 import typer
 
+import platform
+
+import dask.distributed
+from dask_jobqueue import SLURMCluster
+
 app = typer.Typer(invoke_without_command=False)
 
 _logger = logging.getLogger(__name__)
@@ -54,10 +59,25 @@ def process_experiment_data(
     logging.getLogger("distributed.core").setLevel(logging.WARNING)
     logging.getLogger("distributed.nanny").setLevel(logging.WARNING)
     logging.getLogger("distributed.utils_perf").setLevel(logging.WARNING)
+    logging.getLogger("tornado.application").setLevel(logging.CRITICAL)
+    logging.getLogger("dask_jobqueue.core").setLevel(logging.WARNING)
 
-    import dask.distributed
+    on_taurus = "taurus" in platform.node()
+    _logger.info(f"On taurus: {on_taurus}")
 
-    client = dask.distributed.Client(n_workers=n_workers, processes=True)
+    if on_taurus:
+        cluster = SLURMCluster(
+            queue='romeo',
+            cores=16,
+            processes=2,
+            account='p_mdpolymer',
+            memory="63GB",
+            walltime="00:60:00"
+        )
+        cluster.adapt(minimum_jobs=10, maximum_jobs=100)
+        client = dask.distributed.Client(cluster)
+    else:
+        client = dask.distributed.Client(n_workers=n_workers, processes=True)
 
     _logger.info(client)
 

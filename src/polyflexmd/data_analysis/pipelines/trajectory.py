@@ -18,13 +18,15 @@ _logger = logging.getLogger(__name__)
 def read_and_process_trajectories(
         trajectories: typing.Iterable[read.VariableTrajectoryPath],
         system: polyflexmd.data_analysis.data.types.LammpsSystemData,
-        time_steps_per_partition: int = 100000
+        time_steps_per_partition: int = 100000,
+        total_time_steps: typing.Optional[int] = None,
 ) -> dask.dataframe.DataFrame:
     df_trajectory_unfolded = transform.unfold_coordinates_df(
         trajectory_df=transform.join_raw_trajectory_df_with_system_data(
             raw_trajectory_df=read.read_lammps_trajectories(
                 list(trajectories),
-                time_steps_per_partition=time_steps_per_partition
+                time_steps_per_partition=time_steps_per_partition,
+                total_time_steps=total_time_steps
             ),
             system_data=system
         ),

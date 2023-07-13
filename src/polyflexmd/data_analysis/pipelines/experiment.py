@@ -129,6 +129,18 @@ def process_experiment_data(
     else:
         _logger.info(f"{path_traj_dir} does not exist;")
         _logger.info("Reading and processing trajectories ...")
+
+        total_time_steps = 0
+        if "n_equilibrium_steps" in config.simulation_config.variables:
+            total_time_steps += int(config.simulation_config.variables["n_equilibrium_steps"])
+        elif "n_equilibrium_steps_1" in config.simulation_config.variables and "n_equilibrium_steps_2" in config.simulation_config.variables:
+            total_time_steps += config.simulation_config.variables["n_equilibrium_steps_1"]
+            total_time_steps += config.simulation_config.variables["n_equilibrium_steps_2"]
+        if read_relax:
+            total_time_steps += config.simulation_config.variables["n_relax_steps"]
+
+        _logger.debug(f"Total time steps: {total_time_steps}")
+
         df_trajectories = polyflexmd.data_analysis.pipelines.trajectory.read_and_process_trajectories(
             trajectories=polyflexmd.data_analysis.data.read.get_experiment_trajectories_paths(
                 experiment_raw_data_path=path_data_raw,
@@ -138,7 +150,8 @@ def process_experiment_data(
                 read_relax=read_relax
             ),
             system=initial_system,
-            time_steps_per_partition=time_steps_per_partition
+            time_steps_per_partition=time_steps_per_partition,
+            total_time_steps=total_time_steps if total_time_steps > 0 else None
         )
         df_trajectories.persist()
         path_traj_dir.mkdir(exist_ok=True, parents=True)
