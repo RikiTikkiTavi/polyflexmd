@@ -102,9 +102,13 @@ def process_experiment_data(
     # Trajectories
     path_traj_dir = path_data_processed / "trajectories"
     traj_glob = f"{str(path_traj_dir)}/trajectories-*.csv"
-    # path_traj_processed = path_data_processed / "trajectories.csv"
 
-    if path_traj_dir.exists():
+    path_traj_processed = path_data_processed / "trajectories.csv"
+
+    if path_traj_dir.exists() or path_traj_processed.exists():
+        if path_traj_processed.exists():
+            traj_glob = path_traj_processed
+
         _logger.info(f"{path_traj_dir} exists => Reading processed ...")
         traj_column_types = copy.deepcopy(polyflexmd.data_analysis.data.constants.RAW_TRAJECTORY_DF_COLUMN_TYPES)
         traj_column_types.pop("ix")
@@ -120,6 +124,7 @@ def process_experiment_data(
             df_trajectories["t"] % time_steps_per_partition == 0
             ].unique().compute().sort_values().tolist()
         df_trajectories = df_trajectories.set_index("t", divisions=divisions)
+        df_trajectories.persist()
 
     else:
         _logger.info(f"{path_traj_dir} does not exist;")

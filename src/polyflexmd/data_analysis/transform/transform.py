@@ -241,6 +241,8 @@ def estimate_kuhn_length(
         l_b: typing.Optional[float] = None
 ) -> pd.Series:
 
+    traj_df_unf.sort_values(by="id", ascending=True, inplace=True)
+
     if l_b is not None and l_K_guess is None and "kappa" in traj_df_unf.columns:
         kappa = float(traj_df_unf.iloc[0]["kappa"])
         l_K_guess = np.float32(polyflexmd.data_analysis.theory.kremer_grest.bare_kuhn_length(
@@ -294,8 +296,7 @@ def estimate_kuhn_length_df(
         l_b: typing.Optional[float] = None,
         time_col: str = "t"
 ) -> dask.dataframe.DataFrame:
-
-    l_K_results = df_trajectory.groupby([*group_by_params, time_col]).apply(
+    l_K_results = df_trajectory.groupby([time_col, *group_by_params]).apply(
         estimate_kuhn_length,
         l_b=l_b,
         N_beads=N_beads,

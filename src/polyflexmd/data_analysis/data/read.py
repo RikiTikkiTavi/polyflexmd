@@ -16,6 +16,7 @@ import dask.bag
 
 _logger = logging.getLogger(__name__)
 
+
 def read_lammps_system_data(
         path: pathlib.Path,
         atom_style: str = "angle",
@@ -104,42 +105,65 @@ def read_lammps_custom_trajectory_file_generator(
             line = file.readline()
 
 
-def process_timestep(df: dask.dataframe.DataFrame):
+class VariableTrajectoryPath(typing.NamedTuple):
+    variables: list[tuple[str, float]]
+    possible_values: list[list[float]]
+    paths: list[pathlib.Path]
+
+
+def process_timestep(df: dask.dataframe.DataFrame, path_to_var: dict[str, VariableTrajectoryPath]):
     timestep = df.iloc[1][0]
     columns = df.iloc[8][0].split()[2:]
 
-    header = ["t", *columns]
+    path = df.iloc[0]["path"]
+    variable_names, variable_values = zip(*path_to_var[path].variables)
+
+    header = ["t", *columns, *variable_names]
     rows = []
 
     for _, row in df.iloc[9:].iterrows():
         values = row["row"].split()
         values.insert(0, timestep)
+        values.extend(variable_values)
         rows.append(values)
 
     return pd.DataFrame(rows, columns=header).astype(constants.RAW_TRAJECTORY_DF_COLUMN_TYPES)
 
 
-def read_lammps_trajectory(
-        path: pathlib.Path,
+def read_lammps_trajectories(
+        paths: list[VariableTrajectoryPath],
         column_types: dict = constants.RAW_TRAJECTORY_DF_COLUMN_TYPES,
         time_steps_per_partition: int = 100000,
 ) -> dask.dataframe.DataFrame:
-    _logger.debug(f"Reading {path}...")
-    df_bag = dask.bag.read_text(str(path), linedelimiter="\n", blocksize="128MiB").to_dataframe(columns=["row"])
+    _logger.info(f"Reading {paths}...")
+
+    paths_d = {str(vtp_path): vtp for vtp in paths for vtp_path in vtp.paths}
+    variable_names = (name for name, _ in paths[0].variables)
+    paths = [p for vtp in paths for p in vtp.paths]
+
+    df_bag = dask.bag.read_text(paths, linedelimiter="\n", blocksize="128MiB", include_path=True).to_dataframe(
+        columns=["row", "path"])
+
+    _logger.debug("Partitioning raw by timestep ...")
     index = df_bag["row"].str.contains("ITEM: TIMESTEP").cumsum()
     df_bag["i"] = index
     df_bag = df_bag.set_index("i", divisions=index.unique().compute().sort_values().tolist())
-    _logger.debug(f"Extracting columns from {path}...")
+    df_bag.persist()
+
     columns = df_bag.loc[df_bag["row"].str.contains("ITEM: ATOMS")].head(1).iloc[0]["row"].split()[2:]
     columns.insert(0, "t")
-    _logger.debug(f"Creating dataframe from {path}...")
-    df: dask.dataframe.DataFrame = df_bag.groupby("i").apply(
+
+    _logger.debug("Extracting timesteps ...")
+    df: dask.dataframe.DataFrame = df_bag.groupby(["i", "path"]).apply(
         process_timestep,
-        meta=pd.DataFrame(columns=columns).astype(column_types)
+        path_to_var=paths_d,
+        meta=pd.DataFrame(columns=[*columns, *variable_names]).astype(column_types)
     )
-    _logger.debug(f"Indexing dataframe from {path}...")
+
+    _logger.debug("Partitioning processed by t ...")
     divisions = df["t"].loc[df["t"] % time_steps_per_partition == 0].unique().compute().sort_values().tolist()
     df = df.set_index("t", divisions=divisions)
+
     return df
 
 
@@ -164,15 +188,10 @@ def read_multiple_raw_trajectory_dfs(
     dfs = []
 
     for path in paths:
-        dfs.append(read_lammps_trajectory(path, column_types=column_types, time_steps_per_partition=time_steps_per_partition))
+        dfs.append(
+            read_lammps_trajectory(path, column_types=column_types, time_steps_per_partition=time_steps_per_partition))
 
     return dask.dataframe.concat(dfs)
-
-
-class VariableTrajectoryPath(typing.NamedTuple):
-    variables: list[tuple[str, float]]
-    possible_values: list[list[float]]
-    paths: list[pathlib.Path]
 
 
 def get_experiment_trajectories_paths(
