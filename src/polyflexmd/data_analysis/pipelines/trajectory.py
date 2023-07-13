@@ -17,13 +17,17 @@ _logger = logging.getLogger(__name__)
 
 def read_and_process_trajectory(
         trajectory: read.VariableTrajectoryPath,
-        system: polyflexmd.data_analysis.data.types.LammpsSystemData
+        system: polyflexmd.data_analysis.data.types.LammpsSystemData,
+        time_steps_per_partition: int = 100000
 ):
     _logger.debug(f"Reading and processing trajectory {trajectory.paths}")
 
     df_trajectory_unfolded = transform.unfold_coordinates_df(
         trajectory_df=transform.join_raw_trajectory_df_with_system_data(
-            raw_trajectory_df=read.read_multiple_raw_trajectory_dfs(trajectory.paths),
+            raw_trajectory_df=read.read_multiple_raw_trajectory_dfs(
+                trajectory.paths,
+                time_steps_per_partition=time_steps_per_partition
+            ),
             system_data=system
         ),
         system_data=system
@@ -39,11 +43,11 @@ def read_and_process_trajectory(
 
 def read_and_process_trajectories(
         trajectories: typing.Iterable[read.VariableTrajectoryPath],
-        system: polyflexmd.data_analysis.data.types.LammpsSystemData
+        system: polyflexmd.data_analysis.data.types.LammpsSystemData,
+        time_steps_per_partition: int = 100000
 ) -> dask.dataframe.DataFrame:
     dataframes = [
-        read_and_process_trajectory(path, system)
+        read_and_process_trajectory(path, system, time_steps_per_partition=time_steps_per_partition)
         for path in trajectories
     ]
-    df: dask.dataframe.DataFrame = dask.dataframe.concat(dataframes, interleave_partitions=True)
-    return dask.dataframe.concat(dataframes)
+    return dask.dataframe.concat(dataframes, interleave_partitions=True)

@@ -39,14 +39,18 @@ def process_experiment_data(
         save_angle_matrix: typing.Annotated[
             bool,
             typer.Option()
-        ] = False
+        ] = False,
+        time_steps_per_partition: typing.Annotated[
+            int,
+            typer.Option()
+        ] = 100000
 ):
     logging.basicConfig(
         level=logging.DEBUG,
         format='%(asctime)s - %(levelname)s - %(name)s :: %(message)s', datefmt='%d.%m.%Y %I:%M:%S'
     )
     logging.getLogger("fsspec.local").setLevel(logging.INFO)
-    logging.getLogger("distributed.scheduler").setLevel(logging.WARNING)
+    logging.getLogger("distributed.scheduler").setLevel(logging.INFO)
     logging.getLogger("distributed.core").setLevel(logging.WARNING)
     logging.getLogger("distributed.nanny").setLevel(logging.WARNING)
     logging.getLogger("distributed.utils_perf").setLevel(logging.WARNING)
@@ -63,7 +67,8 @@ def process_experiment_data(
         style=style.value,
         read_relax=read_relax,
         enable_l_K_estimate=l_K_estimate,
-        save_angle_matrix=save_angle_matrix
+        save_angle_matrix=save_angle_matrix,
+        time_steps_per_partition=time_steps_per_partition
     )
 
 

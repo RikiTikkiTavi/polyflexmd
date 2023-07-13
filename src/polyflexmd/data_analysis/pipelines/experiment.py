@@ -27,11 +27,13 @@ def process_experiment_data(
         n_workers: int = 16,
         read_relax: bool = False,
         enable_l_K_estimate: bool = True,
+        time_steps_per_partition: int = 100000,
         save_angle_matrix: bool = False
 ):
     _logger.info(f"Processing data of experiment: {path_experiment}")
     _logger.info(f"Data style: {style}")
     _logger.info(f"Read relax: {read_relax}")
+    _logger.info(f"time_steps_per_partition: {time_steps_per_partition}")
 
     pandarallel.initialize(
         nb_workers=n_workers,
@@ -115,8 +117,8 @@ def process_experiment_data(
             dtype=traj_column_types
         )
         divisions = df_trajectories["t"].loc[
-            df_trajectories["t"] % 100000 == 0
-        ].unique().compute().sort_values().tolist()
+            df_trajectories["t"] % time_steps_per_partition == 0
+            ].unique().compute().sort_values().tolist()
         df_trajectories = df_trajectories.set_index("t", divisions=divisions)
 
     else:
@@ -130,7 +132,8 @@ def process_experiment_data(
                 d_ends=d_ends,
                 read_relax=read_relax
             ),
-            system=initial_system
+            system=initial_system,
+            time_steps_per_partition=time_steps_per_partition
         )
         path_traj_dir.mkdir(exist_ok=True, parents=True)
         _logger.info(f"Writing {traj_glob} ...")
