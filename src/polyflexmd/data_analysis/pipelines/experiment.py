@@ -135,6 +135,7 @@ def process_experiment_data(
             system=initial_system,
             time_steps_per_partition=time_steps_per_partition
         )
+        df_trajectories.persist()
         path_traj_dir.mkdir(exist_ok=True, parents=True)
         _logger.info(f"Writing {traj_glob} ...")
         df_trajectories.to_csv(traj_glob, single_file=False, index=True)
