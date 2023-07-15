@@ -58,6 +58,7 @@ def unfold_coordinates_df(
 
 
 def calculate_end_to_end(molecule_traj_step_df_unf: pd.DataFrame) -> pd.Series:
+
     root_atom_data: pd.Series = molecule_traj_step_df_unf \
         .loc[molecule_traj_step_df_unf["type"] == AtomGroup.ROOT.value] \
         .head(5) \
@@ -82,14 +83,13 @@ def calculate_end_to_end(molecule_traj_step_df_unf: pd.DataFrame) -> pd.Series:
 
 
 def join_raw_trajectory_df_with_system_data(
-        raw_trajectory_df: pd.DataFrame,
+        raw_trajectory_df: dask.dataframe.DataFrame,
         system_data: types.LammpsSystemData
 ) -> pd.DataFrame:
+    atom_id_to_molecule_id = {row[0]: row[1]["molecule-ID"] for row in system_data.atoms.iterrows()}
     _logger.debug("Joining with system data ...")
-    return raw_trajectory_df.join(
-        system_data.atoms["molecule-ID"],
-        on="id"
-    )
+    raw_trajectory_df["molecule-ID"] = raw_trajectory_df["id"].map(atom_id_to_molecule_id).astype(np.ushort)
+    return raw_trajectory_df
 
 
 def calc_end_to_end_df(
@@ -240,7 +240,6 @@ def estimate_kuhn_length(
         l_K_guess: typing.Optional[float] = None,
         l_b: typing.Optional[float] = None
 ) -> pd.Series:
-
     traj_df_unf.sort_values(by="id", ascending=True, inplace=True)
 
     if l_b is not None and l_K_guess is None and "kappa" in traj_df_unf.columns:

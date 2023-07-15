@@ -95,7 +95,7 @@ def process_experiment_data(
 
     # Trajectories
     path_traj_dir = path_data_processed / "trajectories"
-    traj_glob = f"{str(path_traj_dir)}/trajectories-*.csv"
+    traj_glob = f"{str(path_traj_dir)}/trajectories-*.parquet"
 
     path_traj_processed = path_data_processed / "trajectories.csv"
 
@@ -122,7 +122,6 @@ def process_experiment_data(
         _logger.info(f"{path_traj_dir} does not exist;")
         _logger.info("Reading and processing trajectories ...")
 
-        _logger.info("Reformat trajectories ...")
         vtps = list(polyflexmd.data_analysis.data.read.get_experiment_trajectories_paths(
             experiment_raw_data_path=path_data_raw,
             style=style,
@@ -130,29 +129,22 @@ def process_experiment_data(
             d_ends=d_ends,
             read_relax=read_relax
         ))
-        path_traj_interim = path_experiment / "data" / "interim" / "trajectories"
-        path_traj_interim.mkdir(parents=True, exist_ok=True)
-        polyflexmd.data_analysis.data.read.reformat_trajectories(
-            vtps=vtps,
-            out_path=path_traj_interim
-        )
 
-        total_time_steps = 0
+        total_time_steps = config.simulation_config.variables["n_relax_steps"]
         if "n_equilibrium_steps" in config.simulation_config.variables:
             total_time_steps += int(config.simulation_config.variables["n_equilibrium_steps"])
         elif "n_equilibrium_steps_1" in config.simulation_config.variables and "n_equilibrium_steps_2" in config.simulation_config.variables:
             total_time_steps += config.simulation_config.variables["n_equilibrium_steps_1"]
             total_time_steps += config.simulation_config.variables["n_equilibrium_steps_2"]
-        if read_relax:
-            total_time_steps += config.simulation_config.variables["n_relax_steps"]
 
         _logger.debug(f"Total time steps: {total_time_steps}")
 
         df_trajectories = polyflexmd.data_analysis.pipelines.trajectory.read_and_process_trajectories(
             trajectories=vtps,
+            path_trajectories_interim=path_experiment / "data" / "interim" / "trajectories",
             system=initial_system,
             time_steps_per_partition=time_steps_per_partition,
-            total_time_steps=total_time_steps if total_time_steps > 0 else None
+            total_time_steps=total_time_steps
         )
         df_trajectories = df_trajectories.persist()
         path_traj_dir.mkdir(exist_ok=True, parents=True)

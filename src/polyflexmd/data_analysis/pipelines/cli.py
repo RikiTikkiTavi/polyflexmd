@@ -73,6 +73,7 @@ def process_experiment_data(
             processes=1,
             account='p_scads',
             memory="125GB",
+            death_timeout=1800,
             walltime="00:60:00",
             job_extra_directives=["--reservation p_scads_1060"],
             local_directory="/tmp",
@@ -80,7 +81,7 @@ def process_experiment_data(
             log_directory="/beegfs/ws/0/s4610340-polyflexmd/.logs",
             worker_extra_args=["--memory-limit 125GB"],
         )
-        cluster.adapt(maximum_jobs=32)
+        cluster.scale(28)
         client = dask.distributed.Client(cluster)
     else:
         client = dask.distributed.Client(n_workers=n_workers, processes=True)

@@ -6,10 +6,12 @@ import multiprocessing
 import multiprocessing.pool
 import os
 import pathlib
+import re
 import typing
 import uuid
 
 import numpy as np
+import pandas
 import pandas as pd
 import pymatgen.io.lammps.data
 import polyflexmd.data_analysis.data.types as types
@@ -145,52 +147,76 @@ def trajectory_to_timestep_dfs(
         path: pathlib.Path,
         variables: list[tuple[str, float]],
         out_path: pathlib.Path,
-        file_prefix: str
+        file_prefix: str,
+        column_types: dict,
+        chunks_per_file: int = 5
 ):
+    _logger.info(f"Reformatting {path} ...")
+
     header_length = 9
     var_names, var_values = zip(*variables)
-    var_values = list(var_values)
+    var_values = [str(v) for v in var_values]
 
     with open(path, "r") as traj_file:
-
-        n_timesteps = 0
-
         header = [next(traj_file) for _ in range(header_length)]
-
         t = int(header[1])
-
-        n_timesteps += 1
         n_atoms = int(header[3])
 
-        columns = header[8].split()[2:]
-        columns = ["t"] + columns + list(var_names)
+        raw_columns = header[8].split()[2:]
+        out_columns = ["t"] + raw_columns + list(var_names)
+
+        lines = []
+        n_chunks = 0
+        t_first = t
 
         while True:
-            with open(out_path / f"{file_prefix}-{t}.csv", "w+", newline='') as chunk_file:
-                writer = csv.writer(chunk_file, delimiter=";", quoting=csv.QUOTE_MINIMAL)
-                writer.writerow(columns)
+            for i in range(n_atoms):
+                row = [t]
+                row.extend(next(traj_file).split())
+                row.extend(var_values)
+                lines.append(row)
 
-                for i in range(n_atoms):
-                    values = [t]
-                    values.extend(next(traj_file).split())
-                    values.extend(var_values)
-                    writer.writerow(values)
+            n_chunks += 1
+            last_chunk = n_chunks == chunks_per_file
 
-            header = [next(traj_file) for _ in range(header_length)]
+            if last_chunk:
+                if t % 1e6 == 0:
+                    _logger.debug(f"Writing chunk {t_first}-{t} of {path} ...")
 
-            t = int(header[1])
+                pd.DataFrame(
+                    lines, columns=out_columns
+                ).to_csv(
+                    out_path / f"{file_prefix}-{t_first}-{t}.csv", index=False
+                )
 
-            n_timesteps += 1
+                lines.clear()
+                n_chunks = 0
+
+            line = traj_file.readline()
+
+            if line == "":
+                pd.DataFrame(
+                    lines, columns=out_columns
+                ).to_csv(
+                    out_path / f"{file_prefix}-{t_first}-{t}.csv", index=False
+                )
+                break
+
+            header = [next(traj_file) for _ in range(header_length - 1)]
+            t = int(header[0])
+
+            if last_chunk:
+                t_first = t
 
 
 def reformat_trajectories(
         vtps: list[VariableTrajectoryPath],
-        out_path: pathlib.Path
+        out_path: pathlib.Path,
+        column_types: dict
 ):
-
     paths = [p for vtp in vtps for p in vtp.paths]
     args = [
-        (p, vtp.variables, out_path, f"{i}_{j}")
+        (p, vtp.variables, out_path, f"{i}_{j}", column_types)
         for i, vtp in enumerate(vtps) for j, p in enumerate(vtp.paths)
     ]
 
@@ -199,17 +225,27 @@ def reformat_trajectories(
 
 
 def read_lammps_trajectories(
-        trajectories_interim_glob: str,
-        column_types: dict = constants.RAW_TRAJECTORY_DF_COLUMN_TYPES,
+        trajectories_interim_path: pathlib.Path,
+        total_time_steps: int,
+        column_types: dict,
         time_steps_per_partition: int = 100000,
-        total_time_steps: typing.Optional[int] = None
 ) -> dask.dataframe.DataFrame:
+    trajectories_interim_glob = str(trajectories_interim_path / "*.csv")
 
-    df = dask.dataframe.read_csv(trajectories_interim_glob, delimiter=";").persist()
-    _logger.debug("Set index t ...")
-    divisions = df["t"].loc[df["t"] % time_steps_per_partition == 0].drop_duplicates().compute().tolist()
+    divisions = sorted((
+        int(re.search(r"0_0-(\d+)-\d+.csv", timestep_path.name).groups()[0])
+        for timestep_path in trajectories_interim_path.glob("0_0-*.csv")
+    ))
+    if divisions[-1] != total_time_steps:
+        divisions.append(total_time_steps)
 
-    df = df.set_index("t", divisions=divisions)
+    _logger.info("Compute divisions ...")
+
+    _logger.debug("Read and set index t ...")
+    df = dask.dataframe.read_csv(
+        trajectories_interim_glob
+    ).set_index("t").repartition(divisions=divisions).persist()
+
     _logger.debug(f"N t partitions: {df.npartitions}; t Divisions: {df.divisions}")
 
     return df
