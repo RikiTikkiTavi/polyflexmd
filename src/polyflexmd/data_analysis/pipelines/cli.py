@@ -55,31 +55,38 @@ def process_experiment_data(
         format='%(asctime)s - %(levelname)s - %(name)s :: %(message)s', datefmt='%d.%m.%Y %I:%M:%S'
     )
     logging.getLogger("fsspec.local").setLevel(logging.INFO)
-    logging.getLogger("distributed.scheduler").setLevel(logging.INFO)
+    logging.getLogger("distributed.scheduler").setLevel(logging.WARNING)
     logging.getLogger("distributed.core").setLevel(logging.WARNING)
     logging.getLogger("distributed.nanny").setLevel(logging.WARNING)
     logging.getLogger("distributed.utils_perf").setLevel(logging.WARNING)
     logging.getLogger("tornado.application").setLevel(logging.CRITICAL)
     logging.getLogger("dask_jobqueue.core").setLevel(logging.WARNING)
+    logging.getLogger("asyncio").setLevel(logging.CRITICAL)
 
     on_taurus = "taurus" in platform.node()
     _logger.info(f"On taurus: {on_taurus}")
 
     if on_taurus:
         cluster = SLURMCluster(
-            queue='romeo',
-            cores=16,
-            processes=2,
-            account='p_mdpolymer',
-            memory="63GB",
-            walltime="00:60:00"
+            queue='alpha',
+            cores=6,
+            processes=1,
+            account='p_scads',
+            memory="125GB",
+            walltime="00:60:00",
+            job_extra_directives=["--reservation p_scads_1060"],
+            local_directory="/tmp",
+            interface="ib0",
+            log_directory="/beegfs/ws/0/s4610340-polyflexmd/.logs",
+            worker_extra_args=["--memory-limit 125GB"],
         )
-        cluster.adapt(minimum_jobs=10, maximum_jobs=100)
+        cluster.adapt(maximum_jobs=32)
         client = dask.distributed.Client(cluster)
     else:
         client = dask.distributed.Client(n_workers=n_workers, processes=True)
 
     _logger.info(client)
+    _logger.info(f"Dashboard link: {client.dashboard_link}")
 
     polyflexmd.data_analysis.pipelines.experiment.process_experiment_data(
         path_experiment=path_experiment,

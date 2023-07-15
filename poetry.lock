@@ -190,6 +190,43 @@ html5lib = ["html5lib"]
 lxml = ["lxml"]
 
 [[package]]
+name = "biopython"
+version = "1.81"
+description = "Freely available tools for computational molecular biology."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "biopython-1.81-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:ef7c79b65b0b3f3c7dc59e20a7f8ae5758d8e852cb8b9cace590dc5617e348ba"},
+    {file = "biopython-1.81-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6ebfbce0d91796c7aef422ee9dffe8827e07e5abaa94545e006f1f20e965c80b"},
+    {file = "biopython-1.81-cp310-cp310-win32.whl", hash = "sha256:919a2c583cabf9c96d2ae4e1245a6b0376932fb342aca302a0fc198b71ab3275"},
+    {file = "biopython-1.81-cp310-cp310-win_amd64.whl", hash = "sha256:b37c0d24191e5c96ca02415a5188551980c83a0d518bbc4ffe3c9a5d1fe0ee81"},
+    {file = "biopython-1.81-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:7a168709694e10b338718c18d967edd5b56c237dc88642c22275796007a70000"},
+    {file = "biopython-1.81-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a51d9c1d1b4b634447535da74a644fae59bc234fbbf9001e2dc6b6fbabb98019"},
+    {file = "biopython-1.81-cp311-cp311-win32.whl", hash = "sha256:2f9cfaf16d55ab80d514e7aebe5710dabe4e4ff47ede851031202e33b3249da3"},
+    {file = "biopython-1.81-cp311-cp311-win_amd64.whl", hash = "sha256:e41b55edcfd448630e77bf4de66a7235324a8a149621499891da6bd1d5085b9a"},
+    {file = "biopython-1.81-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:3b36ba1bf6395c09a365c53530c9d71f3617763fa2c1d452b3d8948368c0f1de"},
+    {file = "biopython-1.81-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7c5c07123ff5f44c9e6b5369df854a38afd3c0c50ef58498a0ae8f7eb799f3e8"},
+    {file = "biopython-1.81-cp37-cp37m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:97cbdbed01b2512471f36c74b91658d1dfbdcbf39bc038f6ce5a41c3e60a8fc6"},
+    {file = "biopython-1.81-cp37-cp37m-win32.whl", hash = "sha256:35506e39822c52d11cf09a3951e82375ca1bb9303960b4286acf02c9a6f6c4cc"},
+    {file = "biopython-1.81-cp37-cp37m-win_amd64.whl", hash = "sha256:793c42a376cd63f62f8a088ce39b7dc6b5c55e4e9031d887c434de1595bfa4b8"},
+    {file = "biopython-1.81-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:11d673698b3d0d6589292ea951fb62cb24ea27d273eca0d08dbbd956690f97f5"},
+    {file = "biopython-1.81-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:655df416936662c0c8a06a549cb25e1560e1fea5067d850f34fb714b8a3fae6c"},
+    {file = "biopython-1.81-cp38-cp38-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:762c6c43a8486b5fcd07f136a3217b87d24755618b9ea9da1f17124ff44c2ad6"},
+    {file = "biopython-1.81-cp38-cp38-win32.whl", hash = "sha256:ee51bb1cd7decffd24da6b76d5e01b7e2fd818ab85cf0c180226cbb5793a3abd"},
+    {file = "biopython-1.81-cp38-cp38-win_amd64.whl", hash = "sha256:ccd729249fd5f586dd4c2a3507c2ea2456825d7e615e97c07c409c850eaf4594"},
+    {file = "biopython-1.81-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:9ba33244f0eff830beaa7240065bdb5095d96fded6599b76bbb9ddab45cd2bbd"},
+    {file = "biopython-1.81-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8bb0c690c7368f255ed45236bf0f5464b476b8c083c8f634533921af78278261"},
+    {file = "biopython-1.81-cp39-cp39-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:65b93b513ce9dd7b2ce058720eadf42cd03f312db3409356efeb93123d1320aa"},
+    {file = "biopython-1.81-cp39-cp39-win32.whl", hash = "sha256:811796f8d222aa3869a50e31e54ce62b69106b47cd8bb06934867c0d843297b5"},
+    {file = "biopython-1.81-cp39-cp39-win_amd64.whl", hash = "sha256:b09efcb4733c8770f25eab5fe555a96a08f5ab9e1bc36939e08ebf2ffbf3e0f1"},
+    {file = "biopython-1.81.tar.gz", hash = "sha256:2cf38112b6d8415ad39d6a611988cd11fb5f33eb09346666a87263beba9614e0"},
+]
+
+[package.dependencies]
+numpy = "*"
+
+[[package]]
 name = "bleach"
 version = "6.0.0"
 description = "An easy safelist-based HTML-sanitizing tool."
@@ -897,6 +934,18 @@ files = [
 tests = ["asttokens", "littleutils", "pytest", "rich"]
 
 [[package]]
+name = "fasteners"
+version = "0.18"
+description = "A python package that provides useful locks"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "fasteners-0.18-py3-none-any.whl", hash = "sha256:1d4caf5f8db57b0e4107d94fd5a1d02510a450dced6ca77d1839064c1bacf20c"},
+    {file = "fasteners-0.18.tar.gz", hash = "sha256:cb7c13ef91e0c7e4fe4af38ecaf6b904ec3f5ce0dda06d34924b6b74b869d953"},
+]
+
+[[package]]
 name = "fastjsonschema"
 version = "2.17.1"
 description = "Fastest Python implementation of JSON schema"
@@ -1057,6 +1106,53 @@ files = [
 
 [package.dependencies]
 gitdb = ">=4.0.1,<5"
+
+[[package]]
+name = "griddataformats"
+version = "1.0.1"
+description = "Reading and writing of data on regular grids in Python"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "GridDataFormats-1.0.1-py3-none-any.whl", hash = "sha256:c2c45c9ea18f29ffd8fe311d5322b4cba4f4e4c76980ec4e2e9a7f296b208a46"},
+    {file = "GridDataFormats-1.0.1.tar.gz", hash = "sha256:ad2c9ab7d672a6d8c426de7d083eee4f3e2b0bd59391675d30683c768ab83cc4"},
+]
+
+[package.dependencies]
+mrcfile = "*"
+numpy = ">=1.19"
+scipy = "*"
+
+[[package]]
+name = "gsd"
+version = "3.0.1"
+description = "General simulation data file format."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "gsd-3.0.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:eb49eaac60a994ab0bead8db520ff7e44ad58c18beac7f63b62bed1cf727fe73"},
+    {file = "gsd-3.0.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:43ea24f2de8450b71d3d8298f1c45ee12fa4bdefbdd84723665cff78189c7993"},
+    {file = "gsd-3.0.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c1c618b97d6daa7f7513018eddcbe150d391d031be5134c95ecebca44a47b2b4"},
+    {file = "gsd-3.0.1-cp310-cp310-win_amd64.whl", hash = "sha256:983537316cc533d6b1a2744b36b36840a53600dbdf1770fdf8df01376f777ec7"},
+    {file = "gsd-3.0.1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:09a95147bbd02e36f2e37d5b1b079f69d97f2607fd3e175b9a48164e4a280555"},
+    {file = "gsd-3.0.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:dc11c9a03026df07954817f2802812f422d405ec07a0f081865cd46c30607c08"},
+    {file = "gsd-3.0.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1e4bdc5e1ab9fa11048d78203e8ab4aec8260b72586a22071258d939fb3e0d05"},
+    {file = "gsd-3.0.1-cp311-cp311-win_amd64.whl", hash = "sha256:239ec5c63f590ab5ebef7f2351fbcdbcc308ce976f4791957fbf10c951f565ed"},
+    {file = "gsd-3.0.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:3521b13228f2870a6efc5f48c610e8f911e31dd4a4d9e33549462021d3e03487"},
+    {file = "gsd-3.0.1-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:6cdeee743134f41033bfc5d390658449f7fbeb0adea3e320e0fa7d6e72cfabec"},
+    {file = "gsd-3.0.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d2dfe752a9093c6b22c19c7c67e525f3356dedcb73a4410587b61dd00c2bd4db"},
+    {file = "gsd-3.0.1-cp38-cp38-win_amd64.whl", hash = "sha256:332e7b54853e4ea530f0b48b61a5131bc38ddc02d9cda5f4370ea1ed17357386"},
+    {file = "gsd-3.0.1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:847cb3f73b30aa056a4b7da6f5c59fc5cf57ca553c2943221f320df3d2ebb2dc"},
+    {file = "gsd-3.0.1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:d29ae74b61fa543183e13da48497f18f7ba19052ff1aafd7ca22556c130364af"},
+    {file = "gsd-3.0.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4ad9b93ada7d6b87fd90f7f735ccdc7ab96535ed5da2effe862e7db83d6f9189"},
+    {file = "gsd-3.0.1-cp39-cp39-win_amd64.whl", hash = "sha256:c6269bedb159214cedb96adc88b74d1d53b7bc1ee763944084aa8a56bb30ebf3"},
+    {file = "gsd-3.0.1.tar.gz", hash = "sha256:7b3ce7428d9f9f708618b3a2ef19ab122cc36b658ea53b70d0de40189d19647c"},
+]
+
+[package.dependencies]
+numpy = ">=1.9.3"
 
 [[package]]
 name = "idna"
@@ -1247,6 +1343,18 @@ MarkupSafe = ">=2.0"
 
 [package.extras]
 i18n = ["Babel (>=2.7)"]
+
+[[package]]
+name = "joblib"
+version = "1.3.1"
+description = "Lightweight pipelining with Python functions"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "joblib-1.3.1-py3-none-any.whl", hash = "sha256:89cf0529520e01b3de7ac7b74a8102c90d16d54c64b5dd98cafcd14307fdf915"},
+    {file = "joblib-1.3.1.tar.gz", hash = "sha256:1f937906df65329ba98013dc9692fe22a4c5e4a648112de500508b18a21b41e3"},
+]
 
 [[package]]
 name = "jsonpointer"
@@ -1892,6 +2000,52 @@ files = [
 traitlets = "*"
 
 [[package]]
+name = "mdanalysis"
+version = "2.5.0"
+description = "An object-oriented toolkit to analyze molecular dynamics trajectories."
+category = "main"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "MDAnalysis-2.5.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:e8e5fefc8ad025761a21ace80a9275710bfc92009303f36087308731ba76215d"},
+    {file = "MDAnalysis-2.5.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:eb0cc1ef63f272c6985e76ac6abb0e0bf27604b82cf7055ee3f3545eba86f737"},
+    {file = "MDAnalysis-2.5.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:11b068a62e1231a0dc753cfcfdd4e8c0b95ed187e23b6efb8b9ff56d9bf47e85"},
+    {file = "MDAnalysis-2.5.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1a1d2c1dac5c64ea65746284687b64c375aec697936b3b5efe2dbddbb22c4090"},
+    {file = "MDAnalysis-2.5.0-cp310-cp310-win_amd64.whl", hash = "sha256:ea9aa6526ee7330391fb016c6c861a885133c090a9d96d3cd024765a568fe415"},
+    {file = "MDAnalysis-2.5.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:519d6358621adf8076e0e6f4293d67a95b9c2cf3fe41e939a35a0efd15c29f53"},
+    {file = "MDAnalysis-2.5.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:2ba1aa04ffff56e8cb147d21ebc83eb48c4cc220bb0b06d385704608d19aa03d"},
+    {file = "MDAnalysis-2.5.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1f75ec4d9efd074b376a088991764007672e0aac90d3fda3af9231ccaee691f1"},
+    {file = "MDAnalysis-2.5.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dd044d5aae2ad85a543158b051bd0495ed9176f9cbfc4d8af72fd544e536cd3a"},
+    {file = "MDAnalysis-2.5.0-cp311-cp311-win_amd64.whl", hash = "sha256:1d00263601818220807642575b4a8afbd4706f10431b2a855a854449836ac63d"},
+    {file = "MDAnalysis-2.5.0-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:6b2ef44358a7a5df851357271090e5d606924fb9a32188b3b17167d5054b2916"},
+    {file = "MDAnalysis-2.5.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:5d7173217810533cb364257e0090a7f879c8c2d1e7f0eff008a71e3559aeb25b"},
+    {file = "MDAnalysis-2.5.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:49af3a0c9d02fa6a6a29395423b55b7b7d99b7c5ac9fe1c81842555a00a61f57"},
+    {file = "MDAnalysis-2.5.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:54a61f96669d94f20796547ef6497aab9a71f7bdc0d98bdcf5e74f065b499334"},
+    {file = "MDAnalysis-2.5.0-cp39-cp39-win_amd64.whl", hash = "sha256:103164110c00d2e7372dccb6ccfbcbe1f3e016cf0d1ad986f11f43f63f7770fa"},
+    {file = "MDAnalysis-2.5.0.tar.gz", hash = "sha256:06ce4efab6ca1dbd2ee2959fc668049e1d574a8fe94ab948a4608244da1d016b"},
+]
+
+[package.dependencies]
+biopython = ">=1.80"
+fasteners = "*"
+GridDataFormats = ">=0.4.0"
+gsd = ">=1.9.3"
+joblib = ">=0.12"
+matplotlib = ">=1.5.1"
+mmtf-python = ">=1.0.0"
+networkx = ">=2.0"
+numpy = ">=1.21.0"
+packaging = "*"
+scipy = ">=1.5.0"
+threadpoolctl = "*"
+tqdm = ">=4.43.0"
+
+[package.extras]
+analysis = ["scikit-learn", "seaborn", "tidynamics (>=1.0.0)"]
+doc = ["msmb-theme (==1.2.0)", "pybtex", "pybtex-docutils", "sphinx", "sphinx-rtd-theme", "sphinx-sitemap", "sphinxcontrib-bibtex"]
+extra-formats = ["chemfiles (>=0.10)", "h5py (>=2.10)", "netCDF4 (>=1.0)", "pyedr (>=0.7.0)", "pytng (>=0.2.3)"]
+
+[[package]]
 name = "mistune"
 version = "3.0.1"
 description = "A sane and fast Markdown parser with useful plugins and renderers"
@@ -1902,6 +2056,25 @@ files = [
     {file = "mistune-3.0.1-py3-none-any.whl", hash = "sha256:b9b3e438efbb57c62b5beb5e134dab664800bdf1284a7ee09e8b12b13eb1aac6"},
     {file = "mistune-3.0.1.tar.gz", hash = "sha256:e912116c13aa0944f9dc530db38eb88f6a77087ab128f49f84a48f4c05ea163c"},
 ]
+
+[[package]]
+name = "mmtf-python"
+version = "1.1.3"
+description = "A decoding libary for the PDB mmtf format"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "mmtf-python-1.1.3.tar.gz", hash = "sha256:12a02fe1b7131f0a2b8ce45b46f1e0cdd28b9818fe4499554c26884987ea0c32"},
+    {file = "mmtf_python-1.1.3-py2.py3-none-any.whl", hash = "sha256:502031c509a8a6d73e042781abbd88b84c1afffe65097eb0c1b70f329ffd1e6e"},
+]
+
+[package.dependencies]
+msgpack = ">=1.0.0"
+
+[package.extras]
+dev = ["check-manifest"]
+test = ["coverage"]
 
 [[package]]
 name = "monty"
@@ -1987,6 +2160,21 @@ develop = ["codecov", "pycodestyle", "pytest (>=4.6)", "pytest-cov", "wheel"]
 docs = ["sphinx"]
 gmpy = ["gmpy2 (>=2.1.0a4)"]
 tests = ["pytest (>=4.6)"]
+
+[[package]]
+name = "mrcfile"
+version = "1.4.3"
+description = "MRC file I/O library"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "mrcfile-1.4.3-py2.py3-none-any.whl", hash = "sha256:798fa12f2861e74d627546bd1989836857b10090fa2a148913ea468bbbb27e80"},
+    {file = "mrcfile-1.4.3.tar.gz", hash = "sha256:43c358c59ff8f583fc4dc2079a0099028719109ebf92066e388772bab389c5f5"},
+]
+
+[package.dependencies]
+numpy = ">=1.16.0"
 
 [[package]]
 name = "msgpack"
@@ -3832,6 +4020,18 @@ files = [
 ]
 
 [[package]]
+name = "threadpoolctl"
+version = "3.2.0"
+description = "threadpoolctl"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "threadpoolctl-3.2.0-py3-none-any.whl", hash = "sha256:2b7818516e423bdaebb97c723f86a7c6b0a83d3f3b0970328d66f4d9104dc032"},
+    {file = "threadpoolctl-3.2.0.tar.gz", hash = "sha256:c96a0ba3bdddeaca37dc4cc7344aafad41cdb8c313f74fdfe387a867bba93355"},
+]
+
+[[package]]
 name = "tinycss2"
 version = "1.2.1"
 description = "A tiny CSS parser"
@@ -4132,4 +4332,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.12"
-content-hash = "ebc1182af3a7940df1127bcc5ded05acaa665355bd6e6fae35ca452615bc346a"
+content-hash = "a8306e5368f57e40ecb18558e86735681f49d18c80e1f2983257b8612bf34f56"

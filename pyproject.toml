@@ -32,6 +32,7 @@ jupyter-nbextensions-configurator = "^0.6.3"
 dask = {extras = ["distributed"], version = "^2023.7.0"}
 bokeh = "^3.2.0"
 dask-jobqueue = "^0.8.2"
+mdanalysis = "^2.5.0"
 
 [build-system]
 requires = ["poetry-core"]

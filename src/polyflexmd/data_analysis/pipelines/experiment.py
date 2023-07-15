@@ -35,12 +35,6 @@ def process_experiment_data(
     _logger.info(f"Read relax: {read_relax}")
     _logger.info(f"time_steps_per_partition: {time_steps_per_partition}")
 
-    pandarallel.initialize(
-        nb_workers=n_workers,
-        progress_bar=False,
-        use_memory_fs=None
-    )
-
     path_data_raw = path_experiment / "data" / "raw"
 
     # Handle legacy where raw does not exist
@@ -118,17 +112,30 @@ def process_experiment_data(
             traj_column_types[param] = "category"
         df_trajectories = dask.dataframe.read_csv(
             traj_glob,
-            dtype=traj_column_types
-        )
-        divisions = df_trajectories["t"].loc[
-            df_trajectories["t"] % time_steps_per_partition == 0
-            ].unique().compute().sort_values().tolist()
-        df_trajectories = df_trajectories.set_index("t", divisions=divisions)
-        df_trajectories.persist()
+            dtype=traj_column_types,
+            blocksize="128MiB"
+        ).set_index("t").persist()
+
+        _logger.debug(f"N t partitions: {df_trajectories.npartitions}; t Divisions: {df_trajectories.divisions}")
 
     else:
         _logger.info(f"{path_traj_dir} does not exist;")
         _logger.info("Reading and processing trajectories ...")
+
+        _logger.info("Reformat trajectories ...")
+        vtps = list(polyflexmd.data_analysis.data.read.get_experiment_trajectories_paths(
+            experiment_raw_data_path=path_data_raw,
+            style=style,
+            kappas=kappas,
+            d_ends=d_ends,
+            read_relax=read_relax
+        ))
+        path_traj_interim = path_experiment / "data" / "interim" / "trajectories"
+        path_traj_interim.mkdir(parents=True, exist_ok=True)
+        polyflexmd.data_analysis.data.read.reformat_trajectories(
+            vtps=vtps,
+            out_path=path_traj_interim
+        )
 
         total_time_steps = 0
         if "n_equilibrium_steps" in config.simulation_config.variables:
@@ -142,18 +149,12 @@ def process_experiment_data(
         _logger.debug(f"Total time steps: {total_time_steps}")
 
         df_trajectories = polyflexmd.data_analysis.pipelines.trajectory.read_and_process_trajectories(
-            trajectories=polyflexmd.data_analysis.data.read.get_experiment_trajectories_paths(
-                experiment_raw_data_path=path_data_raw,
-                style=style,
-                kappas=kappas,
-                d_ends=d_ends,
-                read_relax=read_relax
-            ),
+            trajectories=vtps,
             system=initial_system,
             time_steps_per_partition=time_steps_per_partition,
             total_time_steps=total_time_steps if total_time_steps > 0 else None
         )
-        df_trajectories.persist()
+        df_trajectories = df_trajectories.persist()
         path_traj_dir.mkdir(exist_ok=True, parents=True)
         _logger.info(f"Writing {traj_glob} ...")
         df_trajectories.to_csv(traj_glob, single_file=False, index=True)

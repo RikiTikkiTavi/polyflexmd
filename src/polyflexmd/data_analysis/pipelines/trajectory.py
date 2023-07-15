@@ -24,7 +24,7 @@ def read_and_process_trajectories(
     df_trajectory_unfolded = transform.unfold_coordinates_df(
         trajectory_df=transform.join_raw_trajectory_df_with_system_data(
             raw_trajectory_df=read.read_lammps_trajectories(
-                list(trajectories),
+                "/home/egor/Projects/polyflexmd/data/test-5-FENE-beadspring-vary-l_K-vary-d_end/e296c212/data/interim/trajectories/*.csv",
                 time_steps_per_partition=time_steps_per_partition,
                 total_time_steps=total_time_steps
             ),
