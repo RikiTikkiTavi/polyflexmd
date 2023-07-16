@@ -95,7 +95,7 @@ def process_experiment_data(
 
     # Trajectories
     path_traj_dir = path_data_processed / "trajectories"
-    traj_glob = f"{str(path_traj_dir)}/trajectories-*.parquet"
+    traj_glob = f"{str(path_traj_dir)}/trajectories-*.csv"
 
     path_traj_processed = path_data_processed / "trajectories.csv"
 
@@ -110,11 +110,10 @@ def process_experiment_data(
         traj_column_types.pop("iz")
         for param in group_by_parameters:
             traj_column_types[param] = "category"
-        df_trajectories = dask.dataframe.read_csv(
+        df_trajectories: dask.dataframe.DataFrame = dask.dataframe.read_csv(
             traj_glob,
             dtype=traj_column_types,
-            blocksize="128MiB"
-        ).set_index("t").persist()
+        ).set_index("t", sort=False, sorted=True).persist()
 
         _logger.debug(f"N t partitions: {df_trajectories.npartitions}; t Divisions: {df_trajectories.divisions}")
 
