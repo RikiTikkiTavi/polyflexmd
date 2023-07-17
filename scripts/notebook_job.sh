@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #SBATCH --job-name="polyflexmd-notebook"
-#SBATCH --output="/scratch/ws/0/s4610340-bt-eea1-md-workspace/slurm-%j.out"
-#SBATCH --error="/scratch/ws/0/s4610340-bt-eea1-md-workspace/slurm-%j.out"
+#SBATCH --output="/beegfs/ws/0/s4610340-polyflexmd/.logs/slurm-%j.out"
+#SBATCH --error="/beegfs/ws/0/s4610340-polyflexmd/.logs/slurm-%j.out"
 #SBATCH --account="p_mdpolymer"
 #SBATCH --time=8:00:00
 #SBATCH --partition=romeo
@@ -12,8 +12,8 @@
 
 module load modenv/hiera GCC/11.3.0 OpenMPI/4.1.4 Python/3.9.6
 
-source /scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/.venv/bin/activate
+source /beegfs/ws/0/s4610340-polyflexmd/polyflexmd/.venv/bin/activate
 
 export XDG_RUNTIME_DIR=""
 
-cd /scratch/ws/0/s4610340-bt-eea1-md-workspace/polyflexmd/notebooks && jupyter notebook --no-browser --port=8888
+cd /beegfs/ws/0/s4610340-polyflexmd/polyflexmd/notebooks && jupyter notebook --no-browser --port=8888
