@@ -7,6 +7,7 @@ import pandas as pd
 
 import matplotlib.markers
 
+
 def plot_MSD(
         df_msd: pd.DataFrame,
         log_scale: bool,
@@ -30,17 +31,17 @@ def plot_MSD(
 
     df[dR_col] = np.sqrt(df[col]) / L_contour
 
-    ax: plt.Axes = sns.scatterplot(
+    ax: plt.Axes = sns.lineplot(
         df,
         x="t/LJ",
         y=dR_col,
         ax=ax,
         label=label,
         color=color,
-        marker=marker,
-        linewidths=1,
-        edgecolors="black",
-        s=10
+        #marker=marker,
+        #linewidths=1,
+        #edgecolors="black",
+        #s=10
     )
 
     title_prefix = "MSD"
