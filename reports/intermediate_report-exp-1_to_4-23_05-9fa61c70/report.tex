@@ -48,7 +48,7 @@
             \end{itemize}
         \item Friction coefficient of center of mass: $\zeta_{CM}=N_b \zeta$ 
         \item Rouse relaxation time \cite{svaneborg_2020}: $\tau_R = \frac{1}{3 \pi^2} \frac{\zeta_{CM} \mean{R^2}}{k_B T} = \frac{1}{3 \pi^2} \frac{\zeta N_b^2 l_b^2}{k_B T}$
-        \item Relaxation time of single bead: $\tau_0 = \frac{\tau_R}{N^2}$ 
+        \item Relaxation time of single bead: $\tau_0 = \frac{3\pi^2 \tau_R}{N^2}$ 
     \end{itemize}
 
 \end{frame}
@@ -118,6 +118,10 @@
     Analytical: $\tau_R=520.64$, $\tau_0=0.032$
     \\
     Free parameter: $\tau_R=2136.5 \pm 155.2$, $\tau_0=0.130 \pm 0.009$
+    \\
+    \vspace{1cm}
+    Define adjustment factor
+    $ \alpha := \frac{\tau_{0, \textrm{empirical}}}{\tau_{0, \textrm{analytical}}} \approx 4.047$
 \end{frame}
 
 \section{Experiment 2: Semi-flexible chain, vary persistence length}
@@ -143,9 +147,9 @@
     \begin{equation} 
         N_K = \frac{L}{l_K}
     \end{equation}
-    Rouse time with assumption $\zeta_{CM}=\zeta N_K$:
+    Rouse time:
     \begin{equation} \label{eq:tau_R_kuhn}
-        \tau_R = \frac{1}{3 \pi^2} \frac{\zeta_{CM} \mean{R^2}}{k_B T} = \frac{1}{3 \pi^2} \frac{\zeta N_K^2 l_K^2}{k_B T}
+        \tau_R = \frac{1}{3 \pi^2} \frac{\zeta_{K} \mean{R^2}}{k_B T} = \frac{1}{3 \pi^2} \frac{\zeta N_b N_K l_K^2}{k_B T}
     \end{equation}
 \end{frame}
 
@@ -172,19 +176,28 @@
 
 \begin{frame}
     \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
-    \framesubtitle{$\mean{[\Delta R(t)]^2}$}
+    \framesubtitle{MSD: $\mean{[\Delta R(t)]^2}$}
 
     \begin{figure}[h]
-        \includegraphics[width=8.1cm]{./4-exp-delta_R-bare.png}
+        \includegraphics[width=9.5cm]{./4-exp-delta_R-bare.png}
     \end{figure}
 \end{frame}
 
 \begin{frame}
     \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
-    \framesubtitle{$\mean{[\Delta R(t)]^2}$}
+    \framesubtitle{MSD: $\mean{[\Delta R(t)]^2}$ on log-log scale}
 
     \begin{figure}[h]
-        \includegraphics[width=11cm]{./output.png}
+        \includegraphics[width=9.5cm]{./4-exp-msd-log.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{MSD: $\mean{[\Delta R(t)]^2}$ by dimension}
+
+    \begin{figure}[h]
+        \includegraphics[width=11cm]{./4-exp-msd_by_dim.png}
     \end{figure}
 \end{frame}
 
@@ -195,7 +208,7 @@
     \framesubtitle{$\mean{[\Delta R(t)]^2}$ vs Rouse with $\tau_R$ analytically}
 
     \begin{figure}[h]
-        \includegraphics[width=8.3cm]{./4-exp-delta_R-rouse_anal.png}
+        \includegraphics[width=11cm]{./4-exp-delta_R-rouse_anal.png}
     \end{figure}
 \end{frame}
 
@@ -205,7 +218,7 @@
     \framesubtitle{$\mean{[\Delta R(t)]^2}$ vs Rouse with $\tau_R$ as free parameter}
 
     \begin{figure}[h]
-        \includegraphics[width=8.5cm]{./4-exp-delta_R-rouse_fit.png}
+        \includegraphics[width=11cm]{./4-exp-delta_R-rouse_fit.png}
     \end{figure}
 \end{frame}
 

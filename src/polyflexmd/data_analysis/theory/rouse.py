@@ -29,3 +29,15 @@ def rouse_relaxation_time(N: int, l: float, zeta: float, T: float, k_B: float) -
 
 def relaxation_time_bead(tau_R: float, N: int) -> float:
     return 3 * np.pi ** 2 * tau_R / N ** 2
+
+
+def rouse_g_4_mf(t: np.ndarray, *tau_p: float, p_max: int, N_b: int, l_b: float):
+    tau_R = tau_p[0]
+    taus = iter(list(tau_p))
+    s = 0
+    for p in range(1, p_max + 1):
+        if p % 2 == 0:
+            continue
+        tau = next(taus, p ** 2 / tau_R)
+        s += 1 / p ** 2 * np.exp(-t * tau)
+    return 2 * N_b * l_b ** 2 * (1 - 8 / np.pi ** 2 * s)
