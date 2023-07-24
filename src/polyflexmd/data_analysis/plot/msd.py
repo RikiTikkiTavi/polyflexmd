@@ -16,32 +16,42 @@ def plot_MSD(
         zeta: float,
         zeta_e: float,
         col: str = "dR^2",
+        ci_alpha: float = 0.2,
         dimension: typing.Optional[str] = None,
         title: typing.Optional[str] = None,
         ax: typing.Optional[plt.Axes] = None,
-        label: typing.Optional[str] = None,
         color: typing.Optional[str] = None,
-        marker: typing.Optional[matplotlib.markers.MarkerStyle] = None,
+        label: typing.Optional[str] = None,
+        xlabel: typing.Optional[str] = None,
+        ylabel: typing.Optional[str] = None,
 ) -> plt.Axes:
-    df = df_msd.copy()
-    dR_col = "$ \sqrt {{\langle (\Delta R(t))^2 \\rangle}} / L$"
+    if ax is None:
+        ax = plt.gca()
 
-    if dimension is not None:
-        dR_col = f"$ \sqrt {{\langle (\Delta R_{dimension}(t))^2 \\rangle}} / L$"
+    time_col = "t/LJ"
 
-    df[dR_col] = np.sqrt(df[col]) / L_contour
+    col_delta = f"delta {col}"
 
-    ax: plt.Axes = sns.lineplot(
-        df,
-        x="t/LJ",
-        y=dR_col,
-        ax=ax,
+    y = np.sqrt(df_msd[col]) / L_contour
+    dy = df_msd[col_delta] / (np.sqrt(df_msd[col]) * L_contour * 2)
+
+    if label is None:
+        label = f"$l_K/L={l_K / L_contour : .2f}$"
+
+    ax.plot(
+        df_msd[time_col],
+        y,
+        c=color,
         label=label,
+        # path_effects=[pe.Stroke(linewidth=2, foreground='black'), pe.Normal()]
+    )
+    ax.fill_between(
+        x=df_msd[time_col],
+        y1=y - dy,
+        y2=y + dy,
         color=color,
-        #marker=marker,
-        #linewidths=1,
-        #edgecolors="black",
-        #s=10
+        alpha=ci_alpha,
+        linewidth=0
     )
 
     title_prefix = "MSD"
@@ -61,6 +71,15 @@ def plot_MSD(
     if title is None:
         title = f"{title_prefix} for $l_K/L={l_K / L_contour:.2f}$, {zeta_title}, $L={L_contour}$"
 
-    ax.set(title=title)
+    if xlabel is None:
+        xlabel = time_col
+    if ylabel is None:
+        ylabel = "$ \sqrt {{\langle (\Delta R(t))^2 \\rangle}} / L$"
+
+    ax.set(
+        title=title,
+        ylabel=ylabel,
+        xlabel=xlabel
+    )
 
     return ax
