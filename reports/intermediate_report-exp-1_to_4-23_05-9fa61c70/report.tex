@@ -96,7 +96,9 @@
     \framesubtitle{$\tau_R$ calculated analytically}
 
     \begin{figure}[h]
-        \includegraphics[width=9.5cm]{./3-exp-fixed-param.png}
+        \includegraphics[trim={0.1cm 0.1cm 0.1cm 1cm},clip,height=6.9cm]{./3-exp-fixed-param.png}
+        \caption{MSD - compare simulation and Rouse model with $\tau_R$ calculated analytically.}
+        \label{fig:full-flex-chain-fixed}
     \end{figure}
 \end{frame}
 
@@ -106,7 +108,10 @@
     \framesubtitle{$\tau_R$ as free parameter}
 
     \begin{figure}[h]
-        \includegraphics[width=10.8cm]{./3-exp-free-param.png}
+        \includegraphics[trim={0.1cm 0.1cm 0.1cm 1cm},clip,height=6.5cm]{./3-exp-free-param.png}
+        \caption{MSD - compare simulation and Rouse model 
+        with $\tau_R$ estimated from fit of $g_4(t)$ to simulation data.}
+        \label{fig:full-flex-chain-free}
     \end{figure}
 \end{frame}
 
@@ -115,13 +120,13 @@
     \frametitle{Experiment 1: Fully flexible chain}
     \framesubtitle{$\tau_R$ analytcal/free values}
 
-    Analytical: $\tau_R=520.64$, $\tau_0=0.032$
+    Analytical: $\tau_R=130.16$, $\tau_0=0.941$
     \\
-    Free parameter: $\tau_R=2136.5 \pm 155.2$, $\tau_0=0.130 \pm 0.009$
+    Free parameter: $\tau_R=582.3 \pm 28.6$, $\tau_0=4.21 \pm 0.07$
     \\
     \vspace{1cm}
     Define adjustment factor
-    $ \alpha := \frac{\tau_{0, \textrm{empirical}}}{\tau_{0, \textrm{analytical}}} \approx 4.047$
+    $ \alpha := \frac{\tau_{0, \textrm{empirical}}}{\tau_{0, \textrm{analytical}}} \approx 4.47$
 \end{frame}
 
 \section{Experiment 2: Semi-flexible chain, vary persistence length}

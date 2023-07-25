@@ -24,7 +24,11 @@ def extract_first_timestep(df: pd.DataFrame, time_col="t") -> pd.DataFrame:
 def calculate_msd_df(df_ete: pd.DataFrame, group_by_columns: list[str], time_col="t"):
     df_ete = df_ete.reset_index()
     dfs = []
-    for group_vars, df_g in df_ete.groupby(group_by_columns):
+    if len(group_by_columns) == 0:
+        grouper = np.repeat(True, df_ete.shape[0])
+    else:
+        grouper = group_by_columns
+    for group_vars, df_g in df_ete.groupby(grouper):
         df_ete_t_0 = extract_first_timestep(df_g, time_col)
         df_g_msd = df_g.groupby(time_col).apply(calculate_msd, df_ete_t_0=df_ete_t_0)
         df_g_msd[group_by_columns] = group_vars
