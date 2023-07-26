@@ -115,6 +115,18 @@
     \end{figure}
 \end{frame}
 
+\begin{frame}
+    \frametitle{Experiment 1: Fully flexible chain}
+    \framesubtitle{$\tau_R$ as free parameter}
+
+    \begin{figure}[h]
+        \includegraphics[trim={0.1cm 0.1cm 0.1cm 1cm},clip,height=6.5cm]{./3-exp-free-param-log.png}
+        \caption{MSD - compare simulation and Rouse model 
+        with $\tau_R$ estimated from fit of $g_4(t)$ to simulation data.}
+        \label{fig:full-flex-chain-free-log}
+    \end{figure}
+\end{frame}
+
 
 \begin{frame}
     \frametitle{Experiment 1: Fully flexible chain}
@@ -127,6 +139,19 @@
     \vspace{1cm}
     Define adjustment factor
     $ \alpha := \frac{\tau_{0, \textrm{empirical}}}{\tau_{0, \textrm{analytical}}} \approx 4.47$
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 1: Fully flexible chain}
+    \framesubtitle{Conclusions / Results}
+    \begin{itemize}
+        \item Boundary conditions of Rouse model must be adjusted to describe dynamics on 
+        short/interim time-scales.
+        \item Rouse model with $\tau_R$ as free parameter is introduced to account for boundary
+        conditions. Based on $\tau_R$ estimate the adjustment factor for $\tau_0$ is calculated.
+        This allows to use the model on chains with different number of segments.
+
+    \end{itemize}
 \end{frame}
 
 \section{Experiment 2: Semi-flexible chain, vary persistence length}
@@ -206,7 +231,21 @@
     \end{figure}
 \end{frame}
 
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{Conclusions 1}
 
+    \begin{enumerate}
+        \item The behavior of MSD for different $l_K$ is roughly the same for $l_K/L \gtrapprox 0.65$
+        \item The relaxation time grows non-linearly with rising $l_K$
+        \item MSD in z dimension is noticable different for $l_K \gtrapprox 0.97$. 
+        \begin{itemize}
+            \item The relaxation time in z dimension gets smaller 
+            relative to x,y dimensions with increasing $l_K$. Explanation: chain has less freedom along z axis with rising $l_K$. 
+            \item MSD is in z is smaller then in x,y on longer time scales. Explanation: same.
+        \end{itemize}
+    \end{enumerate}
+\end{frame}
 
 \begin{frame}
     \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
