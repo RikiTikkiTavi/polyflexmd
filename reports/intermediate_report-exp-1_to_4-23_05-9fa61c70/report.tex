@@ -52,7 +52,30 @@
     \end{itemize}
 
 \end{frame}
+
+\begin{frame}
+    \frametitle{Definitions, notations, units}
+
+    Notations and definitions:
+
+    \begin{itemize}
+        \item index "e" for variables referring end-monomer of the chain: $m_e$, $\zeta_e$ 
+    \end{itemize}
+
+\end{frame}
     
+\begin{frame}
+    \frametitle{Common simulation settings and values}
+
+    \begin{itemize}
+        \item Only bonded beads interract (ideal chain)
+        \item Chain parameters: 64 monomers, monomer mass $m=1$
+        \item Ensemble size $ \ge $ 500 chains
+        \item Environment parameters: $\zeta=1$
+        \item Time step 0.0025 LJ
+    \end{itemize}
+
+\end{frame}
 
 \begin{frame}
     \frametitle{Assumptions}
@@ -233,6 +256,15 @@
 
 \begin{frame}
     \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{MSD: $\mean{[\Delta R(t)]^2}$ by dimension on log scale}
+
+    \begin{figure}[h]
+        \includegraphics[width=11cm]{./4-exp-msd_by_dim-log.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
     \framesubtitle{Conclusions 1}
 
     \begin{enumerate}
@@ -262,17 +294,70 @@
     \framesubtitle{$\mean{[\Delta R(t)]^2}$ vs Rouse with $\tau_R$ as free parameter}
 
     \begin{figure}[h]
-        \includegraphics[width=11cm]{./4-exp-delta_R-rouse_fit.png}
+        \includegraphics[width=11cm]{./4-exp-delta_R-rouse_fit-tau.png}
     \end{figure}
 \end{frame}
 
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{$\mean{[\Delta R(t)]^2}$ vs Adjusted Rouse with $\tau_R$, $a$ as free parameter}
+    $$ \mean{[\Delta R(t)]^2} = a \mean{R} [1 - \exp(-\frac{t}{\tau_R})] $$
+    \begin{figure}[h]
+        \includegraphics[width=11cm]{./4-exp-delta_R-rouse_fit-tau-a.png}
+    \end{figure}
+\end{frame}
 
 \begin{frame}
     \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
-    \framesubtitle{Analytical and empirical $\tau_0$ vs Kuhn length}
-
+    \framesubtitle{$\mean{[\Delta R(t)]^2}$ vs Adjusted Rouse with $\tau_R$, $a$ as free parameter on log scale}
+    $$ \mean{[\Delta R(t)]^2} = a \mean{R} [1 - \exp(-\frac{t}{\tau_R})] $$
     \begin{figure}[h]
-        \includegraphics[width=8.5cm]{./4-exp-rouse-times.png}
+        \includegraphics[width=11cm]{./4-exp-delta_R-rouse_fit-tau-a_log.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{Conclusions 2}
+    \begin{enumerate}
+        \item Rouse model is not able to describe semi-flexible chain with $\gtrapprox$ 3 segments
+        even with rouse time adjusted for boundary conditions. (Continuum assumption violated.)
+        \item Rouse model with free $\tau_R$ doesn't work for small number 
+        of kuhn segments.
+        \item Introducion of Adjusted Rouse model helps to describe dynamics on 
+        interim and large time scales, however it's inaccurate on short time scales.
+    \end{enumerate}
+\end{frame}
+
+\section{Experiment 3: EEA1/EEA1+Rab5-like chain}
+
+\begin{frame}
+    \frametitle{Experiment 3: EEA1/EEA1+Rab5-like chain}
+    \framesubtitle{Settings}
+    Same potentials used as in \cite[Section 2.1]{svaneborg_2020}, except:
+    \begin{itemize}
+        \item Only bonded beads interract
+    \end{itemize}
+    Modelling EEA1 and EEA1+Rab5:
+    \begin{itemize}
+        \item EEA1: $\kappa = 190.2 \Rightarrow l_K/L=6.02$ 
+        \item EEA1+Rab5: $\zeta_e = 10\zeta, 20\zeta$; $m_e=1.5m$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 3: EEA1/EEA1+Rab5-like chain}
+    \framesubtitle{}
+    \begin{figure}[h]
+        \includegraphics[width=11cm]{./14+15+16-exp-msd.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 3: EEA1/EEA1+Rab5-like chain}
+    \framesubtitle{}
+    \begin{figure}[h]
+        \includegraphics[width=11cm]{./14+15+16-exp-msd-log.png}
     \end{figure}
 \end{frame}
 
