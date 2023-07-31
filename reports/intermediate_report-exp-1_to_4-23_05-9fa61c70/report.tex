@@ -6,7 +6,7 @@
 \usetheme{default}
 
 \title{Molecular dynamics study of ideal polymer chains with variable persistence length}
-\subtitle{Short progress report}
+\subtitle{Results report}
 \author{Yahor Paromau, Holger Merlitz}
 \institute{ITP@IPF}
 \date{23.05.2023}
@@ -321,7 +321,8 @@
     \framesubtitle{Conclusions 2}
     \begin{enumerate}
         \item Rouse model is not able to describe semi-flexible chain with $\gtrapprox$ 3 segments
-        even with rouse time adjusted for boundary conditions. (Continuum assumption violated.)
+        even with rouse time adjusted for boundary conditions. 
+        (Continuum assumption violated; ETE of worm-like chain is different.)
         \item Rouse model with free $\tau_R$ doesn't work for small number 
         of kuhn segments.
         \item Introducion of Adjusted Rouse model helps to describe dynamics on 
@@ -378,6 +379,17 @@
     \end{figure}
 \end{frame}
 
+\begin{frame}
+    \frametitle{Experiment 3: EEA1/EEA1+Rab5-like chain, anchored}
+    \framesubtitle{Conclusions / Results}
+    \begin{itemize}
+        \item $l_K$ of the EEA1-like- and EEA1+Rab5-like- anchored chain is the same.
+        \item Increased diameter of end monomer changes short- and interim-time scale 
+        dynamics. Relaxation time of the chain increases. Likely because of slower
+        diffusion of the end monomer and correspondingly of the part of the chain.
+    \end{itemize}
+\end{frame}
+
 \section{Experiment 4: EEA1/EEA1+Rab5-like chain, free}
 
 \begin{frame}
@@ -405,12 +417,22 @@
 \end{frame}
 
 \begin{frame}
+    \frametitle{Experiment 4: EEA1/EEA1+Rab5-like chain, free}
+    \framesubtitle{Conclusions / Results}
+    \begin{itemize}
+        \item $l_K$ of the EEA1-like- and EEA1+Rab5-like- free chain is the same.
+        \item With increasing diameter of the end monomer short- and interim- time
+        scale dynamics slightly changes. The relaxation time slightly uncreases. 
+        Change in relaxation time is smaller then in case of anchored chain.
+        \item In difference to anchored chain - MSD in z direction does not differ from x,y.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
     \frametitle{Problems and Questions}
     \begin{enumerate}
-        \item Eq. (\ref{eq:tau_R_kuhn}): Is the assumption correct? 
-        Intuitively: $\zeta_{CM}=\zeta_K N_K=\zeta \frac{N_b}{N_K} N_K=\zeta N_b$, but then
-        \cite[Eq. 15]{svaneborg_2020} is not proportional to $N_K^2$.
-        \item Empirical $\tau_0$ are with factor $\approx 10^3$ larger then theoretical, why?
+        \item No analytical model for experiment 3 and 4, therefore precise
+        description of the difference in dynamics is not possible.
     \end{enumerate}
 \end{frame}
 
