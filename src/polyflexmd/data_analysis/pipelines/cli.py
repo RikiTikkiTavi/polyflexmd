@@ -41,10 +41,6 @@ def process_experiment_data(
             bool,
             typer.Option()
         ] = True,
-        save_angle_matrix: typing.Annotated[
-            bool,
-            typer.Option()
-        ] = False,
         time_steps_per_partition: typing.Annotated[
             int,
             typer.Option()
@@ -91,11 +87,11 @@ def process_experiment_data(
 
     polyflexmd.data_analysis.pipelines.experiment.process_experiment_data(
         path_experiment=path_experiment,
-        n_workers=n_workers,
         style=style.value,
         read_relax=read_relax,
         enable_l_K_estimate=l_K_estimate,
-        save_angle_matrix=save_angle_matrix,
+        calculate_msd_lm=True,
+        calculate_lm_trajectory=True,
         time_steps_per_partition=time_steps_per_partition
     )
 

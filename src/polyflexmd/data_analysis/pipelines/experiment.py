@@ -13,6 +13,7 @@ import polyflexmd.data_analysis.pipelines.trajectory
 import polyflexmd.data_analysis.data.read
 import polyflexmd.data_analysis.data.constants
 import polyflexmd.data_analysis.transform.transform as transform
+import polyflexmd.data_analysis.transform.msdlm
 
 import polyflexmd.data_analysis.theory.kremer_grest
 
@@ -24,11 +25,11 @@ _logger = logging.getLogger(__name__)
 def process_experiment_data(
         path_experiment: pathlib.Path,
         style: typing.Literal["l_K+d_end", "l_K", "simple"],
-        n_workers: int = 16,
         read_relax: bool = False,
         enable_l_K_estimate: bool = True,
-        time_steps_per_partition: int = 100000,
-        save_angle_matrix: bool = False
+        calculate_lm_trajectory: bool = True,
+        calculate_msd_lm: bool = True,
+        time_steps_per_partition: int = 100000
 ):
     _logger.info(f"Processing data of experiment: {path_experiment}")
     _logger.info(f"Data style: {style}")
@@ -150,8 +151,6 @@ def process_experiment_data(
         _logger.info(f"Writing {traj_glob} ...")
         df_trajectories.to_csv(traj_glob, single_file=False, index=True)
 
-    # df_trajectories = df_trajectories.compute()
-
     # ETE
     path_ete = path_data_processed / "ete.csv"
 
@@ -216,3 +215,48 @@ def process_experiment_data(
 
         _logger.info(f"Writing {path_msd} ...")
         df_msd.to_csv(path_msd, index=True)
+
+    # LM trajectory
+    if calculate_lm_trajectory:
+
+        path_lm_trajectory = path_data_processed / "lm_trajectory.csv"
+
+        if path_lm_trajectory.exists():
+            _logger.info(f"{path_lm_trajectory} exists;")
+            df_lm_trajectory = pd.read_csv(path_lm_trajectory, index_col=[*group_by_parameters, "molecule-ID", "t"])
+
+        else:
+            _logger.info(f"{path_lm_trajectory} does not exist;")
+            _logger.info(f"Calculating lm trajectory ...")
+
+            df_lm_trajectory: pd.DataFrame = polyflexmd.data_analysis.transform.msdlm.extract_lm_trajectory_df(
+                df_trajectories,
+                group_by_columns=group_by_parameters,
+                time_col="t"
+            ).compute()
+
+            _logger.info(f"Writing {path_lm_trajectory} ...")
+
+            df_lm_trajectory.to_csv(path_lm_trajectory, index=True)
+
+        # LM MSD
+        if calculate_msd_lm:
+
+            path_lm_msd = path_data_processed / "lm_msd.csv"
+
+            if path_lm_msd.exists():
+                _logger.info(f"{path_lm_msd} exists;")
+
+            else:
+                _logger.info(f"{path_lm_msd} does not exist;")
+                _logger.info(f"Calculating lm msd ...")
+
+                df_msd_lm = polyflexmd.data_analysis.transform.msdlm.calculate_msd_lm_df(
+                    df_lm_trajectory=df_lm_trajectory,
+                    group_by_columns=group_by_parameters,
+                    time_col="t"
+                )
+
+                _logger.info(f"Writing {path_lm_msd} ...")
+
+                df_msd_lm.to_csv(path_lm_msd, index=True)

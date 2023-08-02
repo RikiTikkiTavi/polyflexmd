@@ -14,14 +14,9 @@ import functools
 import scipy.optimize
 
 import polyflexmd.data_analysis.theory.kremer_grest
+from polyflexmd.data_analysis.transform.constants import AtomGroup
 
 _logger = logging.getLogger(__name__)
-
-
-class AtomGroup(enum.Enum):
-    ROOT = 1
-    FREE = 2
-    LEAF = 3
 
 
 def unfold_coordinate(val: float, i: float, box_length: float):
@@ -58,7 +53,6 @@ def unfold_coordinates_df(
 
 
 def calculate_end_to_end(molecule_traj_step_df_unf: pd.DataFrame) -> pd.Series:
-
     root_atom_data: pd.Series = molecule_traj_step_df_unf \
         .loc[molecule_traj_step_df_unf["type"] == AtomGroup.ROOT.value] \
         .head(5) \
