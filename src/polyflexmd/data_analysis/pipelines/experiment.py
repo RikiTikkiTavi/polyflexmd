@@ -14,6 +14,7 @@ import polyflexmd.data_analysis.data.read
 import polyflexmd.data_analysis.data.constants
 import polyflexmd.data_analysis.transform.transform as transform
 import polyflexmd.data_analysis.transform.msdlm
+import polyflexmd.data_analysis.transform.msd
 
 import polyflexmd.data_analysis.theory.kremer_grest
 
@@ -167,6 +168,45 @@ def process_experiment_data(
         ).compute()
         _logger.info(f"Writing {path_ete} ...")
         df_ete.to_csv(path_ete, index=True)
+
+    path_data_processed_main_ax = path_data_processed / "main_ax_frame"
+    path_data_processed_main_ax.mkdir(parents=True, exist_ok=True)
+
+    # ETE MAIN AX
+    path_ete_main_ax = path_data_processed_main_ax / "ete.csv"
+    if path_ete_main_ax.exists():
+        _logger.info(f"{path_ete_main_ax} exists => Reading processed ...")
+        df_ete_main_ax_frame = pd.read_csv(path_ete_main_ax, index_col=[*group_by_parameters, "molecule-ID", "t"])
+    else:
+        _logger.info(f"{path_ete_main_ax} does not exist;")
+        _logger.info(f"Transforming ETE in main ax frame ...")
+
+        df_ete_main_ax_frame = transform.change_basis_df_ete(
+            df_ete,
+            pd.read_csv(path_df_main_axis).groupby("molecule-ID", as_index=True).nth(1)
+        )
+
+        _logger.info(f"Writing {path_ete_main_ax} ...")
+
+        df_ete_main_ax_frame.to_csv(path_ete_main_ax, index=True)
+
+    # MSD - dim MAIN AX
+    path_msd_dim_main_ax = path_data_processed_main_ax / "msd.csv"
+    if path_msd_dim_main_ax.exists():
+        _logger.info(f"{path_msd_dim_main_ax} exists.")
+    else:
+        _logger.info(f"{path_msd_dim_main_ax} does not exist;")
+        _logger.info(f"Calculating MSD in main ax frame ...")
+
+        df_msd_dim_main_ax = polyflexmd.data_analysis.transform.msd.calculate_msd_by_dimension_df(
+            df_ete=df_ete_main_ax_frame,
+            group_by_params=group_by_parameters,
+            time_param="t"
+        )
+
+        _logger.info(f"Writing {path_msd_dim_main_ax} ...")
+
+        df_msd_dim_main_ax.to_csv(path_msd_dim_main_ax, index=True)
 
     # l_K estimate
     if enable_l_K_estimate:
