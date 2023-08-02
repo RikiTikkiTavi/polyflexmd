@@ -3,6 +3,7 @@ import pandas as pd
 import dask.dataframe
 import polyflexmd.data_analysis.transform.constants as constants
 import polyflexmd.data_analysis.transform.msd as msd
+import polyflexmd.data_analysis.transform.transform as transform
 
 
 def extract_lm(df_molecule_traj_step: pd.DataFrame) -> pd.Series:
@@ -79,11 +80,11 @@ def calculate_msd_lm_by_dimension_df(
         df_lm_trajectory: pd.DataFrame,
         group_by_columns: list[str],
         time_col="t",
-        dimensions: tuple[str, str, str] = ("R_x", "R_y", "R_z")
+        dimensions: tuple[str, str, str] = ("x", "y", "z")
 ) -> pd.DataFrame:
-    df_ete = df_lm_trajectory.reset_index(drop=False).drop("R", axis=1)
+    df_lm_trajectory = df_lm_trajectory.reset_index(drop=False)
     dfs = []
-    for params, df_group in df_ete.groupby(group_by_columns):
+    for params, df_group in df_lm_trajectory.groupby(group_by_columns):
         df_group_t_0 = msd.extract_first_timestep(df_group, time_col)
         df_group_msd_lm = df_group.groupby(time_col).apply(
             calculate_msd_lm_by_dimension,
@@ -92,5 +93,21 @@ def calculate_msd_lm_by_dimension_df(
         )
         df_group_msd_lm[group_by_columns] = params
         dfs.append(df_group_msd_lm)
+
+    return pd.concat(dfs)
+
+
+def change_basis_df_lm_trajectory(df_lm_trajectory: pd.DataFrame, df_main_axis: pd.DataFrame):
+    dims = ["x", "y", "z"]
+    dfs = []
+    for mol_id, df_mol in df_lm_trajectory.groupby("molecule-ID"):
+        vec_axs = df_main_axis.loc[df_main_axis["molecule-ID"] == mol_id].iloc[0][dims].to_numpy()
+        basis_new = transform.create_orthogonal_basis_with_given_vector(vec_axs)
+        vecs = []
+        for vec in df_mol[dims].to_numpy():
+            vec_new = transform.basis_change_from_cartesian(basis_new, vec)
+            vecs.append(vec_new)
+        df_mol[dims] = vecs
+        dfs.append(df_mol)
 
     return pd.concat(dfs)

@@ -23,6 +23,59 @@ import dask.dataframe
 _logger = logging.getLogger(__name__)
 
 
+def get_lm_trajectory_in_main_ax_frame(
+        df_lm_trajectory: pd.DataFrame,
+        df_main_ax: pd.DataFrame,
+        path_data_processed_main_ax: pathlib.Path,
+        group_by_parameters: list[str],
+        file_name: str = "lm_trajectory.csv"
+) -> pd.DataFrame:
+    path_lm_trajectory = path_data_processed_main_ax / file_name
+
+    if path_lm_trajectory.exists():
+        _logger.info(f"{path_lm_trajectory} exists;")
+        return pd.read_csv(path_lm_trajectory, index_col=[*group_by_parameters, "molecule-ID", "t"])
+
+    else:
+        _logger.info(f"{path_lm_trajectory} does not exist;")
+        _logger.info(f"Transforming lm trajectory ...")
+
+        df_lm_trajectory_maf: pd.DataFrame = polyflexmd.data_analysis.transform.msdlm.change_basis_df_lm_trajectory(
+            df_lm_trajectory=df_lm_trajectory,
+            df_main_axis=df_main_ax
+        )
+
+        _logger.info(f"Writing {path_lm_trajectory} ...")
+
+        df_lm_trajectory_maf.to_csv(path_lm_trajectory, index=True)
+
+        return df_lm_trajectory_maf
+
+
+def get_msd_lm_main_ax(
+        df_lm_traj_main_ax: pd.DataFrame,
+        path_data_processed_main_ax: pathlib.Path,
+        group_by_parameters: list[str],
+        file_name: str = "msd_lm.csv",
+) -> None:
+    path_msd_lm = path_data_processed_main_ax / file_name
+    if path_msd_lm.exists():
+        _logger.info(f"{path_msd_lm} exists.")
+    else:
+        _logger.info(f"{path_msd_lm} does not exist;")
+        _logger.info(f"Calculating MSD LM in main ax frame ...")
+
+        df_msd_dim_main_ax = polyflexmd.data_analysis.transform.msdlm.calculate_msd_lm_by_dimension_df(
+            df_lm_trajectory=df_lm_traj_main_ax,
+            group_by_columns=group_by_parameters,
+            time_col="t"
+        )
+
+        _logger.info(f"Writing {path_msd_lm} ...")
+
+        df_msd_dim_main_ax.to_csv(path_msd_lm, index=True)
+
+
 def process_experiment_data(
         path_experiment: pathlib.Path,
         style: typing.Literal["l_K+d_end", "l_K", "simple"],
@@ -279,6 +332,14 @@ def process_experiment_data(
 
             df_lm_trajectory.to_csv(path_lm_trajectory, index=True)
 
+        # LM main ax
+        df_lm_traj_main_ax: pd.DataFrame = get_lm_trajectory_in_main_ax_frame(
+            df_lm_trajectory=df_lm_trajectory,
+            df_main_ax=pd.read_csv(path_df_main_axis).groupby("molecule-ID", as_index=True).nth(1),
+            path_data_processed_main_ax=path_data_processed_main_ax,
+            group_by_parameters=group_by_parameters
+        )
+
         # LM MSD
         if calculate_msd_lm:
 
@@ -300,3 +361,11 @@ def process_experiment_data(
                 _logger.info(f"Writing {path_lm_msd} ...")
 
                 df_msd_lm.to_csv(path_lm_msd, index=True)
+
+        # LM MSD main ax
+        if calculate_msd_lm:
+            get_msd_lm_main_ax(
+                df_lm_traj_main_ax=df_lm_traj_main_ax,
+                path_data_processed_main_ax=path_data_processed_main_ax,
+                group_by_parameters=group_by_parameters
+            )
