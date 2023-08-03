@@ -7,7 +7,6 @@ import pandas as pd
 
 import matplotlib.markers
 
-
 def plot_MSD(
         df_msd: pd.DataFrame,
         log_scale: bool,
