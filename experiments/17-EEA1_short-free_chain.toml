@@ -13,10 +13,10 @@ kappa_n_values = 1
 
 n_relax_steps = 35000000
 
-n_equilibrium_steps_1 = 2000000
+n_equilibrium_steps_1 = 1000000
 dump_frequency_1 = 100
 
-n_equilibrium_steps_2 = 38000000
+n_equilibrium_steps_2 = 80000000
 dump_frequency_2 = 10000
 
 [simulation_config.job]

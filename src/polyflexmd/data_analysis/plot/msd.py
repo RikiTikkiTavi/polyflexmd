@@ -6,6 +6,8 @@ from matplotlib import pyplot as plt
 import pandas as pd
 
 import matplotlib.markers
+import matplotlib.lines
+
 
 def plot_MSD(
         df_msd: pd.DataFrame,
@@ -23,6 +25,7 @@ def plot_MSD(
         label: typing.Optional[str] = None,
         xlabel: typing.Optional[str] = None,
         ylabel: typing.Optional[str] = None,
+        scatter: bool = False
 ) -> plt.Axes:
     if ax is None:
         ax = plt.gca()
@@ -37,11 +40,21 @@ def plot_MSD(
     if label is None:
         label = f"$l_K/L={l_K / L_contour : .2f}$"
 
+    plot_kwargs = {}
+    if scatter:
+        plot_kwargs["linestyle"] = 'None'
+        plot_kwargs["markersize"] = 5
+        plot_kwargs["markerfacecolor"] = 'none'
+        plot_kwargs["markeredgecolor"] = color
+        plot_kwargs["fillstyle"] = 'none'
+        plot_kwargs["marker"] = "o"
+
     ax.plot(
         df_msd[time_col],
         y,
         c=color,
         label=label,
+        **plot_kwargs
         # path_effects=[pe.Stroke(linewidth=2, foreground='black'), pe.Normal()]
     )
     ax.fill_between(

@@ -63,6 +63,8 @@
 
 % \frontmatter
 
+% Commands
+\newcommand{\E}[1]{\langle#1\rangle}
 
 % Titelpageseite
 \begin{titlepage}
@@ -141,8 +143,49 @@ Deutsch \\
 \section{Introduction}
 \subsection{Motivation}
 \subsection{Polymer chain model}
-\subsection{Rouse model of polymer dynamics}
+\subsection{Langevin equation}
+The Langevin equation is a fundamental stochastic differential equation 
+widely used in statistical mechanics and molecular dynamics to describe the 
+dynamics of particles or molecules subjected to random forces in a 
+dissipative medium.
+\\
+\\
+Specifically Langevin equation is used to describe the particle in immobile
+solvent and can be written as:
+\begin{equation}
+    m \ddot{\vec{r}} = - \nabla U(\vec{r}) - \sigma m \dot{\vec{r}} + \vec{f}^r(t)
+\end{equation}
+where:
+\begin{itemize}
+    \item $\sigma$ - damping constaint, which accounts for the viscosity of the solvent
+    \item $\vec{f}^r(t)$ - stochastic force, represents the effect of thermal 
+    fluctuations due to the particle's interactions with the solvents molecules
+    \item $U(\vec{r})$ - any external potential acting on the particle
+\end{itemize}
+$\vec{f}^r(t)$ is a stochastic process known as white noise:
+\begin{itemize}
+    \item Sampled from Gaussian distribution
+    \item $\E{\vec{f}^r(t)} = 0$
+    \item $\E{\vec{f}_{\alpha}^r(t) \vec{f}_{\beta}^r(t')} = 2 k T \sigma \delta(t-t')$ which relates strength
+     of noise and friction and
+    is known as fluctuation-dissipation theorem.
+\end{itemize}
 
+\subsection{Rouse model}
+Polymer chains, composed of repeating monomer units, exhibit complex 
+behaviors that are of great interest in polymer physics and materials science. 
+Understanding the dynamics of polymer chains is crucial for elucidating their 
+mechanical, thermal, and transport properties. One of the fundamental 
+models used to describe polymer dynamics is the Rouse model.
+\\
+\\
+The Rouse model, proposed by Peter J. W. Debye and Paul J. Flory in 
+the 1940s, is a widely used theoretical framework to study the dynamics 
+of polymer chains in an ideal solvent. This model simplifies the complex 
+behavior of polymer chains by representing them as linear chains of connected beads.
+\\
+\\
+Ideal chain in immobile implicit solvent is considered. 
 
 \section{Methods}
 \subsection{Simulation methods}
