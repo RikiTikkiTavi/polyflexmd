@@ -51,8 +51,6 @@ variable i uloop ${kappa_n_values}
 
     run ${n_relax_steps}
 
-    unfix 5
-
     # Now collect data
 
     undump dump_vmd_${i}
