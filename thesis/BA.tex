@@ -152,7 +152,7 @@ dissipative medium.
 \\
 Specifically Langevin equation is used to describe the particle in immobile
 solvent and can be written as:
-\begin{equation}
+\begin{equation} \label{eq:langevin}
     m \ddot{\vec{r}} = - \nabla U(\vec{r}) - \sigma m \dot{\vec{r}} + \vec{f}^r(t)
 \end{equation}
 where:
@@ -166,7 +166,7 @@ $\vec{f}^r(t)$ is a stochastic process known as white noise:
 \begin{itemize}
     \item Sampled from Gaussian distribution
     \item $\E{\vec{f}^r(t)} = 0$
-    \item $\E{\vec{f}_{\alpha}^r(t) \vec{f}_{\beta}^r(t')} = 2 k T \sigma \delta(t-t')$ which relates strength
+    \item $\E{\vec{f}_{\alpha}^r(t) \vec{f}_{\beta}^r(t')} = 2 k_B T \sigma m \delta(t-t')$ which relates strength
      of noise and friction and
     is known as fluctuation-dissipation theorem.
 \end{itemize}
@@ -183,10 +183,68 @@ The Rouse model, proposed by Peter J. W. Debye and Paul J. Flory in
 the 1940s, is a widely used theoretical framework to study the dynamics 
 of polymer chains in an ideal solvent. This model simplifies the complex 
 behavior of polymer chains by representing them as linear chains of connected beads.
-\\
-\\
-Ideal chain in immobile implicit solvent is considered. 
 
+\subsubsection{Assumptions}
+The Rouse model makes certain key assumptions to facilitate its analytical treatment:
+\begin{enumerate}
+    \item \label{rouse_assumption_1} No hydrodynamic interactions or excluded volume effects between monomers.
+    \item \label{rouse_assumption_2} Thermal forces acting on each bead follow Gaussian statistics.
+    \item \label{rouse_assumption_3} Overdamped motion of the bead, which implies that inertia term vanishes: $m \ddot{\vec{r}} \approx 0$.
+    Which is usually fulfilled in polymeric systems \cite{Doi_Intro_PP:2005}.
+    \item \label{rouse_assumption_4} Beads continuously distributed along polymer chain.
+\end{enumerate}
+
+\subsubsection{Equation}
+Assumptions \ref{rouse_assumption_1}, \ref{rouse_assumption_2} lead to description of the
+system using Langevin equation (Eq. \ref{eq:langevin}). Following assumption \ref{rouse_assumption_3} 
+the inertia term is set to 0. The continous approximation then made as consequence of assumption \ref{rouse_assumption_4}.
+The initial equation of motion of single bead then becomes a diffusion equation \cite{Rub_Colby_PolyPhy:2005}:
+\begin{equation}
+    \label{eq:diffusion}
+    \zeta \frac{\partial \vec{r}(t,n)}{\partial t} = \frac{3 k_B T}{b^2} \frac{\partial \vec{r}(t,n)}{\partial n^2} + \vec{f}^r(t)
+\end{equation}
+
+\subsubsection{Boundary conditions}
+The chain ends are connected to one spring only. These free ends could be modelled by adding two 
+fictious beads to both ends with $\vec{r}_0=\vec{r}_1$ and $\vec{r}_N=\vec{r}_{N+1}$. Boundary 
+conditions for diffusion equation can be then written as follows \cite{Rub_Colby_PolyPhy:2005}:
+\begin{equation}
+    \label{eq:rouse_boundary}
+    \begin{aligned}
+        & \left(\frac{\partial \vec{r}}{\partial n}\right)_{n=0} = 0\\
+        & \left(\frac{\partial \vec{r}}{\partial n}\right)_{n=N} = 0
+    \end{aligned}
+\end{equation}
+
+\subsubsection{Solution}
+Define:
+\begin{equation}
+    \label{eq:rouse_mode}
+    \vec{X}_p := \frac{1}{N} \int_0^N dn \cos(\frac{p \pi n}{N})\vec{r}(n, t)
+\end{equation}
+Eq. \ref{eq:diffusion} can be then rewritten as \cite{Doi_Edwards_PD:1994}:
+\begin{equation}
+    \zeta_p \frac{\partial}{\partial t} \vec{X}_p = -k_p \vec{X}_p + \vec{f}^p
+\end{equation}
+with 
+\begin{equation}
+    \zeta_0 = N \zeta
+    \text{ and }
+    \zeta_p = 2 N \zeta
+    \text{ for } p = 1,2,\ldots
+\end{equation}
+\begin{equation}
+    k_p = \frac{6 \pi^2 k_B T}{Nb^2} p^2
+    \text{ for } p = 0,1,2,\ldots
+\end{equation}
+and $\vec{f}^p$ is a random force, which satisfies \cite{Doi_Edwards_PD:1994}:
+\begin{equation}
+    \begin{aligned}
+        & \E{f_{p\alpha}} = 0\\
+        & \E{f_{p\alpha}(t) f_{p\beta}(t')} = 2 \delta_{pq} \delta_{\alpha\beta} \zeta_p k_B T \delta(t-t')
+    \end{aligned}
+\end{equation}
+Which is langevin equation
 \section{Methods}
 \subsection{Simulation methods}
 \subsection{Evaluation methods}

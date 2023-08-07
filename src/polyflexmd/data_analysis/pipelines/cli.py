@@ -64,14 +64,13 @@ def process_experiment_data(
 
     if on_taurus:
         cluster = SLURMCluster(
-            queue='alpha',
-            cores=6,
+            queue='haswell',
+            cores=12,
             processes=1,
-            account='p_scads',
+            account='p_mdpolymer',
             memory="125GB",
             death_timeout=1800,
-            walltime="24:00:00",
-            job_extra_directives=["--reservation p_scads_1060"],
+            walltime="48:00:00",
             local_directory="/tmp",
             interface="ib0",
             log_directory="/beegfs/ws/0/s4610340-polyflexmd/.logs",
