@@ -44,7 +44,11 @@ def process_experiment_data(
         time_steps_per_partition: typing.Annotated[
             int,
             typer.Option()
-        ] = 100000
+        ] = 100000,
+        total_time_steps: typing.Annotated[
+            typing.Optional[int],
+            typer.Option()
+        ] = None
 ):
     logging.basicConfig(
         level=logging.DEBUG,
@@ -91,7 +95,8 @@ def process_experiment_data(
         enable_l_K_estimate=l_K_estimate,
         calculate_msd_lm=True,
         calculate_lm_trajectory=True,
-        time_steps_per_partition=time_steps_per_partition
+        time_steps_per_partition=time_steps_per_partition,
+        total_time_steps=total_time_steps
     )
 
 
