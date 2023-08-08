@@ -217,7 +217,8 @@ conditions for diffusion equation can be then written as follows \cite{Rub_Colby
 \end{equation}
 
 \subsubsection{Solution}
-Define:
+The motion of the polymer can be decoupled in the motion of the independent modes using normal
+coordinates \cite{Doi_Edwards_PD:1994}. Define:
 \begin{equation}
     \label{eq:rouse_mode}
     \vec{X}_p := \frac{1}{N} \int_0^N dn \cos(\frac{p \pi n}{N})\vec{r}(n, t)
@@ -244,7 +245,29 @@ and $\vec{f}^p$ is a random force, which satisfies \cite{Doi_Edwards_PD:1994}:
         & \E{f_{p\alpha}(t) f_{p\beta}(t')} = 2 \delta_{pq} \delta_{\alpha\beta} \zeta_p k_B T \delta(t-t')
     \end{aligned}
 \end{equation}
-Which is langevin equation
+Which is langevin equation for the harmonic spring potential, with formal solution \cite{Doi_Edwards_PD:1994}:
+\begin{equation}
+    \vec{X_p}(t) = \frac{1}{\zeta_p} \int_{-\infty}^{t} dt' \frac{\exp(t-t')}{\tau_p} \vec{f^p}
+\end{equation}
+with
+\begin{equation}
+    \tau_p = \zeta_p / k_p
+\end{equation}
+The inverse transformation of Eq. \ref{eq:rouse_mode} is given by \cite{Doi_Edwards_PD:1994}:
+\begin{equation}
+    \vec{r}_n = \vec{X_0} + 2 \sum_{p=1}^{\infty} \vec{X}_p \cos(p \pi n  / N)
+\end{equation}
+
+\subsubsection{Important values}
+End-to-End vector \cite{Doi_Edwards_PD:1994}:
+\begin{equation}
+    \vec{R}(t) = -4 \sum_{p=1,3,5,\ldots} \vec{X}_p
+\end{equation}
+Time correlation of End-to-End vector \cite{Doi_Edwards_PD:1994}:
+\begin{equation}
+    \E{\vec{R}(t)\vec{R}(0)} = Nb^2 \sum_{p=1,3,\ldots} \frac{8}{p^2\pi^2}\exp{\frac{-t p^2}{\tau_R}}
+\end{equation}
+
 \section{Methods}
 \subsection{Simulation methods}
 \subsection{Evaluation methods}
