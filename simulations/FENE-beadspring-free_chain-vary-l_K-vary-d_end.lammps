@@ -64,6 +64,9 @@ variable i uloop ${kappa_n_values}
         restart                  1000000  ${checkpoints_dir}/restart.${i}-${j}
 
 
+        # Add balancing
+        fix 5 all balance 1000000 1.05 shift xyz 20 1.05
+
         # First let the polymers relax
 
         dump dump_vmd_${i}-${j} all atom 10000 ${data_dir}/polymer_relax-${i}-${j}.vmd

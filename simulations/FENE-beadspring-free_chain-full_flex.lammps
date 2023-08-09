@@ -1,0 +1,67 @@
+#FENE beadspring model without angle potential
+
+shell mkdir ${experiment_path}/data/raw
+
+units                    lj
+atom_style               angle
+special_bonds            fene
+boundary                 p p p
+ 
+read_data                ${experiment_path}/data/initial_system.data
+ 
+bond_style               fene
+bond_coeff               1 30.0 1.5 1.0 1.0    
+
+angle_style zero
+angle_coeff 1 0.0
+
+
+group anchor type 1
+group end    type 3
+
+group  free subtract all anchor   # all monomers except anchors are free
+
+fix                      1 all nve
+fix                      2 all langevin 1.0 1.0 1.0 904297
+ 
+thermo                    1000
+timestep                 0.0025
+neighbor       0.3 bin
+neigh_modify   delay 1 every 1 check yes
+
+restart                  1000000  ${experiment_path}/checkpoints/fene.restart
+
+# First let the polymers relax
+
+# Add balancing
+fix 5 all balance 1000000 1.05 shift xyz 20 1.05
+
+dump dump_vmd_1 all atom 10000 ${experiment_path}/data/raw/polymer_relax.vmd
+dump dump_1 all custom 100000 ${experiment_path}/data/raw/polymer_relax.out id type x y z ix iy iz
+dump_modify 1 sort id
+dump_modify 2 sort id
+
+run ${n_relax_steps}
+
+# Now collect data
+
+undump dump_vmd_1
+undump dump_1
+
+dump dump_vmd_1 all atom 100000 ${experiment_path}/data/raw/polymer.vmd
+
+# custom style dump for data analysis
+
+# 1
+dump dump_1 all custom ${dump_frequency_1} ${experiment_path}/data/raw/polymer.out id type x y z ix iy iz
+dump_modify dump_${i} sort id
+run ${n_equilibrium_steps_1}
+
+# 2
+dump_modify dump_1 every ${dump_frequency_2} append yes
+run ${n_equilibrium_steps_2}
+
+# 3
+dump_modify dump_1 every ${dump_frequency_3} append yes
+run ${n_equilibrium_steps_3}
+

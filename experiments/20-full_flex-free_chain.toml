@@ -1,5 +1,5 @@
 [simulation_config]
-simulation_model_path = "simulations/FENE-beadspring-free_chain-vary-l_K-vary-d_end.lammps"
+simulation_model_path = "simulations/FENE-beadspring-free_chain-full_flex.lammps"
 experiments_path = "/beegfs/ws/0/s4610340-polyflexmd/data/experiment_results"
 lmod_modules = "modenv/hiera GCC/11.3.0 OpenMPI/4.1.4 Python/3.9.6"
 lammps_executable = "/beegfs/ws/0/s4610340-polyflexmd/bin/lammps-patch_23Jun2022_update4/lmp_omp_romeo_opt"
@@ -7,23 +7,16 @@ n_partitions = 1
 n_tasks_per_partition = 125
 
 [simulation_config.variables]
-kappa_start = 190.2
-kappa_delta = 0.0
-kappa_n_values = 1
+n_relax_steps = 20000000
 
-m_end = 1.5
+n_equilibrium_steps_1 = 4000
+dump_frequency_1 = 1
 
-d_end_start = 15
-d_end_delta = 0.0
-d_end_n_values = 1
+n_equilibrium_steps_2 = 40000
+dump_frequency_2 = 1000
 
-n_relax_steps = 35000000
-
-n_equilibrium_steps_1 = 1000000
-dump_frequency_1 = 100
-
-n_equilibrium_steps_2 = 800000000
-dump_frequency_2 = 10000
+n_equilibrium_steps_3 = 40000000
+dump_frequency_3 = 10000
 
 [simulation_config.job]
 account = "p_mdpolymer"
@@ -41,7 +34,7 @@ venv_path = "/beegfs/ws/0/s4610340-polyflexmd/polyflexmd/.venv"
 system_type = "create"
 
 [initial_system_config.system_config]
-name = "anchored-fene-rod"
+name = "anchored-fene-chain"
 n_chains = 500
 n_monomers = 64
 monomer_type = 2
@@ -49,8 +42,7 @@ bond_type = 1
 angle_type = 1
 bond_length = 0.97
 box_length = 200
-seed = 133
-d_angle = 25.0
+seed = 137
 
 [initial_system_config.job]
 account = "p_mdpolymer"
