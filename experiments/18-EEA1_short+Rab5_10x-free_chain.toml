@@ -19,11 +19,14 @@ d_end_n_values = 1
 
 n_relax_steps = 35000000
 
-n_equilibrium_steps_1 = 1000000
-dump_frequency_1 = 100
+n_equilibrium_steps_1 = 4000
+dump_frequency_1 = 1
 
-n_equilibrium_steps_2 = 800000000
-dump_frequency_2 = 10000
+n_equilibrium_steps_2 = 40000
+dump_frequency_2 = 1000
+
+n_equilibrium_steps_3 = 800000000
+dump_frequency_3 = 10000
 
 [simulation_config.job]
 account = "p_mdpolymer"
