@@ -38,8 +38,8 @@ fix 5 all balance 1000000 1.05 shift xyz 20 1.05
 
 dump dump_vmd_1 all atom 10000 ${experiment_path}/data/raw/polymer_relax.vmd
 dump dump_1 all custom 100000 ${experiment_path}/data/raw/polymer_relax.out id type x y z ix iy iz
-dump_modify 1 sort id
-dump_modify 2 sort id
+dump_modify dump_vmd_1 sort id
+dump_modify dump_1 sort id
 
 run ${n_relax_steps}
 
@@ -54,7 +54,7 @@ dump dump_vmd_1 all atom 100000 ${experiment_path}/data/raw/polymer.vmd
 
 # 1
 dump dump_1 all custom ${dump_frequency_1} ${experiment_path}/data/raw/polymer.out id type x y z ix iy iz
-dump_modify dump_${i} sort id
+dump_modify dump_1 sort id
 run ${n_equilibrium_steps_1}
 
 # 2
