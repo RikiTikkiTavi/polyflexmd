@@ -64,7 +64,11 @@ def calculate_msd_by_dimension_df(
 ) -> pd.DataFrame:
     df_ete = df_ete.reset_index(drop=False).drop("R", axis=1)
     dfs = []
-    for params, df_group in df_ete.groupby(group_by_params):
+    if len(group_by_params) == 0:
+        grouper = np.repeat(True, df_ete.shape[0])
+    else:
+        grouper = group_by_params
+    for params, df_group in df_ete.groupby(grouper):
         df_group_t_0 = extract_first_timestep(df_group, time_param)
         df_group_MSD = df_group.groupby(time_param).apply(
             calculate_msd_by_dimension,

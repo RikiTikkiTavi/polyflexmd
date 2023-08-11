@@ -44,7 +44,7 @@ def process_experiment_data(
         time_steps_per_partition: typing.Annotated[
             int,
             typer.Option()
-        ] = 100000,
+        ] = 5,
         total_time_steps: typing.Annotated[
             typing.Optional[int],
             typer.Option()
@@ -91,7 +91,7 @@ def process_experiment_data(
     _logger.info(f"On taurus: {on_taurus}")
 
     if on_taurus:
-        job_extra_directives = []
+        job_extra_directives = [f'--job-name="polyflexmd-f{path_experiment.parents[0].stem}-{path_experiment.stem}-process-worker"']
         if reservation is not None:
             job_extra_directives.append(f"--reservation={reservation}")
         cluster = SLURMCluster(
@@ -106,7 +106,8 @@ def process_experiment_data(
             interface="ib0",
             log_directory="/beegfs/ws/0/s4610340-polyflexmd/.logs",
             worker_extra_args=[f"--memory-limit {memory}"],
-            job_extra_directives=job_extra_directives
+            job_extra_directives=job_extra_directives,
+
         )
         cluster.adapt(maximum_jobs=max_workers)
         client = dask.distributed.Client(cluster)

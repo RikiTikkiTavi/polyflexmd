@@ -83,7 +83,7 @@ def process_experiment_data(
         enable_l_K_estimate: bool = True,
         calculate_lm_trajectory: bool = True,
         calculate_msd_lm: bool = True,
-        time_steps_per_partition: int = 100000,
+        time_steps_per_partition: int = 5,
         total_time_steps: typing.Optional[int] = None
 ):
     _logger.info(f"Processing data of experiment: {path_experiment}")

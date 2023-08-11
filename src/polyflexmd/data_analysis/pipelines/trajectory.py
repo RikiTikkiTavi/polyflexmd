@@ -21,7 +21,7 @@ def read_and_process_trajectories(
         path_trajectories_interim: pathlib.Path,
         system: polyflexmd.data_analysis.data.types.LammpsSystemData,
         total_time_steps: int,
-        time_steps_per_partition: int = 100000,
+        time_steps_per_partition: int = 5,
 ) -> dask.dataframe.DataFrame:
     trajectories = list(trajectories)
 
@@ -37,7 +37,8 @@ def read_and_process_trajectories(
         polyflexmd.data_analysis.data.read.reformat_trajectories(
             vtps=trajectories,
             out_path=path_trajectories_interim,
-            column_types=raw_column_types
+            column_types=raw_column_types,
+            chunks_per_file=time_steps_per_partition
         )
 
     df_trajectory_unfolded = transform.unfold_coordinates_df(

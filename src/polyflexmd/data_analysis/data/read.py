@@ -216,11 +216,12 @@ def trajectory_to_timestep_dfs(
 def reformat_trajectories(
         vtps: list[VariableTrajectoryPath],
         out_path: pathlib.Path,
-        column_types: dict
+        column_types: dict,
+        chunks_per_file: int = 5
 ):
     paths = [p for vtp in vtps for p in vtp.paths]
     args = [
-        (p, vtp.variables, out_path, f"{i}_{j}", column_types)
+        (p, vtp.variables, out_path, f"{i}_{j}", column_types, chunks_per_file)
         for i, vtp in enumerate(vtps) for j, p in enumerate(vtp.paths)
     ]
 
@@ -236,19 +237,25 @@ def read_lammps_trajectories(
 ) -> dask.dataframe.DataFrame:
     trajectories_interim_glob = str(trajectories_interim_path / "*.csv")
 
+    _logger.info("Compute divisions ...")
+    time_batches = []
+    for timestep_path in trajectories_interim_path.glob("0_0-*.csv"):
+        groups = re.search(r"0_0-(\d+)-(\d+).csv", timestep_path.name).groups()
+        time_batches.append((int(groups[0]), int(groups[1])))
+    time_batches = sorted(time_batches, key=lambda tup: tup[0])
+    divisions = [t_start for t_start, _ in time_batches]
+    if time_batches[-1][0] < time_batches[-1][1]:
+        divisions.append(time_batches[-1][1])
+
     divisions = sorted((
         int(re.search(r"0_0-(\d+)-\d+.csv", timestep_path.name).groups()[0])
         for timestep_path in trajectories_interim_path.glob("0_0-*.csv")
     ))
-    if divisions[-1] != total_time_steps:
-        divisions.append(total_time_steps)
-
-    _logger.info("Compute divisions ...")
 
     _logger.debug("Read and set index t ...")
     df = dask.dataframe.read_csv(
         trajectories_interim_glob
-    ).set_index("t").repartition(divisions=divisions).persist()
+    ).set_index("t").repartition(divisions=divisions, force=True).persist()
 
     _logger.debug(f"N t partitions: {df.npartitions}; t Divisions: {df.divisions}")
 

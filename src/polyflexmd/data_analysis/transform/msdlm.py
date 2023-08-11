@@ -84,7 +84,11 @@ def calculate_msd_lm_by_dimension_df(
 ) -> pd.DataFrame:
     df_lm_trajectory = df_lm_trajectory.reset_index(drop=False)
     dfs = []
-    for params, df_group in df_lm_trajectory.groupby(group_by_columns):
+    if len(group_by_columns) == 0:
+        grouper = np.repeat(True, df_lm_trajectory.shape[0])
+    else:
+        grouper = group_by_columns
+    for params, df_group in df_lm_trajectory.groupby(grouper):
         df_group_t_0 = msd.extract_first_timestep(df_group, time_col)
         df_group_msd_lm = df_group.groupby(time_col).apply(
             calculate_msd_lm_by_dimension,
