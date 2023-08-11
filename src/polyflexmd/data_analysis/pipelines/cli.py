@@ -48,7 +48,31 @@ def process_experiment_data(
         total_time_steps: typing.Annotated[
             typing.Optional[int],
             typer.Option()
-        ] = None
+        ] = None,
+        partition: typing.Annotated[
+            str,
+            typer.Option()
+        ] = "haswell",
+        reservation: typing.Annotated[
+            typing.Optional[str],
+            typer.Option()
+        ] = None,
+        cores: typing.Annotated[
+            int,
+            typer.Option()
+        ] = 12,
+        memory: typing.Annotated[
+            str,
+            typer.Option()
+        ] = "60GB",
+        account: typing.Annotated[
+            str,
+            typer.Option()
+        ] = "p_mdpolymer",
+        max_workers: typing.Annotated[
+            int,
+            typer.Option()
+        ] = 10,
 ):
     logging.basicConfig(
         level=logging.DEBUG,
@@ -67,20 +91,24 @@ def process_experiment_data(
     _logger.info(f"On taurus: {on_taurus}")
 
     if on_taurus:
+        job_extra_directives = []
+        if reservation is not None:
+            job_extra_directives.append(f"--reservation={reservation}")
         cluster = SLURMCluster(
-            queue='haswell',
-            cores=12,
+            queue=partition,
+            cores=cores,
             processes=1,
-            account='p_mdpolymer',
-            memory="125GB",
+            account=account,
+            memory=memory,
             death_timeout=1800,
             walltime="48:00:00",
             local_directory="/tmp",
             interface="ib0",
             log_directory="/beegfs/ws/0/s4610340-polyflexmd/.logs",
-            worker_extra_args=["--memory-limit 125GB"],
+            worker_extra_args=[f"--memory-limit {memory}"],
+            job_extra_directives=job_extra_directives
         )
-        cluster.adapt(maximum_jobs=24)
+        cluster.adapt(maximum_jobs=max_workers)
         client = dask.distributed.Client(cluster)
     else:
         client = dask.distributed.Client(n_workers=n_workers, processes=True)

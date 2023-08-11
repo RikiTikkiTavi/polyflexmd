@@ -192,6 +192,8 @@ def process_experiment_data(
             elif "n_equilibrium_steps_1" in config.simulation_config.variables and "n_equilibrium_steps_2" in config.simulation_config.variables:
                 total_time_steps += config.simulation_config.variables["n_equilibrium_steps_1"]
                 total_time_steps += config.simulation_config.variables["n_equilibrium_steps_2"]
+                if "n_equilibrium_steps_3" in config.simulation_config.variables:
+                    total_time_steps += config.simulation_config.variables["n_equilibrium_steps_3"]
 
         _logger.debug(f"Total time steps: {total_time_steps}")
 

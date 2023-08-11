@@ -154,7 +154,11 @@ def trajectory_to_timestep_dfs(
     _logger.info(f"Reformatting {path} ...")
 
     header_length = 9
-    var_names, var_values = zip(*variables)
+    if len(variables) > 0:
+        var_names, var_values = zip(*variables)
+    else:
+        var_names = []
+        var_values = []
     var_values = [str(v) for v in var_values]
 
     with open(path, "r") as traj_file:
