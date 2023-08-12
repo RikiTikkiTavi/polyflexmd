@@ -29,7 +29,8 @@ import csv
 def read_lammps_system_data(
         path: pathlib.Path,
         atom_style: str = "angle",
-        molecule_id_type: np.dtype = np.ushort,
+        molecule_id_type: np.dtype = np.uint16,
+        atom_id_type: np.dtype = np.uint32
 ) -> types.LammpsSystemData:
     """
     Reads a LAMMPS data file and returns a dictionary with the header information
@@ -48,6 +49,7 @@ def read_lammps_system_data(
     }, axis=1, inplace=True)
 
     content.atoms["molecule-ID"] = content.atoms["molecule-ID"].astype(molecule_id_type)
+    content.atoms.index = content.atoms.index.astype(atom_id_type)
 
     return types.LammpsSystemData(
         box=content.box,
@@ -254,8 +256,9 @@ def read_lammps_trajectories(
 
     _logger.debug("Read and set index t ...")
     df = dask.dataframe.read_csv(
-        trajectories_interim_glob
-    ).set_index("t").repartition(divisions=divisions, force=True).persist()
+        trajectories_interim_glob,
+        dtype=column_types,
+    ).set_index("t", divisions=divisions).persist()
 
     _logger.debug(f"N t partitions: {df.npartitions}; t Divisions: {df.divisions}")
 

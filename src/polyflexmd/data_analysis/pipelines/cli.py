@@ -105,7 +105,7 @@ def process_experiment_data(
             local_directory="/tmp",
             interface="ib0",
             log_directory="/beegfs/ws/0/s4610340-polyflexmd/.logs",
-            worker_extra_args=[f"--memory-limit {memory}"],
+            worker_extra_args=[f"--memory-limit auto"],
             job_extra_directives=job_extra_directives,
 
         )

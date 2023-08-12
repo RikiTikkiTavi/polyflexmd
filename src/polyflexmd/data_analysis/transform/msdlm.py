@@ -115,3 +115,19 @@ def change_basis_df_lm_trajectory(df_lm_trajectory: pd.DataFrame, df_main_axis: 
         dfs.append(df_mol)
 
     return pd.concat(dfs)
+
+
+def calculate_msdlm_scaling_exponent(df_msdlm: pd.DataFrame, n_bins: int):
+    bins = np.logspace(
+        np.log10(df_msdlm["t/LJ"].iloc[1]),
+        np.log10(df_msdlm["t/LJ"].max()),
+        n_bins,
+        base=10
+    ).tolist()
+    binned_idx = pd.cut(df_msdlm["t/LJ"].iloc[1:], bins=bins, include_lowest=True)
+    msdlm_avg = df_msdlm.groupby(binned_idx)["dr_N^2"].mean().dropna()
+    t = msdlm_avg.index.map(lambda x: x.left).astype(float)
+    log_r = np.log10(msdlm_avg)
+    log_t = np.log10(t)
+    dr = np.gradient(log_r, log_t)
+    return pd.Series(dr, index=t, name="alpha")

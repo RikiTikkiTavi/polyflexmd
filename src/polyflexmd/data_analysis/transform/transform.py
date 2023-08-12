@@ -80,9 +80,11 @@ def join_raw_trajectory_df_with_system_data(
         raw_trajectory_df: dask.dataframe.DataFrame,
         system_data: types.LammpsSystemData
 ) -> pd.DataFrame:
-    atom_id_to_molecule_id = {row[0]: row[1]["molecule-ID"] for row in system_data.atoms.iterrows()}
+
+    atom_id_to_molecule_id = {row[0]: row[1] for row in system_data.atoms.itertuples()}
+
     _logger.debug("Joining with system data ...")
-    raw_trajectory_df["molecule-ID"] = raw_trajectory_df["id"].map(atom_id_to_molecule_id).astype(np.ushort)
+    raw_trajectory_df["molecule-ID"] = raw_trajectory_df["id"].map(atom_id_to_molecule_id)
     return raw_trajectory_df
 
 
@@ -399,3 +401,9 @@ def calculate_msd_by_dimension_df(
         dfs.append(df_group_MSD)
 
     return pd.concat(dfs)
+
+
+def with_lj_time(df: pd.DataFrame, time_step: float = 0.0025, time_col="t", time_col_lj="t/LJ") -> pd.DataFrame:
+    df["t/LJ"] = df["t"] * 0.0025
+    df["t/LJ"] = df["t/LJ"] - df["t/LJ"].min()
+    return df

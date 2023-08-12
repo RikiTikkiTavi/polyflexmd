@@ -27,7 +27,7 @@ def read_and_process_trajectories(
 
     raw_column_types = constants.RAW_TRAJECTORY_DF_COLUMN_TYPES.copy()
     for var_name, var_val in trajectories[0].variables:
-        raw_column_types[var_name] = "category"
+        raw_column_types[var_name] = np.float32
 
     if not path_trajectories_interim.exists():
         _logger.info("Reformatting trajectories ...")

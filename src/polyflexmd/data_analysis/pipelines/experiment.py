@@ -164,6 +164,7 @@ def process_experiment_data(
         traj_column_types.pop("ix")
         traj_column_types.pop("iy")
         traj_column_types.pop("iz")
+        traj_column_types["molecule-ID"] = np.uint16
         for param in group_by_parameters:
             traj_column_types[param] = "category"
         df_trajectories: dask.dataframe.DataFrame = dask.dataframe.read_csv(
