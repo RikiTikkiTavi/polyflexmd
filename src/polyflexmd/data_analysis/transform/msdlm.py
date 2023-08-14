@@ -1,3 +1,7 @@
+import functools
+import logging
+import multiprocessing
+
 import numpy as np
 import pandas as pd
 import dask.dataframe
@@ -5,6 +9,7 @@ import polyflexmd.data_analysis.transform.constants as constants
 import polyflexmd.data_analysis.transform.msd as msd
 import polyflexmd.data_analysis.transform.transform as transform
 
+_logger = logging.getLogger(__name__)
 
 def extract_lm(df_molecule_traj_step: pd.DataFrame) -> pd.Series:
     leaf_atom_data: pd.Series = df_molecule_traj_step \
@@ -131,3 +136,23 @@ def calculate_msdlm_scaling_exponent(df_msdlm: pd.DataFrame, n_bins: int):
     log_t = np.log10(t)
     dr = np.gradient(log_r, log_t)
     return pd.Series(dr, index=t, name="alpha")
+
+
+def _calculate_msd_lm_df_proxy(t, df_lm_traj: pd.DataFrame, **kwargs):
+    _logger.debug(f"Calculating MSDLM with t_start={t} ...")
+    return calculate_msd_lm_df(df_lm_traj.loc[df_lm_traj["t"] >= t], **kwargs)
+
+
+def calculate_msdlm_mean_avg_over_t_start(df_lm_traj: pd.DataFrame,  group_by_columns: list[str], n_workers: int, exclude_n_last: int = 10) -> pd.DataFrame:
+    ts = sorted(df_lm_traj["t"].unique())[:-exclude_n_last]
+    with multiprocessing.Pool(processes=n_workers) as pool:
+        dfs = pool.map(
+            functools.partial(
+                _calculate_msd_lm_df_proxy,
+                df_lm_traj=df_lm_traj,
+                group_by_columns=group_by_columns
+            ),
+            ts
+        )
+    df = pd.concat(dfs)
+    return df.groupby(["t", *group_by_columns]).mean()

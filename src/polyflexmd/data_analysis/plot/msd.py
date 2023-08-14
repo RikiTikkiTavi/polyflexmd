@@ -17,6 +17,7 @@ def plot_MSD(
         zeta: float,
         zeta_e: float,
         col: str = "dR^2",
+        col_delta: typing.Optional[str] = None,
         ci_alpha: float = 0.2,
         dimension: typing.Optional[str] = None,
         title: typing.Optional[str] = None,
@@ -25,14 +26,16 @@ def plot_MSD(
         label: typing.Optional[str] = None,
         xlabel: typing.Optional[str] = None,
         ylabel: typing.Optional[str] = None,
-        scatter: bool = False
+        scatter: bool = False,
+        marker_size: int = 5
 ) -> plt.Axes:
     if ax is None:
         ax = plt.gca()
 
     time_col = "t/LJ"
 
-    col_delta = f"delta {col}"
+    if col_delta is None:
+        col_delta = f"delta {col}"
 
     y = np.sqrt(df_msd[col]) / L_contour
     dy = df_msd[col_delta] / (np.sqrt(df_msd[col]) * L_contour * 2)
@@ -43,7 +46,7 @@ def plot_MSD(
     plot_kwargs = {}
     if scatter:
         plot_kwargs["linestyle"] = 'None'
-        plot_kwargs["markersize"] = 5
+        plot_kwargs["markersize"] = marker_size
         plot_kwargs["markerfacecolor"] = 'none'
         plot_kwargs["markeredgecolor"] = color
         plot_kwargs["fillstyle"] = 'none'

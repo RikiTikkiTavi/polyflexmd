@@ -52,8 +52,8 @@ def rouse_g_4_mf(t: np.ndarray, *tau_p: float, p_max: int, N_b: int, l_b: float)
     return 2 * N_b * l_b ** 2 * (1 - 8 / np.pi ** 2 * s)
 
 
-def rouse_msdlm(t, R, tau_R, N):
+def rouse_msdlm(t, R_sq, tau_R, N):
     s = 0
-    for p in range(1, N + 1):
-        s += 1 / p ** 2 * (1 - np.exp(-t * p ** 2 / tau_R))
-    return 2 / np.pi ** 2 * R ** 2 * (s + t / tau_R)
+    for p in range(1, N):
+        s += (1 / p ** 2) * (1 - np.exp(-t * p ** 2 / tau_R))
+    return (2 / np.pi ** 2) * R_sq * (s + t / tau_R)
