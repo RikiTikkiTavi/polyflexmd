@@ -1,3 +1,4 @@
+import numpy as np
 import pathlib
 import typing
 from enum import Enum
@@ -36,6 +37,10 @@ def calculate_msdlm_avg_over_t_start(
             int,
             typer.Option()
         ] = 10,
+        take_n_first: typing.Annotated[
+            typing.Optional[int],
+            typer.Option()
+        ] = None,
 ):
     logging.basicConfig(
         level=logging.DEBUG,
@@ -53,11 +58,24 @@ def calculate_msdlm_avg_over_t_start(
 
     _logger.info(f"Calculating MSDLM avg over start time using n_workers={n_workers} ...")
 
+    dtypes = {
+        "t": np.uint64,
+        "x": np.float32,
+        "y": np.float32,
+        "z": np.float32,
+        "molecule-ID": np.uint16
+    }
+    for var in variables:
+        dtypes[var] = "category"
+
+    df_lm_traj = pd.read_csv(path_df_lm_traj, dtype=dtypes)
+
     polyflexmd.data_analysis.transform.msdlm.calculate_msdlm_mean_avg_over_t_start(
-        df_lm_traj=pd.read_csv(path_df_lm_traj),
+        df_lm_traj=df_lm_traj,
         n_workers=n_workers,
         exclude_n_last=exclude_n_last,
-        group_by_columns=variables
+        group_by_columns=variables,
+        take_n_first=take_n_first
     ).to_csv(output_path, index=True)
 
 

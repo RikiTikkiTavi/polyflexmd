@@ -1,6 +1,8 @@
 import functools
+import itertools
 import logging
 import multiprocessing
+import typing
 
 import numpy as np
 import pandas as pd
@@ -10,6 +12,8 @@ import polyflexmd.data_analysis.transform.msd as msd
 import polyflexmd.data_analysis.transform.transform as transform
 
 _logger = logging.getLogger(__name__)
+
+from scipy.optimize import curve_fit
 
 def extract_lm(df_molecule_traj_step: pd.DataFrame) -> pd.Series:
     leaf_atom_data: pd.Series = df_molecule_traj_step \
@@ -122,37 +126,66 @@ def change_basis_df_lm_trajectory(df_lm_trajectory: pd.DataFrame, df_main_axis: 
     return pd.concat(dfs)
 
 
-def calculate_msdlm_scaling_exponent(df_msdlm: pd.DataFrame, n_bins: int):
+def calculate_msd_alpha_df(df_msdlm: pd.DataFrame, n_bins: int):
+    def linregbin(df):
+        if len(df) < 2:
+            return pd.Series([np.NAN, np.NAN], index=["alpha", "delta alpha"])
+        f = lambda x, k: k * x
+        xs = np.log10(df["t/LJ"])
+        ys = np.log10(df["dr_N^2"])
+        xs = xs - xs.min()
+        ys = ys - ys.min()
+        if "delta dr_N^2" in df.columns:
+            dr = df["dr_N^2"]
+            sigma_dr = df["delta dr_N^2"] / 3
+            dys = np.abs(1 / (dr * np.log(10)) * sigma_dr)
+            popt, pcov = curve_fit(f, xs, ys, p0=(0.0,), sigma=dys, absolute_sigma=True)
+        else:
+            popt, pcov = curve_fit(f, xs, ys, p0=(0.0,))
+        delta_alpha = np.sqrt(np.diag(pcov)[0]) * 3
+        return pd.Series([popt[0], delta_alpha], index=["alpha", "delta alpha"])
+
     bins = np.logspace(
         np.log10(df_msdlm["t/LJ"].iloc[1]),
         np.log10(df_msdlm["t/LJ"].max()),
         n_bins,
         base=10
     ).tolist()
-    binned_idx = pd.cut(df_msdlm["t/LJ"].iloc[1:], bins=bins, include_lowest=True)
-    msdlm_avg = df_msdlm.groupby(binned_idx)["dr_N^2"].mean().dropna()
-    t = msdlm_avg.index.map(lambda x: x.left).astype(float)
-    log_r = np.log10(msdlm_avg)
-    log_t = np.log10(t)
-    dr = np.gradient(log_r, log_t)
-    return pd.Series(dr, index=t, name="alpha")
+    binned_idx = pd.cut(df_msdlm["t/LJ"], bins=bins, precision=5, include_lowest=True)
+    ks = df_msdlm.groupby(binned_idx).apply(linregbin)
+    ks.index = ks.index.map(lambda x: x.left).astype(float)
+    return ks
 
 
-def _calculate_msd_lm_df_proxy(t, df_lm_traj: pd.DataFrame, **kwargs):
+def _calculate_msd_lm_df_proxy(df_lm_traj: pd.DataFrame, **kwargs):
+    t = df_lm_traj.iloc[0]["t"]
     _logger.debug(f"Calculating MSDLM with t_start={t} ...")
-    return calculate_msd_lm_df(df_lm_traj.loc[df_lm_traj["t"] >= t], **kwargs)
+    df_msdlm = calculate_msd_lm_df(df_lm_traj, **kwargs)
+    df_msdlm = df_msdlm.reset_index()
+    df_msdlm["t"] = df_msdlm["t"] - df_msdlm["t"].min()
+    return df_msdlm
 
 
-def calculate_msdlm_mean_avg_over_t_start(df_lm_traj: pd.DataFrame,  group_by_columns: list[str], n_workers: int, exclude_n_last: int = 10) -> pd.DataFrame:
+def calculate_msdlm_mean_avg_over_t_start(
+        df_lm_traj: pd.DataFrame,
+        group_by_columns: list[str],
+        n_workers: int,
+        exclude_n_last: int = 10,
+        take_n_first: typing.Optional[int] = None
+) -> pd.DataFrame:
     ts = sorted(df_lm_traj["t"].unique())[:-exclude_n_last]
+
+    if take_n_first is not None:
+        ts = ts[:take_n_first]
+
     with multiprocessing.Pool(processes=n_workers) as pool:
         dfs = pool.map(
             functools.partial(
                 _calculate_msd_lm_df_proxy,
-                df_lm_traj=df_lm_traj,
                 group_by_columns=group_by_columns
             ),
-            ts
+            (df_lm_traj.loc[df_lm_traj["t"] >= t] for t in ts)
         )
-    df = pd.concat(dfs)
-    return df.groupby(["t", *group_by_columns]).mean()
+
+    _logger.debug("Concatenating and calculating mean ...")
+    return pd.concat(dfs).groupby(["t", *group_by_columns]).mean()

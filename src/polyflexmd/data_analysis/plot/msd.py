@@ -38,7 +38,7 @@ def plot_MSD(
         col_delta = f"delta {col}"
 
     y = np.sqrt(df_msd[col]) / L_contour
-    dy = df_msd[col_delta] / (np.sqrt(df_msd[col]) * L_contour * 2)
+    dy = np.abs(df_msd[col_delta] / (np.sqrt(df_msd[col]) * L_contour * 2))
 
     if label is None:
         label = f"$l_K/L={l_K / L_contour : .2f}$"
@@ -60,6 +60,7 @@ def plot_MSD(
         **plot_kwargs
         # path_effects=[pe.Stroke(linewidth=2, foreground='black'), pe.Normal()]
     )
+
     ax.fill_between(
         x=df_msd[time_col],
         y1=y - dy,
