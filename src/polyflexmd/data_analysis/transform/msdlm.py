@@ -170,10 +170,11 @@ def calculate_msdlm_mean_avg_over_t_start(
         df_lm_traj: pd.DataFrame,
         group_by_columns: list[str],
         n_workers: int,
+        t_start: int,
         exclude_n_last: int = 10,
         take_n_first: typing.Optional[int] = None
 ) -> pd.DataFrame:
-    ts = sorted(df_lm_traj["t"].unique())[:-exclude_n_last]
+    ts = sorted(df_lm_traj.loc[df_lm_traj["t"] >= t_start]["t"].unique())[:-exclude_n_last]
 
     if take_n_first is not None:
         ts = ts[:take_n_first]

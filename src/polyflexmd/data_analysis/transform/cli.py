@@ -33,6 +33,10 @@ def calculate_msdlm_avg_over_t_start(
             int,
             typer.Option()
         ] = 16,
+        t_start: typing.Annotated[
+            int,
+            typer.Option()
+        ] = 400,
         exclude_n_last: typing.Annotated[
             int,
             typer.Option()
@@ -73,6 +77,7 @@ def calculate_msdlm_avg_over_t_start(
     polyflexmd.data_analysis.transform.msdlm.calculate_msdlm_mean_avg_over_t_start(
         df_lm_traj=df_lm_traj,
         n_workers=n_workers,
+        t_start=t_start,
         exclude_n_last=exclude_n_last,
         group_by_columns=variables,
         take_n_first=take_n_first
