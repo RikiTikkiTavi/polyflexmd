@@ -153,12 +153,26 @@ Ideal models are characterized by distinct assumptions concerning the
 permissible ranges of torsion and bond angles. Nevertheless, all 
 these models disregard interactions between monomers that are widely 
 spaced along the chain.
-In this section, two relevant ideal chain models are described: 
-the Freely Rotating Chain (FRC) model and the Worm-Like Chain (WLC) model.
+In this section, 3 relevant ideal chain models are described: 
+the freely jointed chain model, freely rotating chain model and the worml-like chain model.
 
-\subsubsection{Freely Rotating Chain model}
+\subsubsection{Freely jointed chain model}
+The freely jointed chain model is one of the simplest chain models. It assumes
+a constant bond length $l$ and no correlations between the directions of different
+bond vectors: $\E{cos(\theta_{ij})} = 0$ for $i \neq j$. This model is suitable
+to study static properties of fully flexible polymer chains. In particular interest
+are the end-to-end distance of the chain with $N$ bonds
+\begin{equation}
+    \E{R^2} = N l^2
+\end{equation}
+and the contour length 
+\begin{equation}
+    L = N l
+\end{equation}
 
-The Freely Rotating Chain (FRC) model is a fundamental ideal chain model 
+\subsubsection{Freely rotating chain model}
+
+The freely rotating chain (FRC) model is a fundamental ideal chain model 
 that offers a simple yet valuable perspective on polymer behavior. 
 This model assumes that all bond lengths and all bond angles are fixed and
 all torsion angles are equally likely and independent of each other, the bond angles can adopt any value without energetic 
@@ -168,9 +182,19 @@ The FRC model's implications are particularly noteworthy when
 studying the persistence length of polymers. 
 This length scale characterizes the chain's ability to maintain a 
 given direction before undergoing significant bending due to thermal motion. 
-By considering the freely rotating nature of the bonds, the FRC model 
-contributes to our understanding of how the persistence length relates to
-polymer flexibility and its response to external forces.
+
+
+\subsubsection{Worm-like chain model}
+The worm-like chain model is a special case of freely rotating chain model for
+the small values of a bond angle: $\cos(\theta) << 1$ \cite{Rub_Colby_PolyPhy:2005}.
+In this model the end-to-end distance of the chain can be written as:
+\begin{equation}
+    \E{R^2} = 2 l_p L - 2 l_p^2 (1-\exp(-\frac{L}{l_p}))
+\end{equation}
+And the following relation is usefull to estimate the persistence length of the chain:
+\begin{equation}
+    \E{cos(\theta_{ij})} = exp(-\frac{l |j-i|}{l_p})
+\end{equation}
 
 \subsection{Langevin equation}
 The Langevin equation is a fundamental stochastic differential equation 
@@ -230,7 +254,7 @@ the inertia term is set to 0. The continous approximation then made as consequen
 The initial equation of motion of single bead then becomes a diffusion equation \cite{Rub_Colby_PolyPhy:2005}:
 \begin{equation}
     \label{eq:diffusion}
-    \zeta \frac{\partial \vec{r}(t,n)}{\partial t} = \frac{3 k_B T}{b^2} \frac{\partial \vec{r}(t,n)}{\partial n^2} + \vec{f}^r(t)
+    \zeta \frac{\partial \vec{r}(t,n)}{\partial t} = \frac{3 k_B T}{l^2} \frac{\partial \vec{r}(t,n)}{\partial n^2} + \vec{f}^r(t)
 \end{equation}
 
 \subsubsection{Boundary conditions}
@@ -264,7 +288,7 @@ with
     \text{ for } p = 1,2,\ldots
 \end{equation}
 \begin{equation}
-    k_p = \frac{6 \pi^2 k_B T}{Nb^2} p^2
+    k_p = \frac{6 \pi^2 k_B T}{Nl^2} p^2
     \text{ for } p = 0,1,2,\ldots
 \end{equation}
 and $\vec{f}^p$ is a random force, which satisfies \cite{Doi_Edwards_PD:1994}:
@@ -284,7 +308,7 @@ with
 \end{equation}
 
 $\vec{X}_p$ represents the local motion of the chain which includes $\frac{N}{p}$ segments and corresponds to the
-motion with the length-scale of the order $\sqrt{Nb^2/p}$ \cite{Doi_Edwards_PD:1994}.
+motion with the length-scale of the order $\sqrt{Nl^2/p}$ \cite{Doi_Edwards_PD:1994}.
 \\
 \\
 The inverse transformation of Eq. \ref{eq:rouse_mode} is given by \cite{Doi_Edwards_PD:1994}:
@@ -293,47 +317,78 @@ The inverse transformation of Eq. \ref{eq:rouse_mode} is given by \cite{Doi_Edwa
 \end{equation}
 
 \subsubsection{Important values}
-Rouse relaxation time:
-\begin{equation}
-    \tau_R := \tau_1 = \frac{1}{3 \pi^2} \frac{N^2 b^2 \zeta}{k_B T} 
-\end{equation}
-Which matches (except of factor $1/3\pi^2$) the time needed for the chain to diffuse over it's End-to-End distance.
+In this section the relevant dynamical quantities of rouse model are summarized.
 \\
-Relaxation time of the single monomer:
+\\
+Rouse relaxation time
 \begin{equation}
-    \tau_0 = \frac{3 \pi^2 \tau_R}{N^2} = \frac{b^2 \zeta}{k_B T}
+    \tau_R := \tau_1 = \frac{1}{3 \pi^2} \frac{N^2 l^2 \zeta}{k_B T} 
 \end{equation}
-This exression matches the time needed for free particle of size $b$ to diffuse over distance
+matches (except of factor $1/3\pi^2$) the time needed for the chain to diffuse over it's End-to-End distance.
+\\
+\\
+Relaxation time of the single monomer
+\begin{equation}
+    \tau_0 = \frac{3 \pi^2 \tau_R}{N^2} = \frac{l^2 \zeta}{k_B T}
+\end{equation}
+matches the time needed for free particle of size $l$ to diffuse over distance
 of it's own size, as described by Langevin equation for free particle.
 \\
 \\
-End-to-End (ETE) vector \cite{Doi_Edwards_PD:1994}:
+Time correlation of End-to-End (ETE) vector \cite{Doi_Edwards_PD:1994}:
 \begin{equation}
-    \vec{R}(t) = -4 \sum_{p=1,3,5,\ldots} \vec{X}_p
+    \E{\vec{R}(t)\vec{R}(0)} = Nl^2 \sum_{p=1,3,\ldots} \frac{8}{p^2\pi^2}\exp(\frac{-t p^2}{\tau_R})
 \end{equation}
 \\
-Time correlation of End-to-End vector \cite{Doi_Edwards_PD:1994}:
-\begin{equation}
-    \E{\vec{R}(t)\vec{R}(0)} = Nb^2 \sum_{p=1,3,\ldots} \frac{8}{p^2\pi^2}\exp(\frac{-t p^2}{\tau_R})
-\end{equation}
 \\
-MSD of ETE:
+Mean square displacement (MSD) of ETE
 \begin{equation}
     \begin{aligned}
         \E{[\Delta \vec{R}(t)]^2} :&= \E{[\vec{R}(t)-\vec{R}(0)]^2} \\
-        & = 2 N b^2 (1 - \frac{8}{\pi^2}\sum_{p=1,3,\ldots}\frac{1}{p^2} \exp(\frac{-tp^2}{\tau_R}))
+        & = 2 N l^2 (1 - \frac{8}{\pi^2}\sum_{p=1,3,\ldots}\frac{1}{p^2} \exp(\frac{-tp^2}{\tau_R}))
     \end{aligned}
 \end{equation}
-with small adjustment of $\tau_R$ can be used to describe the dynamics of the chain end of the anchored chain.
+is usefull for the description of the dynamics of the anchored chains end.
+\\
 \\
 MSD of last monomer \cite{svaneborg_2020}:
 \begin{equation}
     \E{[\Delta \vec{r}_N(t)]^2} = \frac{2}{\pi^2} \E{R^2} \left( \sum_{p=1}^{\infty} \frac{1}{p^2} \left[ 1-\exp(\frac{-t p^2}{\tau_R}) \right] + \frac{t}{\tau_R} \right)
 \end{equation}
-is used in comparison of free chain with a analytical model.
+describes the dynamics of the chain end of free fully flexible chain.
 
 \section{Methods}
 \subsection{Simulation methods}
+\subsubsection{Molecular dynamics}
+Molecular dynamics (MD) is a powerful computational technique that
+provides insight into the dynamic behavior of molecular systems by 
+numerically solving the Newton's equations of motion for each atom or particle. 
+In the context of polymer physics, MD simulations offer a detailed view of how polymer chains evolve over time, enabling the exploration of their conformational changes, interactions, and mechanical properties.
+\\
+\\
+For the purpose of this study, the Large-scale Atomic/Molecular Massively
+Parallel Simulator (LAMMPS) \cite{LAMMPS} is employed, a widely used software package 
+for molecular dynamics simulations. LAMMPS facilitates the simulation setup and 
+integration algorithms necessary to investigate the behavior of 
+polymer chains with varying persistence length and boundary conditions.
+
+\paragraph{Integrator}
+In this study, the velocity-Verlet algorithm is employed as the numerical integrator. 
+This algorithm updates particle positions and velocities over discrete time steps,
+providing an accurate and stable trajectory for the simulation.
+involves following steps \cite{10.1063/1.442716}:
+\begin{enumerate}
+    \item Calculate position: $\vec{r}(t+\Delta t) = \vec{r}(t) + \vec{v}(t) \Delta t + \frac{1}{2} \vec{a}(t) \Delta{t}^2$
+    \item Derive $\vec{a}(t+\Delta t)$ from interaction potential using $\vec{r}(t+\Delta t)$
+    \item Calculate $\vec{v}(t+\Delta t) = \vec{v} + \frac{1}{2}(\vec{a}(t) + \vec{a}(t+\Delta t))\Delta t$ 
+\end{enumerate}
+
+\paragraph{Potential}
+
+\paragraph{Thermostat}
+
+
+\subsubsection{Simulation setup}
 \subsection{Evaluation methods}
 
 \section{Results}
