@@ -15,6 +15,7 @@ _logger = logging.getLogger(__name__)
 
 from scipy.optimize import curve_fit
 
+
 def extract_lm(df_molecule_traj_step: pd.DataFrame) -> pd.Series:
     leaf_atom_data: pd.Series = df_molecule_traj_step \
         .loc[df_molecule_traj_step["type"] == constants.AtomGroup.LEAF.value] \
@@ -172,21 +173,25 @@ def calculate_msdlm_mean_avg_over_t_start(
         n_workers: int,
         t_start: int,
         exclude_n_last: int = 10,
-        take_n_first: typing.Optional[int] = None
+        take_n_first: typing.Optional[int] = None,
+        chunk_size: int = 2,
 ) -> pd.DataFrame:
+    t_0 = df_lm_traj["t"].min()
+    t_start = t_0 + t_start
     ts = sorted(df_lm_traj.loc[df_lm_traj["t"] >= t_start]["t"].unique())[:-exclude_n_last]
 
     if take_n_first is not None:
         ts = ts[:take_n_first]
 
     with multiprocessing.Pool(processes=n_workers) as pool:
-        dfs = pool.map(
+        dfs = pool.imap(
             functools.partial(
                 _calculate_msd_lm_df_proxy,
                 group_by_columns=group_by_columns
             ),
-            (df_lm_traj.loc[df_lm_traj["t"] >= t] for t in ts)
+            (df_lm_traj.loc[df_lm_traj["t"] >= t] for t in ts),
+            chunksize=chunk_size
         )
 
-    _logger.debug("Concatenating and calculating mean ...")
-    return pd.concat(dfs).groupby(["t", *group_by_columns]).mean()
+        _logger.debug("Concatenating and calculating mean ...")
+        return pd.concat(dfs).groupby(["t", *group_by_columns]).mean()

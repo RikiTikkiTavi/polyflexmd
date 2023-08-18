@@ -45,6 +45,10 @@ def calculate_msdlm_avg_over_t_start(
             typing.Optional[int],
             typer.Option()
         ] = None,
+        chunk_size: typing.Annotated[
+            int,
+            typer.Option()
+        ] = 2
 ):
     logging.basicConfig(
         level=logging.DEBUG,
@@ -74,14 +78,18 @@ def calculate_msdlm_avg_over_t_start(
 
     df_lm_traj = pd.read_csv(path_df_lm_traj, dtype=dtypes)
 
-    polyflexmd.data_analysis.transform.msdlm.calculate_msdlm_mean_avg_over_t_start(
+    df_msd = polyflexmd.data_analysis.transform.msdlm.calculate_msdlm_mean_avg_over_t_start(
         df_lm_traj=df_lm_traj,
         n_workers=n_workers,
         t_start=t_start,
         exclude_n_last=exclude_n_last,
         group_by_columns=variables,
-        take_n_first=take_n_first
-    ).to_csv(output_path, index=True)
+        take_n_first=take_n_first,
+        chunk_size=chunk_size
+    )
+
+    _logger.debug(f"Writing to {output_path}...")
+    df_msd.to_csv(output_path, index=True)
 
 
 @app.command(hidden=True)
