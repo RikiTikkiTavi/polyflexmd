@@ -127,10 +127,11 @@ def change_basis_df_lm_trajectory(df_lm_trajectory: pd.DataFrame, df_main_axis: 
     return pd.concat(dfs)
 
 
-def calculate_msd_alpha_df(df_msdlm: pd.DataFrame, n_bins: int):
+def calculate_msd_alpha_df(df_msdlm: pd.DataFrame, n_bins: int, bins: typing.Optional[list[float]] = None):
+
     def linregbin(df):
         if len(df) < 2:
-            return pd.Series([np.NAN, np.NAN], index=["alpha", "delta alpha"])
+            return pd.Series([np.NAN, np.NAN, np.NAN, np.NAN, np.NAN, np.NAN], index=["t/LJ", "alpha", "delta alpha", "delta t", "interval", "count"])
         f = lambda x, k: k * x
         xs = np.log10(df["t/LJ"])
         ys = np.log10(df["dr_N^2"])
@@ -140,21 +141,29 @@ def calculate_msd_alpha_df(df_msdlm: pd.DataFrame, n_bins: int):
             dr = df["dr_N^2"]
             sigma_dr = df["delta dr_N^2"] / 3
             dys = np.abs(1 / (dr * np.log(10)) * sigma_dr)
-            popt, pcov = curve_fit(f, xs, ys, p0=(0.0,), sigma=dys, absolute_sigma=True)
+            popt, pcov = curve_fit(f, xs, ys, p0=(0.0), sigma=dys, absolute_sigma=True)
         else:
-            popt, pcov = curve_fit(f, xs, ys, p0=(0.0,))
+            popt, pcov = curve_fit(f, xs, ys, p0=(0.0))
         delta_alpha = np.sqrt(np.diag(pcov)[0]) * 3
-        return pd.Series([popt[0], delta_alpha], index=["alpha", "delta alpha"])
+        t_min = df["t/LJ"].min()
+        t_max = df["t/LJ"].max()
+        delta_t = (t_max - t_min) / 2
+        t = t_min + delta_t
+        return pd.Series(
+            [t_min, popt[0], delta_alpha, delta_t, (t_min, t_max), df.shape[0]],
+            index=["t/LJ", "alpha", "delta alpha", "delta t", "interval", "count"]
+        )
 
-    bins = np.logspace(
-        np.log10(df_msdlm["t/LJ"].iloc[1]),
-        np.log10(df_msdlm["t/LJ"].max()),
-        n_bins,
-        base=10
-    ).tolist()
+    if bins is None:
+        bins = np.logspace(
+            np.log10(df_msdlm["t/LJ"].min()),
+            np.log10(df_msdlm["t/LJ"].max()),
+            n_bins,
+            base=10
+        ).tolist()
     binned_idx = pd.cut(df_msdlm["t/LJ"], bins=bins, precision=5, include_lowest=True)
     ks = df_msdlm.groupby(binned_idx).apply(linregbin)
-    ks.index = ks.index.map(lambda x: x.left).astype(float)
+    ks.set_index("t/LJ", inplace=True)
     return ks
 
 
@@ -176,6 +185,7 @@ def calculate_msdlm_mean_avg_over_t_start(
         take_n_first: typing.Optional[int] = None,
         chunk_size: int = 2,
 ) -> pd.DataFrame:
+    df_lm_traj = df_lm_traj[df_lm_traj["t"] % 10000 == 0]
     t_0 = df_lm_traj["t"].min()
     t_start = t_0 + t_start
     ts = sorted(df_lm_traj.loc[df_lm_traj["t"] >= t_start]["t"].unique())[:-exclude_n_last]
