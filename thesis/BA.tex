@@ -232,8 +232,7 @@ mechanical, thermal, and transport properties. One of the fundamental
 models used to describe polymer dynamics is the Rouse model.
 \\
 \\
-The Rouse model, proposed by Peter J. W. Debye and Paul J. Flory in 
-the 1940s, is a widely used theoretical framework to study the dynamics 
+The Rouse model is a widely used theoretical framework to study the dynamics 
 of polymer chains in an ideal solvent. This model simplifies the complex 
 behavior of polymer chains by representing them as linear chains of connected beads.
 
@@ -384,6 +383,7 @@ Involves following steps \cite{10.1063/1.442716}:
 \end{enumerate}
 
 \paragraph{Bond potential}
+\label{par:bond_potential}
 The finite extensible nonlinear elastic (FENE) potential \cite{Kremer_ChemPhys} 
 is used to model the bonds between neighbour-monomers. This is a standard 
 choice for bead-spring polymer models \cite{LAMMPS}. The potential equation used in
@@ -402,6 +402,7 @@ The potential consists of attractive (first) and repulsive (Lennard-Jones, secon
 the minimum ($2^{1/6}\sigma$) of Lennard-Jones potential.
 
 \paragraph{Bending potential}
+\label{par:bend_potential}
 An entropic worm-like potential is introduced to control the persistence length of the chain \cite{svaneborg_2020}.
 The potential is defined by:
 \begin{equation}
@@ -432,6 +433,38 @@ between bonded monomers and adjacent bonds so the problem of "image" interaction
 
 
 \subsubsection{Simulation setup}
+Chosen simulation settings and parameters are explained in this section.
+\\
+\\
+LJ unit system was set for the simulation. In this system 
+mass, $\sigma, \epsilon, k_B = 1$ and the masses, distances, energies are specified
+as multiples of this values \cite{LAMMPS}.
+\\
+\\
+Simulation box has side length $200$ and periodic boundary conditions in all 
+dimensions are used. The polymer chain is modelled as series of interconnected
+beads, where bead represent a monomer and bonds represent the bonds between monomers.
+The adjucent connected beads of the chain interract according to FENE potential $U_{bond}(r)$
+as introduced in section \ref{par:bond_potential} with parameters: 
+$K=30.0$, $R_0=1.5$, $\epsilon=1.0$, $\sigma=1.0$.
+The angles between adjacent bonds of the same chain are affected by bending potential
+$U_{bend}(\theta)$ as described in section \ref{par:bend_potential}, $\kappa$ is varied to obtain
+desired persistence length.
+\\
+\\
+The simulation box is populated with 500 chains. Each chain consists of 64 monomers of mass $m=1$
+and initial bond length $l_b=0.97$ with start in $0$ and is created using random walk. 
+The chains do not interract between each other and hence form
+an ensemble of 500 chains. In case of experiments with larger chain end the mass of the end monomer
+is set $m_e=1.5$.
+\\
+\\
+The temperature of the system and forces on the beads are controlled with
+Langevin thermostat with parameters: $\text{damp}=\frac{1}{\sigma}=1.0$, $T=1.0$. In case of anchored
+chain the forces acting on first two beads of the chain are set to 0 pinning the chain to the origin
+and excluding rotational degrees of freedom.
+
+
 \subsection{Evaluation methods}
 
 \section{Results}
