@@ -196,7 +196,7 @@ And the following relation is usefull to estimate the persistence length of the 
     \E{cos(\theta_{ij})} = exp(-\frac{l |j-i|}{l_p})
 \end{equation}
 
-\subsection{Langevin equation}
+\subsection{Langevin equation} \label{section:langevin_eq}
 The Langevin equation is a fundamental stochastic differential equation 
 widely used in statistical mechanics and molecular dynamics to describe the 
 dynamics of particles or molecules subjected to random forces in a 
@@ -376,16 +376,59 @@ polymer chains with varying persistence length and boundary conditions.
 In this study, the velocity-Verlet algorithm is employed as the numerical integrator. 
 This algorithm updates particle positions and velocities over discrete time steps,
 providing an accurate and stable trajectory for the simulation.
-involves following steps \cite{10.1063/1.442716}:
+Involves following steps \cite{10.1063/1.442716}:
 \begin{enumerate}
     \item Calculate position: $\vec{r}(t+\Delta t) = \vec{r}(t) + \vec{v}(t) \Delta t + \frac{1}{2} \vec{a}(t) \Delta{t}^2$
     \item Derive $\vec{a}(t+\Delta t)$ from interaction potential using $\vec{r}(t+\Delta t)$
     \item Calculate $\vec{v}(t+\Delta t) = \vec{v} + \frac{1}{2}(\vec{a}(t) + \vec{a}(t+\Delta t))\Delta t$ 
 \end{enumerate}
 
-\paragraph{Potential}
+\paragraph{Bond potential}
+The finite extensible nonlinear elastic (FENE) potential \cite{Kremer_ChemPhys} 
+is used to model the bonds between neighbour-monomers. This is a standard 
+choice for bead-spring polymer models \cite{LAMMPS}. The potential equation used in
+LAMMPS can be written as \cite{LAMMPS}:
+
+\begin{equation}
+    U_{bond}(r) = 
+    \begin{cases}
+        -\frac{1}{2} k R_0^2 \ln\left[1 - \left(\frac{r}{R_0}\right)^2\right] + 4 \epsilon \left[\left(\frac{\sigma}{r}\right)^{12} - \left(\frac{\sigma}{r}\right)^6\right] + \epsilon & \text{if } r <= 2^{1/6} \sigma \\
+        -\frac{1}{2} k R_0^2 \ln\left[1 - \left(\frac{r}{R_0}\right)^2\right] & \text{if } 2^{1/6}\sigma < r <= R_0\\
+        0 & \text{else}
+    \end{cases}
+\end{equation}
+
+The potential consists of attractive (first) and repulsive (Lennard-Jones, second) term which is set to $0$ if $r$ is larger then
+the minimum ($2^{1/6}\sigma$) of Lennard-Jones potential.
+
+\paragraph{Bending potential}
+An entropic worm-like potential is introduced to control the persistence length of the chain \cite{svaneborg_2020}.
+The potential is defined by:
+\begin{equation}
+    U_{bend}(\theta) = \kappa (1 - \cos(\theta))
+\end{equation}
 
 \paragraph{Thermostat}
+Langevin thermostat is used to regulate the temperature of the system and interaction with the solvent.
+The Langevin thermostat emulates the interactions between particles and a heat bath, 
+introducing stochastic forces to individual particles that mimic the effects of thermal fluctuations,
+as well as interactions between particles and solvent introducing friction force to individual particles.
+The equations of motion for individual particle then take a form of Langevin equation as described
+in section \ref{section:langevin_eq} aside from some implementation-driven properties of random force $\vec{f}^r$:
+\begin{enumerate}
+    \item $\vec{f}^r \propto \sqrt{k_B T m \sigma \frac{1}{dt}}$ where $dt$ is integration timestep \cite{LAMMPS}
+    \item The uniform random number is used to to randomize the direction 
+    and magnitude of this force instead of Gaussian random number to speedup the
+    calculations \cite{LAMMPS} \cite{dunweg}.
+\end{enumerate}
+
+\paragraph{Boundaries}
+Periodic boundary conditions (PBC) are introduced to mimic the behavior of the infinite system.
+This approach eliminates boundary effects and creates a virtual environment where particles 
+interact as if they were part of a continuous and unbounded space.
+Under PBC, when a particle exits one edge of the simulation box, it re-enters from the opposite edge, 
+maintaining the illusion of a seamless and infinite system. This study includes only the interaction
+between bonded monomers and adjacent bonds so the problem of "image" interactions is excluded. 
 
 
 \subsubsection{Simulation setup}
