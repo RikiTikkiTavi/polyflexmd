@@ -43,6 +43,9 @@ def plot_MSD(
     if label is None:
         label = f"$l_K/L={l_K / L_contour : .2f}$"
 
+    if color is None:
+        color = sns.color_palette()[0]
+
     plot_kwargs = {}
     if scatter:
         plot_kwargs["linestyle"] = 'None'
@@ -60,6 +63,14 @@ def plot_MSD(
         **plot_kwargs
         # path_effects=[pe.Stroke(linewidth=2, foreground='black'), pe.Normal()]
     )
+
+    if scatter:
+        ax.plot(
+            df_msd[time_col],
+            y,
+            c=color,
+            alpha=ci_alpha
+        )
 
     ax.fill_between(
         x=df_msd[time_col],
