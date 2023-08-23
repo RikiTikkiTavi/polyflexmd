@@ -59,6 +59,8 @@
 % Das kannst Du also entfernen, wenn Du den Blindtext nicht mehr brauchst.
 \usepackage{lipsum}
 
+\graphicspath{ {./img/} }
+
 \begin{document}
 
 % \frontmatter
@@ -69,7 +71,7 @@
 % Titelpageseite
 \begin{titlepage}
     \begin{tabularx}{\linewidth}{X}
-        \includegraphics[width=6cm]{img/TU_Logo_SW} \\\hline\hline
+        \includegraphics[width=6cm]{TU_Logo_SW} \\\hline\hline
 
         \vspace{4.5em}
 
@@ -320,7 +322,7 @@ In this section the relevant dynamical quantities of rouse model are summarized.
 \\
 \\
 Rouse relaxation time
-\begin{equation}
+\begin{equation} \label{eq:rouse_relaxation_time}
     \tau_R := \tau_1 = \frac{1}{3 \pi^2} \frac{N^2 l^2 \zeta}{k_B T} 
 \end{equation}
 matches (except of factor $1/3\pi^2$) the time needed for the chain to diffuse over it's End-to-End distance.
@@ -341,7 +343,7 @@ Time correlation of End-to-End (ETE) vector \cite{Doi_Edwards_PD:1994}:
 \\
 \\
 Mean square displacement (MSD) of ETE
-\begin{equation}
+\begin{equation} \label{eq:rouse_msd_ete}
     \begin{aligned}
         \E{[\Delta \vec{R}(t)]^2} :&= \E{[\vec{R}(t)-\vec{R}(0)]^2} \\
         & = 2 N l^2 (1 - \frac{8}{\pi^2}\sum_{p=1,3,\ldots}\frac{1}{p^2} \exp(\frac{-tp^2}{\tau_R}))
@@ -449,29 +451,106 @@ as introduced in section \ref{par:bond_potential} with parameters:
 $K=30.0$, $R_0=1.5$, $\epsilon=1.0$, $\sigma=1.0$.
 The angles between adjacent bonds of the same chain are affected by bending potential
 $U_{bend}(\theta)$ as described in section \ref{par:bend_potential}, $\kappa$ is varied to obtain
-desired persistence length.
+desired Kuhn length according to equation \cite{svaneborg_2020}:
+\begin{equation}
+    l_K = l_b 
+    \begin{cases}
+        \frac{2 \kappa + \exp(-2 \kappa) - 1}{1-\exp(-2\kappa)(2\kappa + 1)} & \text{if } \kappa > 0 \\
+        1 & \text{if } \kappa = 0 
+    \end{cases}
+\end{equation}
 \\
 \\
 The simulation box is populated with 500 chains. Each chain consists of 64 monomers of mass $m=1$
 and initial bond length $l_b=0.97$ with start in $0$ and is created using random walk. 
 The chains do not interract between each other and hence form
 an ensemble of 500 chains. In case of experiments with larger chain end the mass of the end monomer
-is set $m_e=1.5$.
+is set $m_e=1.5$. In case of experiments with large values of Kuhn length the angles are randomized in 
+the way to have more straight chain to resulting in decreasing number of steps to achive the
+equilibrium.
 \\
 \\
 The temperature of the system and forces on the beads are controlled with
 Langevin thermostat with parameters: $\text{damp}=\frac{1}{\sigma}=1.0$, $T=1.0$. In case of anchored
 chain the forces acting on first two beads of the chain are set to 0 pinning the chain to the origin
 and excluding rotational degrees of freedom.
-
+\\
+\\
+The simulation is runned until it reaches the equilibrium and then the measurements
+of particle trajectories are performed. 
 
 \subsection{Evaluation methods}
 
 \section{Results}
-\subsection{Compare dynamics of fixed and free fully flexible chains}
-\subsection{Dynamics of anchored chain at different stiffness values}
-\subsection{Compare fixed rod-limit chain with and without large monomer tethered}
-\subsection{Compare free rod-limit chain with and without large monomer tethered}
+This section unveils the outcomes of an investigation into the dynamic
+characteristics of anchored and free polymer chains. 
+The focus of the study lies in assessing the impact 
+of two properties: chain stiffness and the friction of chain end.
+
+\subsection{Anchored chain dynamics}
+In this subsection, a comparative analysis between the 
+dynamics of anchored polymer chains and their free counterparts is conducted.
+To execute this comparison, the focus is narrowed onto a specific dynamical
+quantity - the mean squared displacement of the end-to-end distance (MSD of ETE)
+further referred as MSD.
+
+\subsubsection{Comparison to free chain}
+
+In this section, the investigation focuses on understanding 
+the influence of anchoring on chain dynamics. 
+This is achieved by comparing the MSD of a fully-flexible anchored 
+chain with the predictions provided by the Rouse model. 
+By contrasting simulation observations with theoretical
+expectations, insights are gained into how anchoring 
+affects chain dynamics.
+
+\begin{figure}[h]
+    \begin{center}
+      \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.9cm},clip]{3-exp-fixed-param-log.png}
+      \caption{\label{fig:anchored_flex_chain_vs_rouse}
+      MSD of ETE of anchored full-flexible chain vs predictions of rouse model (free chain, Eq. \ref{eq:rouse_msd_ete}).
+      Filled area corresponds to the confidence interval.
+      }
+    \end{center}
+\end{figure}
+
+Figure \ref{fig:anchored_flex_chain_vs_rouse} shows, that by anchoring the chain
+the the transition into plateau is shifted to the right, increasing the 
+relaxation time (Eq. \ref{eq:rouse_relaxation_time}), 
+however the scaling behavior is visually the same. Rouse relaxation time
+of the free chain predicted using rouse model is: $\tau_R=130.16$, $\tau_0=0.941$. 
+The rouse relaxation time of the anchored chain estimated 
+using the fit of the Eq. \ref{eq:rouse_msd_ete} with $\tau_R$ as free parameter
+to the MSD curve of acnhored chain is: 
+$\tau_R=582.3 \pm 28.6$, $\tau_0=4.21 \pm 0.07$, which is approximately 4 times
+larger. The fitted curve is displayed on Fig.
+\ref{fig:anchored_flex_chain_vs_rouse_fitted}. 
+
+\begin{figure}[h]
+    \begin{center}
+      \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.9cm},clip]{3-exp-free-param-log.png}
+      \caption{\label{fig:anchored_flex_chain_vs_rouse_fitted}
+      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
+      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
+      }
+    \end{center}
+\end{figure}
+
+It is possible to introduce correction factor based on the estimated $\tau_R$
+to account for boundary conditions:
+\begin{equation}
+    \alpha := \frac{\tau_{0, \textrm{empirical}}}{\tau_{0, \textrm{analytical}}} \approx 4.47
+\end{equation}
+
+
+
+\subsubsection{Impact of chain stiffness}
+\subsubsection{Impact of friction coefficient of chain end}
+
+\subsection{Free chain dynamics}
+
+
+
 
 % Erklärung
 \clearpage
