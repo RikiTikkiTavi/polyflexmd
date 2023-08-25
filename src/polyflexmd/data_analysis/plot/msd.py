@@ -27,8 +27,11 @@ def plot_MSD(
         xlabel: typing.Optional[str] = None,
         ylabel: typing.Optional[str] = None,
         scatter: bool = False,
-        marker_size: int = 5
+        marker_size: int = 5,
+        m=1.0,
 ) -> plt.Axes:
+    df_msd = df_msd.loc[df_msd["t/LJ"] >= m / zeta]
+
     if ax is None:
         ax = plt.gca()
 
@@ -37,8 +40,15 @@ def plot_MSD(
     if col_delta is None:
         col_delta = f"delta {col}"
 
+    x = df_msd[time_col]
     y = np.sqrt(df_msd[col]) / L_contour
     dy = np.abs(df_msd[col_delta] / (np.sqrt(df_msd[col]) * L_contour * 2))
+
+    if log_scale:
+        if x.iloc[0] == 0.0:
+            x = x.iloc[1:]
+            y = y[1:]
+            dy = dy[1:]
 
     if label is None:
         label = f"$l_K/L={l_K / L_contour : .2f}$"
@@ -56,7 +66,7 @@ def plot_MSD(
         plot_kwargs["marker"] = "o"
 
     ax.plot(
-        df_msd[time_col],
+        x,
         y,
         c=color,
         label=label,
@@ -66,14 +76,14 @@ def plot_MSD(
 
     if scatter:
         ax.plot(
-            df_msd[time_col],
+            x,
             y,
             c=color,
             alpha=ci_alpha
         )
 
     ax.fill_between(
-        x=df_msd[time_col],
+        x=x,
         y1=y - dy,
         y2=y + dy,
         color=color,

@@ -59,6 +59,8 @@
 % Das kannst Du also entfernen, wenn Du den Blindtext nicht mehr brauchst.
 \usepackage{lipsum}
 
+\usepackage{booktabs}
+
 \graphicspath{ {./img/} }
 
 \begin{document}
@@ -488,8 +490,8 @@ The focus of the study lies in assessing the impact
 of two properties: chain stiffness and the friction of chain end.
 
 \subsection{Anchored chain dynamics}
-In this subsection, a comparative analysis between the 
-dynamics of anchored polymer chains and their free counterparts is conducted.
+Firstly, this study focuses on a a comparative analysis between the 
+dynamics of anchored polymer chains and their free counterparts.
 To execute this comparison, the focus is narrowed onto a specific dynamical
 quantity - the mean squared displacement of the end-to-end distance (MSD of ETE)
 further referred as MSD.
@@ -509,8 +511,10 @@ affects chain dynamics.
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.9cm},clip]{3-exp-fixed-param-log.png}
       \caption{\label{fig:anchored_flex_chain_vs_rouse}
       MSD of ETE of anchored full-flexible chain vs predictions of rouse model (free chain, Eq. \ref{eq:rouse_msd_ete}).
-      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The line 
-      connecting data points added for readability.
+      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
+      line connecting data points and the filled area between data points doesn't make
+      any statements about probability of measuring values in this interval and is
+      added for readability.
       }
     \end{center}
 \end{figure}
@@ -523,9 +527,13 @@ of the free chain predicted using rouse model is: $\tau_R=130.16$, $\tau_0=0.941
 The rouse relaxation time of the anchored chain estimated 
 using the fit of the Eq. \ref{eq:rouse_msd_ete} with $\tau_R$ as free parameter
 to the MSD curve of acnhored chain is: 
-$\tau_R=582.3 \pm 28.6$, $\tau_0=4.21 \pm 0.07$, which is approximately 4 times
+$\tau_R=582.3 \pm 28.6$, $\tau_0=4.21 \pm 0.07$, which is approximately $4.47$ times
 larger. The fitted curve is displayed on Fig.
-\ref{fig:anchored_flex_chain_vs_rouse_fitted}. 
+\ref{fig:anchored_flex_chain_vs_rouse_fitted}.
+Intuitively such difference is clear, the beginning of the anchored chain
+can't move and therefore the chain needs more time to achieve the MSD limit, which
+in case of fully flexible free chain is $2Nl_b^2$ as the one can see from Eq. \ref{eq:rouse_msd_ete}. 
+
 
 \begin{figure}[h]
     \begin{center}
@@ -533,8 +541,10 @@ larger. The fitted curve is displayed on Fig.
       \caption{\label{fig:anchored_flex_chain_vs_rouse_fitted}
       MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
       (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
-      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The line 
-      connecting data points added for readability.
+      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
+      blue line connecting data points and the filled area between data points doesn't make
+      any statements about probability of measuring values in this interval and is
+      added for readability.
       }
     \end{center}
 \end{figure}
@@ -548,6 +558,131 @@ to account for boundary conditions:
 
 
 \subsubsection{Impact of chain stiffness}
+Within this subsection, the focus shifts 
+toward exploring the influence of chain stiffness on
+the dynamics of anchored polymer chains. 
+By manipulating the stiffness of the chain, the investigation aims to 
+unveil the intricate interplay between molecular rigidity 
+and the effects of anchoring. The analysis provides insights into 
+how varying the chain stiffness exert an influence on the
+conformational transitions and dynamics exhibited by anchored chains.
+Table \ref{table:kappa_values}. shows the range of stiffness values examined
+in this experiment.
+\\
+\\
+The MSD curves are plotted in Figure \ref{fig:msd_anchored_l_K}.
+The following observations are made:
+\begin{itemize}
+    \item The relaxation time grows non-linearly with rising $l_K$
+    \item Long time MSD limit grows non-linearly with rising $l_K$,
+    however for $l_K/L >= 0.65$ it is not possible to distinguish 
+    the curves any more because of the uncertainty.
+\end{itemize}
+
+\begin{figure}[h]
+    \begin{center}
+      \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-bare.png}
+      \caption{\label{fig:msd_anchored_l_K}
+      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
+      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
+      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
+      blue line connecting data points and the filled area between data points doesn't make
+      any statements about probability of measuring values in this interval and is
+      added for readability.
+      }
+    \end{center}
+\end{figure}
+
+\begin{figure}[h]
+    \begin{center}
+      \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-bare-log.png}
+      \caption{\label{fig:msd_anchored_l_K}
+      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
+      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
+      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
+      blue line connecting data points and the filled area between data points doesn't make
+      any statements about probability of measuring values in this interval and is
+      added for readability.
+      }
+    \end{center}
+\end{figure}
+
+Moreover, the attempt is made to describe this results analytically. At first
+the results are compared to the Rouse model predictions for the chain
+with $N_K$ segments of length $l_K$. The results of this comparison are shown
+in Figure \ref{fig:msd_anchored_l_K_rouse_fit_anal}. It is clear, that
+Rouse model is not able to explain the dynamics of the semi-flexible chains.
+The reason for that is violation of contunious chain assumption, because
+the small number of chain segments.
+
+\begin{figure}[h]
+    \begin{center}
+      \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-rouse_anal.png}
+      \caption{\label{fig:msd_anchored_l_K_rouse_fit_anal}
+      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
+      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
+      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
+      blue line connecting data points and the filled area between data points doesn't make
+      any statements about probability of measuring values in this interval and is
+      added for readability.
+      }
+    \end{center}
+\end{figure}
+
+Further, the MSD in so-called "main axis" system is analyzed. In main axis coordinate
+system $z$ direction is perpendicular to the "main axis" of the chain, which is defined
+as vector connecting first two monomers of the chain (which are fixed). 
+The $x$ and $y$ dimensions are then defined by arbitary vectors which 
+together with normalized "main axis" vector build an orthonormal basis.
+Figure \ref{fig:msd_anchored_l_K_by_dim} shows the MSD curves in main axis system
+for each dimension. The analysis delivers following insights:
+\begin{itemize}
+    \item The difference of MSD in $z$ dimension relative to the $x$ and $y$
+    dimensions rises with growing stiffness. The plateau value of MSD falls.
+    \item The MSD in $z$ dimension has smaller relaxation time in case $l_K/L \ge 0.95$ 
+\end{itemize}
+The chain becomes more straight with rising stiffness and therefore has less
+movement freedom along $z$ direction, which results in smaller MSD and quicker
+relaxation.
+
+\begin{figure}[h]
+    \begin{center}
+      \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-msd_by_dim.png}
+      \caption{\label{fig:msd_anchored_l_K_by_dim}
+      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
+      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
+      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
+      blue line connecting data points and the filled area between data points doesn't make
+      any statements about probability of measuring values in this interval and is
+      added for readability.
+      }
+    \end{center}
+\end{figure}
+
+\begin{table}[h]
+    
+    \centering
+\begin{tabular}{rr}
+    \toprule
+    $\kappa$ & $l_K / L$ \\
+    \midrule
+    1.00 & 0.03 \\
+    11.00 & 0.33 \\
+    21.00 & 0.65 \\
+    31.00 & 0.97 \\
+    41.00 & 1.29 \\
+    51.00 & 1.60 \\
+    61.00 & 1.92 \\
+    71.00 & 2.24 \\
+    \bottomrule
+    \end{tabular}
+    \caption{
+        Values of $\kappa$ and corresponding $l_K$ tried in the study
+        of anchored chain dynamics.
+        }
+    \label{table:kappa_values}
+\end{table}
+
 \subsubsection{Impact of friction coefficient of chain end}
 
 \subsection{Free chain dynamics}
