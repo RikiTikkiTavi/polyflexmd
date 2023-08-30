@@ -127,19 +127,19 @@ def change_basis_df_lm_trajectory(df_lm_trajectory: pd.DataFrame, df_main_axis: 
     return pd.concat(dfs)
 
 
-def calculate_msd_alpha_df(df_msdlm: pd.DataFrame, n_bins: int, bins: typing.Optional[list[float]] = None):
+def calculate_msd_alpha_df(df_msdlm: pd.DataFrame, n_bins: int, bins: typing.Optional[list[float]] = None, col: str = "dr_N^2"):
 
     def linregbin(df):
         if len(df) < 2:
             return pd.Series([np.NAN, np.NAN, np.NAN, np.NAN, np.NAN, np.NAN], index=["t/LJ", "alpha", "delta alpha", "delta t", "interval", "count"])
         f = lambda x, k: k * x
         xs = np.log10(df["t/LJ"])
-        ys = np.log10(df["dr_N^2"])
+        ys = np.log10(df[col])
         xs = xs - xs.min()
         ys = ys - ys.min()
-        if "delta dr_N^2" in df.columns:
-            dr = df["dr_N^2"]
-            sigma_dr = df["delta dr_N^2"] / 3
+        if f"delta {col}" in df.columns:
+            dr = df[col]
+            sigma_dr = df[f"delta {col}"] / 3
             dys = np.abs(1 / (dr * np.log(10)) * sigma_dr)
             popt, pcov = curve_fit(f, xs, ys, p0=(0.0), sigma=dys, absolute_sigma=True)
         else:
@@ -153,6 +153,8 @@ def calculate_msd_alpha_df(df_msdlm: pd.DataFrame, n_bins: int, bins: typing.Opt
             [t_min, popt[0], delta_alpha, delta_t, (t_min, t_max), df.shape[0]],
             index=["t/LJ", "alpha", "delta alpha", "delta t", "interval", "count"]
         )
+
+    df_msdlm = df_msdlm.reset_index(drop=True)
 
     if bins is None:
         bins = np.logspace(

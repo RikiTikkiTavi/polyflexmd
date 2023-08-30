@@ -482,6 +482,24 @@ The simulation is runned until it reaches the equilibrium and then the measureme
 of particle trajectories are performed. 
 
 \subsection{Evaluation methods}
+\paragraph{Main-axis coordinate system}
+To analyze the dynamics of anchored chain the so called main-axis coordinate
+system is introduced. In this system the $z$ axis is parallel to the
+first bond vector, connecting the first two beads, which are fixed.
+The orthonormal basis set that defines the system is calculated as follows:
+\begin{equation}
+    \hat{z}_{MA} = \frac{\vec{r}_1 - \vec{r}_0}{\| \vec{r}_1 - \vec{r}_0 \|}
+\end{equation}
+\begin{equation}
+    \hat{y}_{MA} = 
+    \begin{cases}
+        (\hat{x} + \hat{y}) \times \hat{z}_{MA} & \text{if } \hat{x} \parallel \hat{z}_{MA} \\
+        \hat{x} \times \hat{z}_{MA} & \text{otherwise}
+    \end{cases}
+\end{equation}
+\begin{equation}
+    \hat{x}_{MA} = \hat{z}_{MA} \times \hat{y}_{MA} 
+\end{equation}
 
 \section{Results}
 This section unveils the outcomes of an investigation into the dynamic
@@ -629,11 +647,7 @@ the small number of chain segments.
     \end{center}
 \end{figure}
 
-Further, the MSD in so-called "main axis" system is analyzed. In main axis coordinate
-system $z$ direction is perpendicular to the "main axis" of the chain, which is defined
-as vector connecting first two monomers of the chain (which are fixed). 
-The $x$ and $y$ dimensions are then defined by arbitary vectors which 
-together with normalized "main axis" vector build an orthonormal basis.
+Further, the MSD in main-axis coordinate system is analyzed.
 Figure \ref{fig:msd_anchored_l_K_by_dim} shows the MSD curves in main axis system
 for each dimension. The analysis delivers following insights:
 \begin{itemize}
