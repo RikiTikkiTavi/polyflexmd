@@ -482,7 +482,7 @@ The simulation is runned until it reaches the equilibrium and then the measureme
 of particle trajectories are performed. 
 
 \subsection{Evaluation methods}
-\paragraph{Main-axis coordinate system}
+\paragraph{Main-axis coordinate system}\label{sec:main-axis}
 To analyze the dynamics of anchored chain the so called main-axis coordinate
 system is introduced. In this system the $z$ axis is parallel to the
 first bond vector, connecting the first two beads, which are fixed.
@@ -570,7 +570,8 @@ in case of fully flexible free chain is $2Nl_b^2$ as the one can see from Eq. \r
 It is possible to introduce correction factor based on the estimated $\tau_R$
 to account for boundary conditions:
 \begin{equation}
-    \alpha := \frac{\tau_{0, \textrm{empirical}}}{\tau_{0, \textrm{analytical}}} \approx 4.47
+    \label{eq:adj_factor_beta}
+    \beta := \frac{\tau_{0, \textrm{empirical}}}{\tau_{0, \textrm{analytical}}} \approx 4.47
 \end{equation}
 
 
@@ -582,14 +583,14 @@ the dynamics of anchored polymer chains.
 By manipulating the stiffness of the chain, the investigation aims to 
 unveil the intricate interplay between molecular rigidity 
 and the effects of anchoring. The analysis provides insights into 
-how varying the chain stiffness exert an influence on the
-conformational transitions and dynamics exhibited by anchored chains.
+how varying the chain stiffness exert an influence on the 
+dynamics exhibited by anchored chain.
 Table \ref{table:kappa_values}. shows the range of stiffness values examined
 in this experiment.
 \\
 \\
 The MSD curves are plotted in Figure \ref{fig:msd_anchored_l_K} and logarithmic
-representation the one can find in Figure \ref{fig:msd_anchored_l_K_log}.
+representation one can find in Figure \ref{fig:msd_anchored_l_K_log}.
 The following observations are made:
 \begin{itemize}
     \item The relaxation time grows non-linearly with rising $l_K$
@@ -602,12 +603,8 @@ The following observations are made:
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-bare.png}
       \caption{\label{fig:msd_anchored_l_K}
-      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
-      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
-      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
-      blue line connecting data points and the filled area between data points doesn't make
-      any statements about probability of measuring values in this interval and is
-      added for readability.
+      Empirical MSD of ETE of anchored chains with different Kuhn length values.
+      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean.
       }
     \end{center}
 \end{figure}
@@ -616,12 +613,9 @@ The following observations are made:
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-bare-log.png}
       \caption{\label{fig:msd_anchored_l_K_log}
-      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
-      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
-      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
-      blue line connecting data points and the filled area between data points doesn't make
-      any statements about probability of measuring values in this interval and is
-      added for readability.
+      Empirical MSD of ETE of anchored chains with different Kuhn length values,
+      log-log scale.
+      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean.
       }
     \end{center}
 \end{figure}
@@ -650,12 +644,10 @@ free parameter. There are af few possible reasons for that:
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-rouse_anal.png}
       \caption{\label{fig:msd_anchored_l_K_rouse_fit_anal}
-      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
-      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
-      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
-      blue line connecting data points and the filled area between data points doesn't make
-      any statements about probability of measuring values in this interval and is
-      added for readability.
+      Empirical MSD of ETE of anchored chains with different Kuhn length values
+      and Rouse model prediction for fully-flexible chains (Eq.\ref{eq:rouse_msd_ete})
+      with $N_b = N_K$ if $N_K \ge 1$ or $N_b=1$ otherwise. $\tau_R$ adjusted
+      using $\beta$ (Eq.\ref{eq:adj_factor_beta}) to account for boundary conditions.
       }
     \end{center}
 \end{figure}
@@ -663,12 +655,12 @@ free parameter. There are af few possible reasons for that:
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-rouse_fit-tau.png}
       \caption{\label{fig:msd_anchored_l_K_rouse_fit-tau}
-      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
-      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
-      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
-      blue line connecting data points and the filled area between data points doesn't make
-      any statements about probability of measuring values in this interval and is
-      added for readability.
+      Empirical MSD of ETE of anchored chains with different Kuhn length values
+      and fit of Rouse model prediction for fully-flexible chains 
+      (Eq.\ref{eq:rouse_msd_ete}) with $N_b = N_K$ if $N_K \ge 1$ or $N_b=1$ otherwise.
+      $\tau_R$ is free parameter. The summation in Eq.\ref{eq:rouse_msd_ete}
+      goes not up to $N_K$ as it strictyly must, but up to number of bonds (63)
+      of fully flexible chain.
       }
     \end{center}
 \end{figure}
@@ -694,15 +686,16 @@ following relationships \cite{Nikoubashman2016}:
 To compare the case $t>\tau_{rot}$ with empirical results the expression
 $2(\E{R^2} - k \exp(-t/\tau_{rot}))$ with $k$ as free paramater was fit to the part of corresponding  
 empirical MSD curve, where $t>\tau_{rot}$. The result was then visually examined against empirical curve.
-This comparison revealed, that proportionality in first case of Eq. \ref{eq:msd_ete_autocorr_semiflex} 
+This comparison revealed, that proportionality in first case of Eq.\ref{eq:msd_ete_autocorr_semiflex} 
 does not hold for anchored chains.
 However, introduction of two meaningfull free parameters ($a$, $\tau_{rot}$) is able to dismiss the discrepancy between
 theoretical approach for free chain and empirical results for anchored chain:
 \begin{equation}
+    \label{eq:adjusted_rouse_model_ete}
     \E{[\Delta \vec{R}(t)]^2}  = a\E{R^2}[1 - exp(-\frac{t}{\tau_{rot}})]
 \end{equation}
 The free parameter $a$ accounts for large-time limit of MSD and $\tau_{rot}$ 
-accounts location of the transition into the plateau. However, the one
+accounts location of the transition into the plateau. However, one
 can only speculate, that new $\tau_{rot}$ has the same meaning
 as the old one. The results of this fit are shown in Figure 
 \ref{fig:msd_anchored_l_K_rouse_fit_tau-a}. and
@@ -714,12 +707,9 @@ different value (and eventually meaning) of $\tau_{rot}$.
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-rouse_fit-tau-a.png}
       \caption{\label{fig:msd_anchored_l_K_rouse_fit_tau-a}
-      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
-      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
-      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
-      blue line connecting data points and the filled area between data points doesn't make
-      any statements about probability of measuring values in this interval and is
-      added for readability.
+      Empirical MSD of ETE of anchored chains with different Kuhn length values (blue line)
+      and fit of modified Rouse model prediction for semi-flexible chains 
+      (Eq.\ref{eq:adjusted_rouse_model_ete}, dashed line).
       }
     \end{center}
 \end{figure}
@@ -727,20 +717,19 @@ different value (and eventually meaning) of $\tau_{rot}$.
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-rouse_fit-tau-a_log.png}
       \caption{\label{fig:msd_anchored_l_K_rouse_fit_tau-a_log}
-      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
-      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
-      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
-      blue line connecting data points and the filled area between data points doesn't make
-      any statements about probability of measuring values in this interval and is
-      added for readability.
+      Empirical MSD of ETE of anchored chains with different Kuhn length values (blue line)
+      and fit of modified Rouse model prediction for semi-flexible chains 
+      (Eq.\ref{eq:adjusted_rouse_model_ete}, dashed line) on log-log scale.
+      Estimated (empirical) $\tau_{rot}$ is drawn as vertical dashed line. 
       }
     \end{center}
 \end{figure}
 \\
 Further, the case $t \ll \tau_{rot}$ is examined. To execute this comparison
-the scaling behavior of empirical MSD is analyzed. Assuming that
-$\E{[\Delta \vec{R}(t)]^2} \propto t^{\alpha(t)}$ is also valid for
-anchored chain, the scaling exponent $\alpha$ is estimated from MSD curves as 
+the scaling behavior of empirical MSD is analyzed. It is clear, that
+$\E{[\Delta \vec{R}(t)]^2} \propto t^{\alpha(t)}$ for the small times is valid
+in analogy to scaling behavior of MSD of last monomer of free chain. 
+The scaling exponent $\alpha$ is estimated from MSD curves as 
 described in \ref{} with 10 bins. The result is shown on Figure \ref{fig:alpha_anchored_l_K}.
 For nearly flexible chain $l_K/L = 0.03$ scaling exponent value of $\frac{1}{2}$
 is observed, which matches theoretical expectations for fully flexible chain.
@@ -756,12 +745,11 @@ near the $\tau_{rot}$.
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-rouse_fit-tau-a_alpha.png}
       \caption{\label{fig:alpha_anchored_l_K}
-      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
-      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
-      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
-      blue line connecting data points and the filled area between data points doesn't make
-      any statements about probability of measuring values in this interval and is
-      added for readability.
+      Scaling exponent $\alpha$ of the MSD of ETE of anchored semiflexible chain (blue points) and 
+      scaling exponent $\alpha$ of modified Rouse model prediction for semi-flexible chains 
+      (Eq.\ref{eq:adjusted_rouse_model_ete}, orange line).
+      Estimated (empirical) $\tau_{rot}$ is drawn as vertical dashed line.
+      Horizontal grey dashed line corresponds to $\frac{3}{4}$ value.
       }
     \end{center}
 \end{figure}
@@ -784,12 +772,8 @@ relaxation.
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-msd_by_dim.png}
       \caption{\label{fig:msd_anchored_l_K_by_dim}
-      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
-      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
-      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
-      blue line connecting data points and the filled area between data points doesn't make
-      any statements about probability of measuring values in this interval and is
-      added for readability.
+      Empirical MSD of ETE of anchored chains with different Kuhn length values in
+      main-axis coordinate system (See section \ref{sec:main-axis}).
       }
     \end{center}
 \end{figure}
@@ -819,6 +803,15 @@ relaxation.
 \end{table}
 
 \subsubsection{Impact of friction coefficient of chain end}
+In this subsection, the focus turns to the influence 
+of the friction coefficient at the chain end on anchored polymer chain dynamics.
+\\
+\\
+In the simulation this is achieved by changing the value of damp parameter of Langevin thermostat
+for the last bead of the chain. Assuming the Stokes friction, 
+changing the value of damp parameter effectively means change of the mass or change of the 
+bead diameter. The mass of the end bead is set to the $m_e = 1.5$ and friction coefficient of end bead
+is varied: $\zeta_e = 10.0,15.0$, which corresponds to the end-bead diamaters: $15.0, 30.0.$
 
 \subsection{Free chain dynamics}
 

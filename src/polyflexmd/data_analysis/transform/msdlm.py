@@ -130,7 +130,7 @@ def change_basis_df_lm_trajectory(df_lm_trajectory: pd.DataFrame, df_main_axis: 
 def calculate_msd_alpha_df(df_msdlm: pd.DataFrame, n_bins: int, bins: typing.Optional[list[float]] = None, col: str = "dr_N^2"):
 
     def linregbin(df):
-        if len(df) < 2:
+        if len(df) < 3:
             return pd.Series([np.NAN, np.NAN, np.NAN, np.NAN, np.NAN, np.NAN], index=["t/LJ", "alpha", "delta alpha", "delta t", "interval", "count"])
         f = lambda x, k: k * x
         xs = np.log10(df["t/LJ"])
