@@ -818,13 +818,33 @@ the one of the unbound EEA1 \cite{Singh:2022}.
 \\
 The approach mostly follows section \ref{sec:impact_of_chain_stiffness} with an exception that
 the friction coefficient of the chain end $\zeta_e$ is varied instead of Kuhn length $l_K$ 
-of the chain. The resulting MSD curves on different scales are shown on 
-Figure \ref{fig:msd_anchored_zeta}. The exponential decay on time scales 
-$t>\tau_{rot}$ is shown on Figure \ref{fig:msd_anchored_zeta-arm_fit} together
-with fit of Adjusted Rouse model (Eq. \ref{eq:adjusted_rouse_model_ete})
-and corresponding estimated values of free parameters. The $\frac{3}{4}$ scaling
-regime on time scale $t \ll \tau_{rot}$ is shown on Figure 
-\ref{fig:alpha_anchored_zeta}.
+of the chain. The resulting MSD curves are shown on 
+Figure \ref{fig:msd_anchored_zeta}. Again, Adjusted Rouse model 
+(Eq. \ref{eq:adjusted_rouse_model_ete}) is fited to
+the MSD curves: Figure \ref{fig:msd_anchored_zeta-arm_fit}. The one can see
+the perfect match on time scales $t > \tau_{rot}$. Also, the estimated $\tau_{rot}$
+rise with rising $\zeta_e$ and the scaling behavior on short time scales 
+varies. To investigate the scaling behavior the scaling exponent $\alpha$ is
+calculated within $20$ bins and is plotted on Figure \ref{fig:alpha_anchored_zeta}.
+The rouse model for semi-flexible free chains predicts $\alpha=3/4$ on the
+time scales $t \ll \tau_{rot}$. To test if this holds for chains with larger
+friction coefficient of the chain end it's necessary to estimate $\alpha$ in this
+region. The $\alpha_m := \alpha \text{ for } t \ll t_{rot}$ is defined.
+Based on \emph{Nikoubashman et. al.} \cite{Nikoubashman2016} finding,
+that ballistic motion lasts 2 decades of time instead of 1, it is assumed, 
+that the left border of this region is given by the end of the region of ballistic
+motion of the end bead $\tau_b  := 10 \frac{m}{\zeta_e}$. The right border is
+assumed to be $\tau_{rot} / 10$ to match $t \ll \tau_{rot}$ requirement.
+The borders of the region are plotted with red dashed line and vizually match
+the observed scaling behavior. The $\alpha_m$ is then calculated as the mean
+of observed $\alpha$ in the region. The measurement uncertainty is estimated
+as 3 standard deviations of the mean. All estimated quantities are summarized
+in table \ref{table:alpha_anchored}. The one can see the small increase of 
+$\alpha_m$ by transition from $\zeta_e=1$ to $\zeta_e=10$ and, 
+given the confidence interval, there is no difference between 
+$\alpha_m$ for $\zeta_e = 10$ and $\zeta_e=20$. It is also interesting, that
+in case $\zeta=20$ the confidence interval includes $1$, which means
+non-neglible chance to observe free diffusion on short time scales.
 
 \begin{figure}
     \centering
