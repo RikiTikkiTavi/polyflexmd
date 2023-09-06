@@ -576,7 +576,7 @@ to account for boundary conditions:
 
 
 
-\subsubsection{Impact of chain stiffness}
+\subsubsection{Impact of chain stiffness} \label{sec:impact_of_chain_stiffness}
 Within this subsection, the focus shifts 
 toward exploring the influence of chain stiffness on
 the dynamics of anchored polymer chains. 
@@ -698,33 +698,31 @@ The free parameter $a$ accounts for large-time limit of MSD and $\tau_{rot}$
 accounts location of the transition into the plateau. However, one
 can only speculate, that new $\tau_{rot}$ has the same meaning
 as the old one. The results of this fit are shown in Figure 
-\ref{fig:msd_anchored_l_K_rouse_fit_tau-a}. and
-\ref{fig:msd_anchored_l_K_rouse_fit_tau-a_log}.
+\ref{fig:msd_anchored_l_K_rouse_fit_tau-a}.
 It is possible to conclude, that in case of anchored chain the proportionality
 Eq. \ref{eq:msd_ete_autocorr_semiflex} holds for $t>\tau_{rot}$ but with
 different value (and eventually meaning) of $\tau_{rot}$.
+
 \begin{figure}[h]
-    \begin{center}
-      \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-rouse_fit-tau-a.png}
-      \caption{\label{fig:msd_anchored_l_K_rouse_fit_tau-a}
-      Empirical MSD of ETE of anchored chains with different Kuhn length values (blue line)
-      and fit of modified Rouse model prediction for semi-flexible chains 
-      (Eq.\ref{eq:adjusted_rouse_model_ete}, dashed line).
-      }
-    \end{center}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{4-exp-delta_R-rouse_fit-tau-a.png}
+        \caption{normal scale}
+        \label{fig:msd_anchored_l_K_rouse_fit_tau-a_normal}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{4-exp-delta_R-rouse_fit-tau-a_log.png}
+        \caption{log-log scale}
+        \label{fig:msd_anchored_l_K_rouse_fit_tau-a_log}
+    \end{subfigure}
+    \caption{Empirical MSD of ETE of anchored chains with different Kuhn length values (blue line)
+    and fit of modified Rouse model prediction for semi-flexible chains 
+    (Eq.\ref{eq:adjusted_rouse_model_ete}, dashed line) on log-log scale.
+    Estimated (empirical) $\tau_{rot}$ is drawn as vertical dashed line.}
+    \label{fig:msd_anchored_l_K_rouse_fit_tau-a}
 \end{figure}
-\begin{figure}[h]
-    \begin{center}
-      \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-rouse_fit-tau-a_log.png}
-      \caption{\label{fig:msd_anchored_l_K_rouse_fit_tau-a_log}
-      Empirical MSD of ETE of anchored chains with different Kuhn length values (blue line)
-      and fit of modified Rouse model prediction for semi-flexible chains 
-      (Eq.\ref{eq:adjusted_rouse_model_ete}, dashed line) on log-log scale.
-      Estimated (empirical) $\tau_{rot}$ is drawn as vertical dashed line. 
-      }
-    \end{center}
-\end{figure}
-\\
 Further, the case $t \ll \tau_{rot}$ is examined. To execute this comparison
 the scaling behavior of empirical MSD is analyzed. It is clear, that
 $\E{[\Delta \vec{R}(t)]^2} \propto t^{\alpha(t)}$ for the small times is valid
@@ -778,7 +776,7 @@ relaxation.
     \end{center}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}
     
     \centering
 \begin{tabular}{rr}
@@ -811,7 +809,80 @@ In the simulation this is achieved by changing the value of damp parameter of La
 for the last bead of the chain. Assuming the Stokes friction, 
 changing the value of damp parameter effectively means change of the mass or change of the 
 bead diameter. The mass of the end bead is set to the $m_e = 1.5$ and friction coefficient of end bead
-is varied: $\zeta_e = 10.0,15.0$, which corresponds to the end-bead diamaters: $15.0, 30.0.$
+is varied: $\zeta_e = 10, 15$, which corresponds to the end-bead diamaters: $15, 30$.
+The reference value provides simulation of the chain with $\zeta_e=\zeta=1$ and $m_e=m=1$.
+In all 3 cases $\kappa=190.2$, which results in Kuhn length $l_K/L=6.02$. The chosen
+persistence length of the chains relative to their contour length $l_p/L=l_K/(2L)=3.01$ matches
+the one of the unbound EEA1 \cite{Singh:2022}.
+\\
+\\
+The approach mostly follows section \ref{sec:impact_of_chain_stiffness} with an exception that
+the friction coefficient of the chain end $\zeta_e$ is varied instead of Kuhn length $l_K$ 
+of the chain. The resulting MSD curves on different scales are shown on 
+Figure \ref{fig:msd_anchored_zeta}. The exponential decay on time scales 
+$t>\tau_{rot}$ is shown on Figure \ref{fig:msd_anchored_zeta-arm_fit} together
+with fit of Adjusted Rouse model (Eq. \ref{eq:adjusted_rouse_model_ete})
+and corresponding estimated values of free parameters. The $\frac{3}{4}$ scaling
+regime on time scale $t \ll \tau_{rot}$ is shown on Figure 
+\ref{fig:alpha_anchored_zeta}.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{14+15+16-exp-msd.png}
+        \caption{normal scale}
+        \label{fig:msd_anchored_zeta-normal}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{14+15+16-exp-msd-log.png}
+        \caption{log-log scale}
+        \label{fig:msd_anchored_zeta-log}
+    \end{subfigure}
+    \caption{Empirical MSD of ETE of anchored chains with different values of
+    friction coefficient of the chain end $\zeta_e$. 
+    Configured and estimated Kuhn length is shown in text box.
+    }
+    \label{fig:msd_anchored_zeta}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{14+15+16-exp-msd-log-arm_fit.png}
+        \caption{normal scale}
+        \label{fig:msd_anchored_zeta-arm_fit-normal}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{14+15+16-exp-msd-log-arm_fit-log.png}
+        \caption{log-log scale}
+        \label{fig:msd_anchored_zeta-arm_fit-log}
+    \end{subfigure}
+    \caption{Empirical MSD of ETE of anchored chains with different values of
+    friction coefficient of the chain end $\zeta_e$ and corresponding fit
+    of the Adjusted Rouse model (Eq.\ref{eq:adjusted_rouse_model_ete}).
+    }
+    \label{fig:msd_anchored_zeta-arm_fit}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{14+15+16-exp-alpha.png}
+    \caption{Scaling exponent $\alpha$ of MSD of ETE 
+    of anchored chains with different values of
+    friction coefficient of the chain end $\zeta_e$ (blue dots);
+    Scaling exponent $\alpha$ of corresponding fit
+    of the Adjusted Rouse model (Eq.\ref{eq:adjusted_rouse_model_ete}, 
+    orange line); Estimated scaling exponent for the time interval
+    $t \ll \tau_{rot}$: $\alpha_m$ (grey dashed line); Red dashed lines
+    correspond to $\alpha_m$ scaling region which is estimated as:
+    $[10 \frac{m}{\zeta_e}, \frac{\tau_{rot}}{10}]$
+    }
+    \label{fig:alpha_anchored_zeta}
+\end{figure}
 
 \subsection{Free chain dynamics}
 
