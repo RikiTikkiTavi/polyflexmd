@@ -771,7 +771,7 @@ relaxation.
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-msd_by_dim.png}
       \caption{\label{fig:msd_anchored_l_K_by_dim}
       Empirical MSD of ETE of anchored chains with different Kuhn length values in
-      main-axis coordinate system (See section \ref{sec:main-axis}).
+      main-axis coordinate system (See section \ref{sec:main-axis})}.
       }
     \end{center}
 \end{figure}
@@ -814,8 +814,8 @@ The reference value provides simulation of the chain with $\zeta_e=\zeta=1$ and 
 In all 3 cases $\kappa=190.2$, which results in Kuhn length $l_K/L=6.02$. The chosen
 persistence length of the chains relative to their contour length $l_p/L=l_K/(2L)=3.01$ matches
 the one of the unbound EEA1 \cite{Singh:2022}.
-\\
-\\
+
+\paragraph{Comparing with Rouse model}
 The approach mostly follows section \ref{sec:impact_of_chain_stiffness} with an exception that
 the friction coefficient of the chain end $\zeta_e$ is varied instead of Kuhn length $l_K$ 
 of the chain. The resulting MSD curves are shown on 
@@ -829,7 +829,7 @@ calculated within $20$ bins and is plotted on Figure \ref{fig:alpha_anchored_zet
 The rouse model for semi-flexible free chains predicts $\alpha=3/4$ on the
 time scales $t \ll \tau_{rot}$. To test if this holds for chains with larger
 friction coefficient of the chain end it's necessary to estimate $\alpha$ in this
-region. The $\alpha_m := \alpha \text{ for } t \ll t_{rot}$ is defined.
+region. The $\alpha_m := \alpha \text{ for } t \ll \tau_{rot}$ is defined.
 Based on \emph{Nikoubashman et. al.} \cite{Nikoubashman2016} finding,
 that ballistic motion lasts 2 decades of time instead of 1, it is assumed, 
 that the left border of this region is given by the end of the region of ballistic
@@ -839,12 +839,18 @@ The borders of the region are plotted with red dashed line and vizually match
 the observed scaling behavior. The $\alpha_m$ is then calculated as the mean
 of observed $\alpha$ in the region. The measurement uncertainty is estimated
 as 3 standard deviations of the mean. All estimated quantities are summarized
-in table \ref{table:alpha_anchored}. The one can see the small increase of 
+in table \ref{table:anchored_chain_zeta_estimations}. The one can see the small increase of 
 $\alpha_m$ by transition from $\zeta_e=1$ to $\zeta_e=10$ and, 
 given the confidence interval, there is no difference between 
 $\alpha_m$ for $\zeta_e = 10$ and $\zeta_e=20$. It is also interesting, that
 in case $\zeta=20$ the confidence interval includes $1$, which means
 non-neglible chance to observe free diffusion on short time scales.
+
+\paragraph{Main-axis system perspective}
+Additionaly different dimensions of MSD in main-axis coordinate system are
+analyzed and results are shown on Figure \ref{fig:msd_anchored_zeta-dim}.
+The one can observe, that the visual patterns of 
+increasing $\zeta_e$ for all dimensions are the same.
 
 \begin{figure}
     \centering
@@ -888,6 +894,27 @@ non-neglible chance to observe free diffusion on short time scales.
     \label{fig:msd_anchored_zeta-arm_fit}
 \end{figure}
 
+\begin{table}
+    \centering
+    \begin{tabular}{lrrrrrrr}
+        \toprule
+         & $\tau_{rot}$ & $\Delta \tau_{rot}$ & $a$ & $\Delta a$ & $m_e$ & $\alpha_m$ & $\Delta \alpha_m $\\
+        $\zeta_e$ &  &  &  &  &  &  &  \\
+        \midrule
+        1 & 4914.250775 & 2.551632 & 0.381353 & 0.000096 & 1.0 & 0.736970 & 0.055872 \\
+        10 & 9863.543716 & 3.602848 & 0.387068 & 0.000071 & 1.5 & 0.919990 & 0.067072 \\
+        20 & 11967.770149 & 7.068073 & 0.357454 & 0.000103 & 1.5 & 0.928494 & 0.070997 \\
+        \bottomrule
+    \end{tabular}
+    \caption{
+        Anchored chain, $l_K/L=6.02$. 
+        Estimated values of free parameters of Adjusted Rouse model (Eq.\ref{eq:adjusted_rouse_model_ete}),
+        estimated scaling exponent $\alpha_m$ and corresponding $\zeta_e$ and $m_e$ values.
+    }
+    \label{table:anchored_chain_zeta_estimations}
+\end{table}
+
+
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{14+15+16-exp-alpha.png}
@@ -902,6 +929,27 @@ non-neglible chance to observe free diffusion on short time scales.
     $[10 \frac{m}{\zeta_e}, \frac{\tau_{rot}}{10}]$
     }
     \label{fig:alpha_anchored_zeta}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{14+15+16-exp-msd-dim.png}
+        \caption{normal scale}
+        \label{fig:msd_anchored_zeta-dim-normal}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{14+15+16-exp-msd-dim-log.png}
+        \caption{log-log scale}
+        \label{fig:msd_anchored_zeta-dim-log}
+    \end{subfigure}
+    \caption{Empirical MSD of ETE of anchored chains with different values of
+    friction coefficient of the chain end $\zeta_e$ in main-axis system
+    by dimension.
+    }
+    \label{fig:msd_anchored_zeta-dim}
 \end{figure}
 
 \subsection{Free chain dynamics}
