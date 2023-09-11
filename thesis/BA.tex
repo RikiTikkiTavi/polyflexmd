@@ -771,7 +771,7 @@ relaxation.
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-msd_by_dim.png}
       \caption{\label{fig:msd_anchored_l_K_by_dim}
       Empirical MSD of ETE of anchored chains with different Kuhn length values in
-      main-axis coordinate system (See section \ref{sec:main-axis})}.
+      main-axis coordinate system (See section \ref{sec:main-axis}).
       }
     \end{center}
 \end{figure}
@@ -945,17 +945,67 @@ increasing $\zeta_e$ for all dimensions are the same.
         \caption{log-log scale}
         \label{fig:msd_anchored_zeta-dim-log}
     \end{subfigure}
-    \caption{Empirical MSD of ETE of anchored chains with different values of
-    friction coefficient of the chain end $\zeta_e$ in main-axis system
-    by dimension.
+    \caption{
+        Empirical MSD of ETE of anchored chains with different values of
+        friction coefficient of the chain end $\zeta_e$ in main-axis system
+        by dimension.
     }
     \label{fig:msd_anchored_zeta-dim}
 \end{figure}
 
 \subsection{Free chain dynamics}
+123456
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{17+18+19+20-exp-msd.png}
+        \caption{normal scale}
+        \label{fig:msd_free-normal}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{17+18+19+20-exp-msd-log.png}
+        \caption{log-log scale}
+        \label{fig:msd_free-log}
+    \end{subfigure}
+    \caption{
+        Empirical MSD of chain end (MSDLM) of free chains
+        with different stiffness and end-bead friction values and
+        Rouse model prediction for fully flexible chains.
+    }
+    \label{fig:msd_free}
+\end{figure}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{17+18+19+20-exp-alpha.png}
+    \caption{Scaling exponent $\alpha$ of MSD of chain end (MSDLM) 
+    of free chains with different stiffness and end-bead friction values;
+    Grey dashed lines correspond to $3/4$ and $2/3$ values.
+    }
+    \label{fig:alpha_anchored_zeta}
+\end{figure}
 
-
+\begin{table}
+    \centering
+    
+    \begin{tabular}{rrlllrr}
+    \toprule
+    $\zeta_e$ & $l_K/L$ & $\tau_1$ & $\tau_b$ & $\tau_0$ & $\alpha_{min}$ & $\Delta \alpha_{min}$ \\
+    \midrule
+    1 & 6.02 & 78162.53 & 11.00 & 0.94 & 0.736 & 0.004 \\
+    10 & 6.02 & 781625.32 & 1.65 & 9.41 & 0.739 & 0.004 \\
+    1 & 0.6 & 6352.27 & 11.00 & 0.94 & 0.653 & 0.004 \\
+    \bottomrule
+    \end{tabular}
+    \caption{
+        Free chains with different stiffness and end-bead friction values: 
+        Estimated values of the minimum of the scaling exponent $\alpha$ and
+        characteristic time scales.
+    }
+    \label{table:free_chain_alpha_estimations}
+\end{table}
 
 % Erklärung
 \clearpage
