@@ -240,7 +240,9 @@ The Rouse model is a widely used theoretical framework to study the dynamics
 of polymer chains in an ideal solvent. This model simplifies the complex 
 behavior of polymer chains by representing them as linear chains of connected beads.
 
-\subsubsection{Assumptions}
+\subsubsection{Flexible chain}
+Firstly Rouse model for flexible free chains is introduced.
+\paragraph{Assumptions}
 The Rouse model makes certain key assumptions to facilitate its analytical treatment:
 \begin{enumerate}
     \item \label{rouse_assumption_1} No hydrodynamic interactions or excluded volume effects between monomers.
@@ -250,17 +252,17 @@ The Rouse model makes certain key assumptions to facilitate its analytical treat
     \item \label{rouse_assumption_4} Beads continuously distributed along polymer chain.
 \end{enumerate}
 
-\subsubsection{Equation}
+\paragraph{Equation}
 Assumptions \ref{rouse_assumption_1}, \ref{rouse_assumption_2} lead to description of the
 system using Langevin equation (Eq. \ref{eq:langevin}). Following assumption \ref{rouse_assumption_3} 
 the inertia term is set to 0. The continous approximation then made as consequence of assumption \ref{rouse_assumption_4}.
 The initial equation of motion of single bead then becomes a diffusion equation \cite{Rub_Colby_PolyPhy:2005}:
 \begin{equation}
     \label{eq:diffusion}
-    \zeta \frac{\partial \vec{r}(t,n)}{\partial t} = \frac{3 k_B T}{l^2} \frac{\partial \vec{r}(t,n)}{\partial n^2} + \vec{f}^r(t)
+    \zeta \frac{\partial \vec{r}(t,n)}{\partial t} = \frac{3 k_B T}{l_b^2} \frac{\partial \vec{r}(t,n)}{\partial n^2} + \vec{f}^r(t)
 \end{equation}
 
-\subsubsection{Boundary conditions}
+\paragraph{Boundary conditions}
 The chain ends are connected to one spring only. These free ends could be modelled by adding two 
 fictious beads to both ends with $\vec{r}_0=\vec{r}_1$ and $\vec{r}_N=\vec{r}_{N+1}$. Boundary 
 conditions for diffusion equation can be then written as follows \cite{Rub_Colby_PolyPhy:2005}:
@@ -272,7 +274,7 @@ conditions for diffusion equation can be then written as follows \cite{Rub_Colby
     \end{aligned}
 \end{equation}
 
-\subsubsection{Solution}
+\paragraph{Solution}
 The motion of the polymer can be decoupled in the motion of the independent modes using normal
 coordinates \cite{Doi_Edwards_PD:1994}. Define:
 \begin{equation}
@@ -311,7 +313,7 @@ with
 \end{equation}
 
 $\vec{X}_p$ represents the local motion of the chain which includes $\frac{N}{p}$ segments and corresponds to the
-motion with the length-scale of the order $\sqrt{Nl^2/p}$ \cite{Doi_Edwards_PD:1994}.
+motion with the length-scale of the order $\sqrt{Nl_b^2/p}$ \cite{Doi_Edwards_PD:1994}.
 \\
 \\
 The inverse transformation of Eq. \ref{eq:rouse_mode} is given by \cite{Doi_Edwards_PD:1994}:
@@ -319,20 +321,20 @@ The inverse transformation of Eq. \ref{eq:rouse_mode} is given by \cite{Doi_Edwa
     \vec{r}_n = \vec{X_0} + 2 \sum_{p=1}^{\infty} \vec{X}_p \cos(p \pi n  / N)
 \end{equation}
 
-\subsubsection{Important values}
-In this section the relevant dynamical quantities of rouse model are summarized.
+\paragraph{Relevant observables}
+In this paragraph the relevant dynamical quantities of rouse model are summarized.
 \\
 \\
-Rouse relaxation time
+Rouse relaxation time:
 \begin{equation} \label{eq:rouse_relaxation_time}
-    \tau_R := \tau_1 = \frac{1}{3 \pi^2} \frac{N^2 l^2 \zeta}{k_B T} 
+    \tau_R := \tau_1 = \frac{1}{3 \pi^2} \frac{N^2 l_b^2 \zeta}{k_B T} 
 \end{equation}
 matches (except of factor $1/3\pi^2$) the time needed for the chain to diffuse over it's End-to-End distance.
 \\
 \\
-Relaxation time of the single monomer
+Relaxation time of the single monomer:
 \begin{equation}
-    \tau_0 = \frac{3 \pi^2 \tau_R}{N^2} = \frac{l^2 \zeta}{k_B T}
+    \tau_0 = \frac{3 \pi^2 \tau_R}{N^2} = \frac{l_b^2 \zeta}{k_B T}
 \end{equation}
 matches the time needed for free particle of size $l$ to diffuse over distance
 of it's own size, as described by Langevin equation for free particle.
@@ -340,25 +342,61 @@ of it's own size, as described by Langevin equation for free particle.
 \\
 Time correlation of End-to-End (ETE) vector \cite{Doi_Edwards_PD:1994}:
 \begin{equation}
-    \E{\vec{R}(t)\vec{R}(0)} = Nl^2 \sum_{p=1,3,\ldots} \frac{8}{p^2\pi^2}\exp(\frac{-t p^2}{\tau_R})
+    \E{\vec{R}(t)\vec{R}(0)} = Nl_b^2 \sum_{p=1,3,\ldots} \frac{8}{p^2\pi^2}\exp(\frac{-t p^2}{\tau_R})
+\end{equation}
+with following asymptotic behavior \cite{Nikoubashman2016}:
+\begin{equation}
+    \E{\vec{R}(t)\vec{R}(0)} = Nl_b^2 \begin{cases}
+        \frac{8}{\pi^2} \exp(\frac{-t}{\tau_R}) & \text{if } t \gg \tau_R \\
+        1 - \sqrt{8t/(\pi^3\tau_R)} & \text{if } t \ll \tau_R
+    \end{cases}
 \end{equation}
 \\
 \\
-Mean square displacement (MSD) of ETE
+Mean square displacement (MSD) of ETE:
 \begin{equation} \label{eq:rouse_msd_ete}
     \begin{aligned}
         \E{[\Delta \vec{R}(t)]^2} :&= \E{[\vec{R}(t)-\vec{R}(0)]^2} \\
-        & = 2 N l^2 (1 - \frac{8}{\pi^2}\sum_{p=1,3,\ldots}\frac{1}{p^2} \exp(\frac{-tp^2}{\tau_R}))
+        & = 2\E{R^2} - 2 \E{\vec{R}(t)\vec{R}(0)} \\
+        & = 2 N l_b^2 (1 - \frac{8}{\pi^2}\sum_{p=1,3,\ldots}\frac{1}{p^2} \exp(\frac{-tp^2}{\tau_R}))
     \end{aligned}
 \end{equation}
-is usefull for the description of the dynamics of the anchored chains end.
+with asymptotic behavior:
+\begin{equation}
+    \E{[\Delta \vec{R}(t)]^2} = 2Nl_b^2 \begin{cases}
+        (1-\exp(\frac{-t}{\tau_R})) & \text{if } t \gg \tau_R \\
+        \sqrt{8t/(\pi^3\tau_R)} & \text{if } t \ll \tau_R
+    \end{cases}
+\end{equation}
 \\
 \\
-MSD of last monomer \cite{svaneborg_2020}:
+MSD of chain end (MSDLM) \cite{svaneborg_2020}:
 \begin{equation}
     \E{[\Delta \vec{r}_N(t)]^2} = \frac{2}{\pi^2} \E{R^2} \left( \sum_{p=1}^{\infty} \frac{1}{p^2} \left[ 1-\exp(\frac{-t p^2}{\tau_R}) \right] + \frac{t}{\tau_R} \right)
 \end{equation}
-describes the dynamics of the chain end of free fully flexible chain.
+with following asymptotic behavior \cite{svaneborg_2020}:
+\begin{equation}
+    \E{[\Delta \vec{r}_N(t)]^2} = N l_b^2 \begin{cases}
+        (\frac{1}{3} + \frac{2t}{\pi^2 \tau_R}) & \text{if } t \gg \tau_R \\
+        \frac{2}{\pi^{3/2}} \sqrt{\frac{t}{\tau_R}} & \text{if } t \ll \tau_R
+    \end{cases}
+\end{equation}
+
+\subsubsection{Semiflexible chain}
+The Rouse model predictions for semiflexible chains is more complicated
+case as the one need take into account the bending potential.
+Likely the topic has already been studied in several works and
+a summary which covers some of the relevant observables for this work 
+is available in the appendix of 
+Nikoubashman \textit{et al.} \cite{Nikoubashman2016}.
+\\
+\\
+Chain stiffness affects the dynamics on short time scales and 
+does not affect the chain translational diffusion as a whole
+\cite{Nikoubashman2016}. To provide the overview over the 
+relevant quantities the one needs to destinguish between 
+coil limit ($l_p \ll L$) and rod limit ($l_p \gg L$).
+In coil limit 
 
 \section{Methods}
 \subsection{Simulation methods}
