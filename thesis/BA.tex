@@ -368,6 +368,9 @@ with asymptotic behavior:
         \sqrt{8t/(\pi^3\tau_R)} & \text{if } t \ll \tau_R
     \end{cases}
 \end{equation}
+Also, the one can see that the scaling behavior of $\E{[\Delta \vec{R}(t)]^2}$ is given
+by the scaling behavior of $\E{\vec{R}(t)\vec{R}(0)}$ and corresponding
+scaling exponent is $\alpha = \frac{1}{2}$.
 \\
 \\
 MSD of chain end (MSDLM) \cite{svaneborg_2020}:
@@ -384,19 +387,43 @@ with following asymptotic behavior \cite{svaneborg_2020}:
 
 \subsubsection{Semiflexible chain}
 The Rouse model predictions for semiflexible chains is more complicated
-case as the one need take into account the bending potential.
-Likely the topic has already been studied in several works and
-a summary which covers some of the relevant observables for this work 
-is available in the appendix of 
-Nikoubashman \textit{et al.} \cite{Nikoubashman2016}.
+case as the one need take into account the bending potential. 
+Likely the topic has already been studied so the behavior of the
+observables $\E{\vec{R}(t)\vec{R}(0)}$ and $\E{[\Delta \vec{r}_N(t)]^2}$ 
+is available in the literature \cite{Nikoubashman2016}.
 \\
 \\
-Chain stiffness affects the dynamics on short time scales and 
-does not affect the chain translational diffusion as a whole
-\cite{Nikoubashman2016}. To provide the overview over the 
-relevant quantities the one needs to destinguish between 
-coil limit ($l_p \ll L$) and rod limit ($l_p \gg L$).
-In coil limit 
+The behavior of ETE autocorrelation function $\E{\vec{R}(t)\vec{R}(0)}$
+in rod limit ($l_p \ll L$) is given by \cite{Nikoubashman2016}:
+\begin{equation}
+    \E{\vec{R}(t)\vec{R}(0)} \propto \begin{cases}
+    \exp(-t/\tau_{rot}) & \text{if } t > \tau_1 \text{; } l_p \gg L \\
+    \exp[-\frac{8 \Gamma(1/4)}{3 \pi}\frac{L}{l_p}(\frac{t}{\tau_1})^{3/4}] & \text{if } \tau_0 < t < \tau_1 \text{; } l_p \gg L
+    \end{cases}
+\end{equation}
+with $\tau_1$ given by \cite{Nikoubashman2016}:
+\begin{equation}
+    \tau_1 \approx \tau_0 L^4 / (l_p l_b^3) \text{, if } l_p \gg L
+\end{equation}
+The case $\tau_0 < t < \tau_1$ for $\tau_0 < t \ll \tau_1$ can be approximated as \cite{Nikoubashman2016}:
+\begin{equation}
+    \E{\vec{R}(t)\vec{R}(0)} \propto 1-\frac{8 \Gamma(1/4)}{3 \pi}\frac{L}{l_p}(\frac{t}{\tau_1})^{3/4} \text{, if } \tau_0 < t \ll \tau_1 \text{; } l_p \gg L 
+\end{equation}
+which delivers $\alpha = \frac{3}{4}$ scaling behavior of MSD of ETE of free 
+chain in rod limit.
+\\
+\\
+The behavior of MSDLM $\E{[\Delta \vec{r}_N(t)]^2}$
+in rod limit ($l_p \ll L$) on short time scales 
+is given by \cite{Nikoubashman2016}:
+\begin{equation}
+    \E{[\Delta \vec{r}_N(t)]^2} \approx l_b^2(\frac{b}{l_p})^{1/4}(\frac{t}{\tau_0})^{3/4} \text{, if } \tau_0 < t < \tau_1 \text{; } l_p \gg L
+\end{equation}
+The one can see the same scaling behavior as in case of MSD of ETE: $\alpha=\frac{3}{4}$.
+However, on the time scale, where the free diffusion takes place, the scaling
+behavior remains unchanged relative to the flexible chain and is given by 
+$\alpha=1$, because chain stiffness does not affect the chain translational 
+diffusion as a whole \cite{Nikoubashman2016}.
 
 \section{Methods}
 \subsection{Simulation methods}
