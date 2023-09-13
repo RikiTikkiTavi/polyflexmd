@@ -394,7 +394,7 @@ is available in the literature \cite{Nikoubashman2016}.
 \\
 \\
 The behavior of ETE autocorrelation function $\E{\vec{R}(t)\vec{R}(0)}$
-in rod limit ($l_p \ll L$) is given by \cite{Nikoubashman2016}:
+in rod limit ($l_p \gg L$) is given by \cite{Nikoubashman2016}:
 \begin{equation}
     \E{\vec{R}(t)\vec{R}(0)} \propto \begin{cases}
     \exp(-t/\tau_{rot}) & \text{if } t > \tau_1 \text{; } l_p \gg L \\
@@ -414,7 +414,7 @@ chain in rod limit.
 \\
 \\
 The behavior of MSDLM $\E{[\Delta \vec{r}_N(t)]^2}$
-in rod limit ($l_p \ll L$) on short time scales 
+in rod limit ($l_p \gg L$) on short time scales 
 is given by \cite{Nikoubashman2016}:
 \begin{equation}
     \E{[\Delta \vec{r}_N(t)]^2} \approx l_b^2(\frac{b}{l_p})^{1/4}(\frac{t}{\tau_0})^{3/4} \text{, if } \tau_0 < t < \tau_1 \text{; } l_p \gg L
@@ -424,7 +424,8 @@ However, on the time scale, where the free diffusion takes place, the scaling
 behavior remains unchanged relative to the flexible chain and is given by 
 $\alpha=1$, because chain stiffness does not affect the chain translational 
 diffusion as a whole \cite{Nikoubashman2016}.
-
+\\
+\\
 \section{Methods}
 \subsection{Simulation methods}
 \subsubsection{Molecular dynamics}
@@ -1047,7 +1048,7 @@ increasing $\zeta_e$ for all dimensions are the same.
     \includegraphics[width=\textwidth]{17+18+19+20-exp-alpha.png}
     \caption{Scaling exponent $\alpha$ of MSD of chain end (MSDLM) 
     of free chains with different stiffness and end-bead friction values;
-    Grey dashed lines correspond to $3/4$ and $2/3$ values.
+    Grey dashed lines correspond to $3/4$, $2/3$, $1/2$ values.
     }
     \label{fig:alpha_anchored_zeta}
 \end{figure}
@@ -1055,15 +1056,16 @@ increasing $\zeta_e$ for all dimensions are the same.
 \begin{table}
     \centering
     
-    \begin{tabular}{rrlllrr}
-    \toprule
-    $\zeta_e$ & $l_K/L$ & $\tau_1$ & $\tau_b$ & $\tau_0$ & $\alpha_{min}$ & $\Delta \alpha_{min}$ \\
-    \midrule
-    1 & 6.02 & 78162.53 & 11.00 & 0.94 & 0.736 & 0.004 \\
-    10 & 6.02 & 781625.32 & 1.65 & 9.41 & 0.739 & 0.004 \\
-    1 & 0.6 & 6352.27 & 11.00 & 0.94 & 0.653 & 0.004 \\
-    \bottomrule
-    \end{tabular}
+    \begin{tabular}{rrlllrrr}
+        \toprule
+        $\zeta_e$ & $l_K/L$ & $\tau_1$ & $\tau_b$ & $\tau_0$ & $\alpha_{min}$ & $\Delta \alpha_{min}$ & $\alpha_{ref}$ \\
+        \midrule
+        1 & 6.02 & 78162.53 & 11.00 & 0.94 & 0.727000 & 0.001000 & 0.750000 \\
+        10 & 6.02 & 781625.32 & 1.65 & 9.41 & 0.803000 & 0.001000 & 0.750000 \\
+        1 & 0.6 & 6352.27 & 11.00 & 0.94 & 0.659000 & 0.002000 & 0.666667 \\
+        1 & $\approx 0.01$ & 0.12 & 11.00 & 0.94 & 0.500000 & 0.015000 & 0.666667 \\
+        \bottomrule
+        \end{tabular}
     \caption{
         Free chains with different stiffness and end-bead friction values: 
         Estimated values of the minimum of the scaling exponent $\alpha$ and
