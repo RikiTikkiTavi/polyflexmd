@@ -261,6 +261,7 @@ The initial equation of motion of single bead then becomes a diffusion equation 
     \label{eq:diffusion}
     \zeta \frac{\partial \vec{r}(t,n)}{\partial t} = \frac{3 k_B T}{l_b^2} \frac{\partial \vec{r}(t,n)}{\partial n^2} + \vec{f}^r(t)
 \end{equation}
+with friction coefficient $\zeta = \sigma m$.
 
 \paragraph{Boundary conditions}
 The chain ends are connected to one spring only. These free ends could be modelled by adding two 
@@ -390,9 +391,9 @@ The Rouse model predictions for semiflexible chains is more complicated
 case as the one need take into account the bending potential. 
 Likely the topic has already been studied so the behavior of the
 observables $\E{\vec{R}(t)\vec{R}(0)}$ and $\E{[\Delta \vec{r}_N(t)]^2}$ 
-is available in the literature \cite{Nikoubashman2016}.
-\\
-\\
+is available in the literature \cite{Nikoubashman2016} for the asymptotic
+cases: rod limit $l_p \gg L$ and coil limit $l_p \ll L$.
+\paragraph{Rod limit}
 The behavior of ETE autocorrelation function $\E{\vec{R}(t)\vec{R}(0)}$
 in rod limit ($l_p \gg L$) is given by \cite{Nikoubashman2016}:
 \begin{equation}
@@ -417,15 +418,38 @@ The behavior of MSDLM $\E{[\Delta \vec{r}_N(t)]^2}$
 in rod limit ($l_p \gg L$) on short time scales 
 is given by \cite{Nikoubashman2016}:
 \begin{equation}
-    \E{[\Delta \vec{r}_N(t)]^2} \approx l_b^2(\frac{b}{l_p})^{1/4}(\frac{t}{\tau_0})^{3/4} \text{, if } \tau_0 < t < \tau_1 \text{; } l_p \gg L
+    \E{[\Delta \vec{r}_N(t)]^2} \approx l_b^2\left(\frac{l_b}{l_p}\right)^{1/4}\left(\frac{t}{\tau_0}\right)^{3/4} \quad \text{if } \tau_0 < t < \tau_1 \text{; } l_p \gg L
 \end{equation}
 The one can see the same scaling behavior as in case of MSD of ETE: $\alpha=\frac{3}{4}$.
 However, on the time scale, where the free diffusion takes place, the scaling
 behavior remains unchanged relative to the flexible chain and is given by 
 $\alpha=1$, because chain stiffness does not affect the chain translational 
 diffusion as a whole \cite{Nikoubashman2016}.
+\paragraph{Coil limit}
+In the coil limit $l_p \ll L$ there are several timescales \cite{Nikoubashman2016}:
+\begin{equation}
+    \begin{split}
+        \tau_1 & \approx \tau_0 \left(\frac{l_p}{l_b}\right)^3 \\ 
+        \tau_{rot} & \approx \frac{L^2 l_p \tau_0}{l_b^3} \\
+        \tau_R & \propto \tau_{rot}
+    \end{split}
+\end{equation}
+On the timescale $t \ll \tau_1$ the $\E{\vec{R}(t)\vec{R}(0)}$ is given by \cite{Nikoubashman2016}:
+\begin{equation}
+    1 - \E{\vec{R}(t)\vec{R}(0)} \propto \frac{l_p}{L}\left(\frac{t}{\tau_1}\right)^{3/4} \quad \text{if} \quad t \ll \tau_1 \text{, } l_p \ll L
+\end{equation}
+On the timescale $\tau_1 < t \ll \tau_R$ the equations are given by the Rouse model
+predictions for flexible chains renormalized in space $l_b \rightarrow l_p$ and in time
+$\tau_0 \rightarrow \tau_1$ \cite{Nikoubashman2016}. The scaling behavior is then
+given by $\alpha=1/2$ \cite{Nikoubashman2016}. The crossover from $\alpha=1/2$ to
+$\alpha=3/4$ is expected for $t=\tau_1$ \cite{Nikoubashman2016}.
 \\
 \\
+On the timescale $t > \tau_{rot}$ the following regime holds \cite{Nikoubashman2016}:
+\begin{equation}
+    \E{\vec{R}(t)\vec{R}(0)} \propto \exp(-t/\tau_{rot}) \quad \text{if} \quad t > \tau_{rot} \text{, } l_p \ll L
+\end{equation}
+
 \section{Methods}
 \subsection{Simulation methods}
 \subsubsection{Molecular dynamics}
@@ -1023,13 +1047,17 @@ increasing $\zeta_e$ for all dimensions are the same.
 The following section focuses on the study of the dynamics of the 
 free polymer chains. Specifically the the focus is on the verification
 of the two hypothesis arising from the discussion in the paper of 
-\emph{Singh et. al.} \cite{Singh:2022}. Their work shows, that upon the 
+Singh \emph{et. al.} \cite{Singh:2022}. Their work shows, that upon the 
 binding of Rab5 to the EEA1 the scaling behavior of MSDLM in 
 early time regime shifts from $3/4$ to the $2/3$. This behavior is explained
 with the change of stiffness of the EEA1 upon the binding of Rab5, because
-the scaling regime of MSDLM $\alpha=3/4$ corresponds the chains in the rod limit and
-the $\alpha=2/3$ to the fully flexible chains in presence of excluded
-volume interactions. However, it is unclear if the change of scaling behavior
+the scaling regime of MSDLM $\alpha=3/4$ corresponds the chains in the rod limit
+and the $\alpha=2/3$ to the fully flexible chains in presence of excluded
+volume interactions. The persistence length is estimated \emph{inderectly} by 
+fitting the equation of MSDLM \cite{Singh:2022} derived in 
+the Hinczewski \emph{et al.} \cite{Hinczewski_2009}.
+
+However, it is unclear if the change of scaling behavior
 is caused by the stiffness transformation or by the change of friction
 coefficient of the chains end. Using the molecular dynamics it's possible
 to isolate the the both cases and consider them separately. 
