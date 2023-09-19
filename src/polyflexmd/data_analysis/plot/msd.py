@@ -29,8 +29,10 @@ def plot_MSD(
         scatter: bool = False,
         marker_size: int = 5,
         m=1.0,
+        without_ballistic: bool = True,
 ) -> plt.Axes:
-    df_msd = df_msd.loc[df_msd["t/LJ"] >= m / zeta]
+    if without_ballistic:
+        df_msd = df_msd.loc[df_msd["t/LJ"] >= m / zeta]
 
     if ax is None:
         ax = plt.gca()
