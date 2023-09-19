@@ -30,6 +30,7 @@ def plot_MSD(
         marker_size: int = 5,
         m=1.0,
         without_ballistic: bool = True,
+        marker_edge_width: float = 0.4
 ) -> plt.Axes:
     if without_ballistic:
         df_msd = df_msd.loc[df_msd["t/LJ"] >= m / zeta]
@@ -64,6 +65,7 @@ def plot_MSD(
         plot_kwargs["markersize"] = marker_size
         plot_kwargs["markerfacecolor"] = 'none'
         plot_kwargs["markeredgecolor"] = color
+        plot_kwargs["markeredgewidth"] = marker_edge_width
         plot_kwargs["fillstyle"] = 'none'
         plot_kwargs["marker"] = "o"
 
