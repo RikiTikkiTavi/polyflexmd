@@ -2,7 +2,7 @@
     paper=A4,pagesize=automedia,fontsize=12pt,
     BCOR=15mm,DIV=22,
     twoside,headinclude,footinclude=false,
-    ngerman,fleqn,             % fleqn = linksbündige Ausrichtung von Formeln
+    fleqn,             % fleqn = linksbündige Ausrichtung von Formeln
     bibliography=totocnumbered,          % Literaturverz. im Inhaltsverz. eintragen
     listof=totoc,                % Abbildungsverz. im Inhaltsverz. eintragen
     listof=flat,                 % Abbildungsverz. an der längsten Nummer ausrichten
@@ -60,6 +60,9 @@
 \usepackage{lipsum}
 
 \usepackage{booktabs}
+
+\usepackage[outputdir=out]{minted}
+\usemintedstyle{vs}
 
 \graphicspath{ {./img/} }
 
@@ -387,6 +390,7 @@ with following asymptotic behavior \cite{svaneborg_2020}:
 \end{equation}
 
 \subsubsection{Semiflexible chain}
+\label{sec:rouse_semiflex_chain}
 The Rouse model predictions for semiflexible chains is more complicated
 case as the one need take into account the bending potential. 
 Likely the topic has already been studied so the behavior of the
@@ -572,7 +576,13 @@ The simulation is runned until it reaches the equilibrium and then the measureme
 of particle trajectories are performed. 
 
 \subsection{Evaluation methods}
-\paragraph{Main-axis coordinate system}\label{sec:main-axis}
+
+\subsubsection{Measurement uncertainty}
+In this work the 3$\sigma$ confidence interval is used, which means
+$\approx99.7 \%$ of observations would land in given confidence interval.
+Gaussian error propagation is used to propagate the uncertainty. The normal
+distribution is assumed everywhere, where the measurement uncertainty is given.
+\subsubsection{Main-axis coordinate system}\label{sec:main-axis}
 To analyze the dynamics of anchored chain the so called main-axis coordinate
 system is introduced. In this system the $z$ axis is parallel to the
 first bond vector, connecting the first two beads, which are fixed.
@@ -590,6 +600,43 @@ The orthonormal basis set that defines the system is calculated as follows:
 \begin{equation}
     \hat{x}_{MA} = \hat{z}_{MA} \times \hat{y}_{MA} 
 \end{equation}
+
+\subsubsection{Estimation of scaling behavior of MSD of ETE} \label{sec:est-alpha-msd}
+To estimate the scaling behavior $\alpha(t)$ of the MSD-ETE curve the following
+algorithm is applied:
+\begin{enumerate}
+    \item Split the MSD by the time (t/LJ) in $n$ bins logarithmically using
+    \mintinline{python3}{numpy.logspace} \cite{harris2020array}
+    \item Within each bin:
+    \begin{enumerate}
+        \item Calculate: $x=log_{10}(t)$, $y=log_{10}(\text{MSD})$
+        \item Shift to origin: $x=x-min(x)$, $y=y-min(y)$
+        \item Use \mintinline{python3}{scipy.optimize.curve_fit} 
+        \cite{2020SciPy-NMeth} to fit the $f(x) = \alpha x$ to the $x,y$,
+        obtaining $\alpha$ the scaling exponent within the bin.
+    \end{enumerate}
+\end{enumerate}  
+The $\Delta \alpha$ is estimated by calculating the 
+$\Delta y$ from $\Delta \text{MSD}$:
+\begin{equation}
+    \Delta y = \frac{1}{\text{MSD} \ln(10)} \sigma_{\text{MSD}}
+\end{equation}
+with $\sigma_{\text{MSD}}=\Delta \text{MSD} / 3$
+and then supplying it to the  
+\\
+\mintinline{python3}{scipy.optimize.curve_fit} \cite{2020SciPy-NMeth}
+when calculating $\alpha$. The algorithm outputs the variance-covariance
+matrix, from which $\sigma_{\alpha}$ can be calculated.
+
+\subsubsection{Estimation of scaling behavior of MSDLM} \label{sec:est-alpha-msdlm}
+To estimate the scaling behavior $\alpha(t)$ of the MSDLM curve the similar
+algorthm as in case of MSD-ETE is applied, except that instead of
+binning the rolling window of size defined in log scale is used.
+Basically the $\alpha(t_i)$ is calculated using linear regression as priveously
+mentioned on the rolling window defined by $|\log_{10}(t)-\log_{10}(t_i)| \le w$
+with $w$ the logarithmic window size. The step of the rolling window is 1 element.
+Per default $w = 1$ (which matches decade-long window) 
+unless other value is mentioned.
 
 \section{Results}
 This section unveils the outcomes of an investigation into the dynamic
@@ -614,7 +661,7 @@ By contrasting simulation observations with theoretical
 expectations, insights are gained into how anchoring 
 affects chain dynamics.
 
-\begin{figure}[h]
+\begin{figure}
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.9cm},clip]{3-exp-fixed-param-log.png}
       \caption{\label{fig:anchored_flex_chain_vs_rouse}
@@ -643,7 +690,7 @@ can't move and therefore the chain needs more time to achieve the MSD limit, whi
 in case of fully flexible free chain is $2Nl_b^2$ as the one can see from Eq. \ref{eq:rouse_msd_ete}. 
 
 
-\begin{figure}[h]
+\begin{figure}
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.8cm},clip]{3-exp-free-param-log.png}
       \caption{\label{fig:anchored_flex_chain_vs_rouse_fitted}
@@ -689,7 +736,7 @@ The following observations are made:
     the curves any more because of the uncertainty.
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-bare.png}
       \caption{\label{fig:msd_anchored_l_K}
@@ -699,7 +746,7 @@ The following observations are made:
     \end{center}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-bare-log.png}
       \caption{\label{fig:msd_anchored_l_K_log}
@@ -730,7 +777,7 @@ free parameter. There are af few possible reasons for that:
     \item Change of boundary conditions (anchoring).
 \end{enumerate}
 
-\begin{figure}[h]
+\begin{figure}
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-rouse_anal.png}
       \caption{\label{fig:msd_anchored_l_K_rouse_fit_anal}
@@ -741,7 +788,7 @@ free parameter. There are af few possible reasons for that:
       }
     \end{center}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-rouse_fit-tau.png}
       \caption{\label{fig:msd_anchored_l_K_rouse_fit-tau}
@@ -793,7 +840,7 @@ It is possible to conclude, that in case of anchored chain the proportionality
 Eq. \ref{eq:msd_ete_autocorr_semiflex} holds for $t>\tau_{rot}$ but with
 different value (and eventually meaning) of $\tau_{rot}$.
 
-\begin{figure}[h]
+\begin{figure}
     \centering
     \begin{subfigure}[b]{\textwidth}
         \centering
@@ -829,7 +876,7 @@ Additionaly, $\alpha$ for $t>\tau_{rot}$ matches the one of rouse model predicti
 for free semiflexible chain as well as $\alpha$ transitions in this regime smoothly
 near the $\tau_{rot}$.
 
-\begin{figure}[h]
+\begin{figure}
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-rouse_fit-tau-a_alpha.png}
       \caption{\label{fig:alpha_anchored_l_K}
@@ -856,7 +903,7 @@ The chain becomes more straight with rising stiffness and therefore has less
 movement freedom along $z$ direction, which results in smaller MSD and quicker
 relaxation.
 
-\begin{figure}[h]
+\begin{figure}
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-msd_by_dim.png}
       \caption{\label{fig:msd_anchored_l_K_by_dim}
@@ -866,7 +913,7 @@ relaxation.
     \end{center}
 \end{figure}
 
-\begin{table}
+\begin{table}[p]
     
     \centering
 \begin{tabular}{rr}
@@ -1046,21 +1093,72 @@ increasing $\zeta_e$ for all dimensions are the same.
 \subsection{Free chain dynamics}
 The following section focuses on the study of the dynamics of the 
 free polymer chains. Specifically the the focus is on the verification
-of the two hypothesis arising from the discussion in the paper of 
+of the hypothesis arising from the discussion in the paper of 
 Singh \emph{et. al.} \cite{Singh:2022}. Their work shows, that upon the 
-binding of Rab5 to the EEA1 the scaling behavior of MSDLM in 
+binding of RAB5 to the EEA1 the scaling behavior of MSDLM in 
 early time regime shifts from $3/4$ to the $2/3$. This behavior is explained
-with the change of stiffness of the EEA1 upon the binding of Rab5, because
+with the change of stiffness of the EEA1 upon the binding of RAB5, because
 the scaling regime of MSDLM $\alpha=3/4$ corresponds the chains in the rod limit
 and the $\alpha=2/3$ to the fully flexible chains in presence of excluded
 volume interactions. The persistence length is estimated \emph{inderectly} by 
 fitting the equation of MSDLM \cite{Singh:2022} derived in 
-the Hinczewski \emph{et al.} \cite{Hinczewski_2009}.
+the Hinczewski \emph{et al.} \cite{Hinczewski_2009}. Therefore this approach does
+not proove that change of scaling behavior is caused by exactly the change
+of stiffness. An other factor possibly affecting the scaling behavior
+is the increased friction coefficient of the end of the chain caused by 
+bonded RAB5. Hence in this section the impact of the increased friction 
+coefficient of the chain end ($\zeta_e$) on the scaling behavior of MSDLM is explored.
+Additionally is checked if by changing the chain $l_p$ from the 
+esimated for EEA1 value ($l_p/L_{\text{EEA1}} \approx 3.01$ \cite{Singh:2022}) to
+the estimated for EEA1+RAB5 value 
+($l_p/L_{\text{EEA1+RAB5}} \approx 0.3$ \cite{Singh:2022}) causes the 
+similar to experimentally observed change of scaling behavior.
+Some simplifications are made to reduce the computational resources
+requirements and implementation complexity of simulation and analysis:
+the number of beads of the chain is set to $N_b=64$ which results in 
+contour length $L=61.11\text{LJ}$ which is smaller then the contour length of EEA1
+$L_{\text{EEA1}}\approx222\text{nm}$.
+\\
+\\
+The obtained MSDLM curves are shown on the \autoref{fig:msd_free}, the 
+estimated scaling behavior on the \autoref{fig:alpha_free} and the 
+corresponding $\alpha_{min}$ values are available in \autoref{table:free_chain_alpha_estimations}.
+For the plausibility check the estimated scaling behavior of full flexible free chain is
+displayed on \autoref{fig:alpha_free_full_flex}. 
+\\
+\\
+Firstly, the $\alpha_{min} \approx 0.727$
+in case $l_K/L=6.02$ approaches the expected value for the chain in the rod limit ($3/4$) 
+and the $\alpha_{min} \approx 0.5$ (\autoref{fig:alpha_free_full_flex}) in 
+case of the full flexible chain matches  almost exactly the expected value 
+($1/2$), which is a good hint towards the results plausibility.
+\\
+\\
+Secondly, the drop of $\alpha_{min}$ observed 
+($0.727\pm0.001 \rightarrow 0.659\pm0.002 \Rightarrow \Delta\approx0.068$) by transition from $l_K/L=6.02$
+to the $l_K/L=0.6$. 
+Surprisingly both values are very close (however outside of CI) to the ones
+of Singh \emph{et al.} \cite{Singh:2022}.
+However, in case $l_K/L=0.6$ the $\alpha_{min}$ is 
+far larger then $a_{min}$ of full flexible chain in contrast with the results
+of Singh \emph{et al.} \cite{Singh:2022} where the $\alpha_{min}=2/3$ match 
+the one of full-flexible chain, taking into account the presence of 
+excluded volume interactions.
+\\
+\\
+Thirdly, it is observed, that 
+increased $\zeta_e$ causes non-neglible increase of $\alpha_{min}$:
+\begin{itemize}
+    \item In case $l_K/L=6.02$: $0.727 \pm 0.001 \rightarrow 0.803 \pm 0.001$ $\Rightarrow$ $\Delta\approx0.076$
+    \item In case $l_K/L=0.6$: $0.659 \pm 0.002 \rightarrow 0.775 \pm 0.001$ $\Rightarrow$ $\Delta\approx0.116$
+\end{itemize}
+Given also the MSDLM curves in \autoref{fig:msd_free}, the one can conclude,
+that if the estimation of the $l_p$ as 
+in Singh \emph{et al.} \cite{Singh:2022} would be done in absence of
+excluded volume interactions, the value of $l_p$ would be overestimated. 
+Further research is needed to find if this holds in the presence of the 
+excluded volume interactions and larger $L$.
 
-However, it is unclear if the change of scaling behavior
-is caused by the stiffness transformation or by the change of friction
-coefficient of the chains end. Using the molecular dynamics it's possible
-to isolate the the both cases and consider them separately. 
 
 \begin{figure}
     \centering
@@ -1091,20 +1189,30 @@ to isolate the the both cases and consider them separately.
     of free chains with different stiffness and end-bead friction values;
     Grey dashed lines correspond to $3/4$, $2/3$, $1/2$ values.
     }
-    \label{fig:alpha_anchored_zeta}
+    \label{fig:alpha_free}
 \end{figure}
 
-\begin{table}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{17+18+19+20-exp-full-flex-alpha.png}
+    \caption{Scaling exponent $\alpha$ of MSD of chain end (MSDLM) 
+    of free full flexible chain. $\tau_0$ and $\tau_b$ are outside of the
+    x-axis boundaries. Estimated $\alpha_{min}=0.499 \pm 0.015$.
+    }
+    \label{fig:alpha_free_full_flex}
+\end{figure}
+
+\begin{table}[p]
     \centering
     
     \begin{tabular}{rrlllrrr}
         \toprule
-        $\zeta_e$ & $l_K/L$ & $\tau_1$ & $\tau_b$ & $\tau_0$ & $\alpha_{min}$ & $\Delta \alpha_{min}$ & $\alpha_{ref}$ \\
+        $\zeta_e$ & $l_K/L$ & $\tau_1$ & $\tau_b$ & $\tau_0$ & $\alpha_{min}$ & $\Delta \alpha_{min}$ \\
         \midrule
-        1 & 6.02 & 78162.53 & 11.00 & 0.94 & 0.727000 & 0.001000 & 0.750000 \\
-        10 & 6.02 & 781625.32 & 1.65 & 9.41 & 0.803000 & 0.001000 & 0.750000 \\
-        1 & 0.6 & 6352.27 & 11.00 & 0.94 & 0.659000 & 0.002000 & 0.666667 \\
-        1 & $\approx 0.01$ & 0.12 & 11.00 & 0.94 & 0.500000 & 0.015000 & 0.666667 \\
+        1 & 6.02 & 78162.53 & 11.00 & 0.94 & 0.727 & 0.001\\
+        10 & 6.02 & 781625.32 & 1.65 & 9.41 & 0.803 & 0.001\\
+        1 & 0.6 & 6352.27 & 11.00 & 0.94 & 0.659 & 0.002\\
+        10 & 0.6 & 63522.69 & 1.65 & 9.41 & 0.775 & 0.001\\
         \bottomrule
         \end{tabular}
     \caption{
