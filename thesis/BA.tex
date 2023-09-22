@@ -244,14 +244,13 @@ And the following relation is usefull to estimate the persistence length of the 
 \end{equation}
 
 \subsection{Langevin equation} \label{section:langevin_eq}
+The discussion of chain dynamics should start from the description of
+the dynamics of single particle. This can be done using the Langevin equation. 
 The Langevin equation is a fundamental stochastic differential equation 
 widely used in statistical mechanics and molecular dynamics to describe the 
 dynamics of particles or molecules subjected to random forces in a 
-dissipative medium.
-\\
-\\
-Specifically Langevin equation is used to describe the particle in immobile
-solvent and can be written as:
+dissipative medium. Specifically Langevin equation is used to describe the 
+particle in immobile solvent and can be written as:
 \begin{equation} \label{eq:langevin}
     m \ddot{\vec{r}} = - \nabla U(\vec{r}) - \sigma m \dot{\vec{r}} + \vec{f}^r(t)
 \end{equation}
@@ -270,6 +269,8 @@ $\vec{f}^r(t)$ is a stochastic process known as white noise:
      of noise and friction and
     is known as fluctuation-dissipation theorem.
 \end{itemize}
+The solution of this equation depends of course on the selected external
+potential $U(\vec{r})$ and will be introduced in the next section.
 
 \subsection{Rouse model}
 Polymer chains, composed of repeating monomer units, exhibit complex 
