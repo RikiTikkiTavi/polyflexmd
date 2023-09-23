@@ -148,31 +148,31 @@ Deutsch \\
 
 
 \section{Introduction}
-\subsection{Motivation}
+\subsection{Motivation and goal}
 Intracellular traffic constitutes a intricate interplay of both mechanical 
-and chemical processes starting from formation of visicle proceeding with 
+and chemical processes starting from formation of vesicle proceeding with 
 its movement along the cytoskeletal tracks ending with tethering and merging
 with their corresponding target membrane compartment \cite{Singh:2022}.
 Membrane tethering process, in some cases driven by the pairing of
-small GTPases with long dimeric coiled-coil tether molecules \cite{Singh:2022}  
-is the coupling of chemistry with mechanics which is not yet well 
-understood \cite{Singh:2022}. There is recent discussions in the literature
+small GTPases with long dimeric coiled-coil tether molecules, \cite{Singh:2022}  
+is the coupling of chemistry with mechanics, which is not yet well 
+understood \cite{Singh:2022}. There are recent discussions in the literature
 about the role of the long dimeric coiled-coil molecules in the process
 of overcoming the distance barriers that physically separate 
 membranes \cite{Singh:2022}. Specifically, the process of membrane tethering was
-obseved driven by the conformational changes of the early endosomal
-tether EEA1 caused by its binding to the small GTPase Rab5 \cite{Murray2016}.
+obseved, driven by the conformational changes of the early endosomal
+tether EEA1, caused by its binding to the small GTPase Rab5 \cite{Murray2016}.
 The conformational changes of EEA1 upon the binding of Rab5 are then closely
 studied by the Singh \emph{et al.} \cite{Singh:2022}. 
 Among others they observed 
 a change in the scaling behavior of the mean squared displacement of 
-chains end upon the binding of the Rab5. They also showed \emph{indirectly}, 
+chains end upon the binding of the Rab5. They also have shown \emph{indirectly} 
 that this change is caused by the stiffness transition of the chain.
-However, the underlying molecules constitute a complex biological system and
+However, the underlying molecules constitute a complex biological system, and
 there might be other factors affecting the change in the scaling behavior.
-With the help of coarse grained molecular dynamics simulations is possible
-to investigate if such change in the dynamical properties of the chain could 
-be caused by the change of mechanical properties of the chain such as stiffness and 
+With the help of coarse grained molecular dynamics simulations it is possible
+to investigate, if such change in the dynamical properties of the chain could 
+be caused by the change of mechanical properties of the chain, such as stiffness and 
 friction coefficient of the chain end, 
 which is increased upon the binding of Rab5. Also, while the dynamical
 properties of free chains were already considered in various studies 
@@ -180,22 +180,26 @@ properties of free chains were already considered in various studies
 \cite{Kremer_ChemPhys} \cite{Hinczewski_2009}), the dynamics of anchored
 semiflexible chains
 (as they occur in the process of membrane terhering, anchored to the endosome)
-is not yet well studied. So the goal of this work is on the one hand to study 
+is not yet well studied. 
+\\
+\\
+The goal of this work is, on the one hand, to study 
 the dynamical properties of the anchored semiflexible chains by varying 
 stiffness and 
-friction of the chain end, on the other hand to explore if the above mentioned
+friction of the chain end, on the other hand, to explore, if the above mentioned
 mechanical properties of the free chain can cause the change in scaling behavior
-of the chain as observed in Singh \emph{et al.} \cite{Singh:2022}.
+of the chain, as observed in Singh \emph{et al.} \cite{Singh:2022}. The scope
+of this work is limited by considering only ideal chain models and excluding
+hydrodynamic interactions.
 
 
-
-\subsection{Polymer chain model}
+\subsection{Ideal polymer chain models}
 
 In the realm of polymer physics, ideal chain models serve as crucial tools
 for understanding the fundamental properties and behavior of polymer chains. 
 These models provide simplified yet insightful descriptions of polymer chains' 
 static properties and are integral to elucidating phenomena such as
-polymer flexibility, persistence length, and overall chain behavior.
+polymer persistence length and overall chain behavior.
 Ideal models are characterized by distinct assumptions concerning the 
 permissible ranges of torsion and bond angles. Nevertheless, all 
 these models disregard interactions between monomers that are widely 
@@ -203,45 +207,64 @@ spaced along the chain.
 In this section, 3 relevant ideal chain models are described: 
 the freely jointed chain model, freely rotating chain model and the worml-like chain model.
 
-\subsubsection{Freely jointed chain model}
+\paragraph{Freely jointed chain model}
 The freely jointed chain model is one of the simplest chain models. It assumes
-a constant bond length $l$ and no correlations between the directions of different
-bond vectors: $\E{cos(\theta_{ij})} = 0$ for $i \neq j$. This model is suitable
+a constant bond length $l_b$ \cite{Rub_Colby_PolyPhy:2005} and no correlations between the directions of different
+bond vectors \cite{Rub_Colby_PolyPhy:2005}: $\E{cos(\theta_{ij})} = 0$ for $i \neq j$. This model is suitable
 to study static properties of fully flexible polymer chains. In particular interest
 are the end-to-end distance of the chain with $N$ bonds
 \begin{equation}
-    \E{R^2} = N l^2
+    \E{R^2} = N l_b^2
 \end{equation}
 and the contour length 
 \begin{equation}
-    L = N l
+    L = N l_b
 \end{equation}
 
-\subsubsection{Freely rotating chain model}
-
+\paragraph{Freely rotating chain model}
+To define the polymer stiffness one needs to consider the polymer chain model
+where correlation between bond vectors does not vanish.
 The freely rotating chain (FRC) model is a fundamental ideal chain model 
 that offers a simple yet valuable perspective on polymer behavior. 
-This model assumes that all bond lengths and all bond angles are fixed and
-all torsion angles are equally likely and independent of each other, the bond angles can adopt any value without energetic 
-penalty, akin to a series of interconnected rigid segments.
-\\
-The FRC model's implications are particularly noteworthy when 
-studying the persistence length of polymers. 
-This length scale characterizes the chain's ability to maintain a 
-given direction before undergoing significant bending due to thermal motion. 
+This model assumes a constant bond length $l_b$ \cite{Rub_Colby_PolyPhy:2005}, 
+bond angles are constant \cite{Rub_Colby_PolyPhy:2005} and
+all torsion angles are equally likely and independent of each other \cite{Rub_Colby_PolyPhy:2005}.
+In this model there is a correlation between bond vectors \cite{Rub_Colby_PolyPhy:2005}:
+\begin{equation}
+    \E{\vec{r}_i \vec{r}_j} = l_b^2 (\cos(\theta))^{|j-i|}
+\end{equation}
+A persistence segment of the chain is defined by the number of main-chain bonds $s_p$ 
+it contains \cite{Rub_Colby_PolyPhy:2005}. This represents a scale at which local 
+correlations between bond vectors decay \cite{Rub_Colby_PolyPhy:2005}.
+\begin{equation}
+    s_p = - \frac{1}{\ln(\cos(\theta))}
+\end{equation}
+The persistence length $l_p$ of the chain is then defined as \cite{Rub_Colby_PolyPhy:2005}:
+\begin{equation}
+    l_p = l_b s_p
+\end{equation}
+And the Kuhn length $l_K$ of the chain is defined as \cite{Rub_Colby_PolyPhy:2005}:
+\begin{equation}
+    l_K = 2 l_p
+\end{equation}
 
-
-\subsubsection{Worm-like chain model}
+\paragraph{Worm-like chain model}
 The worm-like chain model is a special case of freely rotating chain model for
-the small values of a bond angle: $\cos(\theta) << 1$ \cite{Rub_Colby_PolyPhy:2005}.
-In this model the end-to-end distance of the chain can be written as:
+the small values of a bond angle: $\theta \ll 1$ \cite{Rub_Colby_PolyPhy:2005}.
+It is suitable for the description of very stiff polymers \cite{Rub_Colby_PolyPhy:2005}.
+In this model the number of main-chain bonds in persistence segment simplifies to 
+\begin{equation}
+    s_p \approx \frac{2}{\theta^2}
+\end{equation}
+The end-to-end distance of the chain can be written as:
 \begin{equation}
     \E{R^2} = 2 l_p L - 2 l_p^2 (1-\exp(-\frac{L}{l_p}))
 \end{equation}
-And the following relation is usefull to estimate the persistence length of the chain:
+And the following relation holds between persistence length and angles of the chain:
 \begin{equation}
-    \E{cos(\theta_{ij})} = exp(-\frac{l |j-i|}{l_p})
+    \E{cos(\theta_{ij})} = exp(-\frac{l_b |j-i|}{l_p})
 \end{equation}
+which is usefull if one needs to estimate the persistence length from the chain angles.
 
 \subsection{Langevin equation} \label{section:langevin_eq}
 The discussion of chain dynamics should start from the description of
@@ -270,7 +293,12 @@ $\vec{f}^r(t)$ is a stochastic process known as white noise:
     is known as fluctuation-dissipation theorem.
 \end{itemize}
 The solution of this equation depends of course on the selected external
-potential $U(\vec{r})$ and will be introduced in the next section.
+potential $U(\vec{r})$. In case of harmonic spring potential 
+$U(\vec{r})=\frac{1}{2} k r^2$ the formal solution can be written as:
+\begin{equation}
+    \vec{r}(t)=\frac{1}{\zeta}\int_{-\infty}^{t} dt' \exp\left(-\frac{t-t'}{\tau}\right)\vec{f}^r(t')
+\end{equation}
+with $\zeta=m \sigma$ and $\tau := \zeta / k$.
 
 \subsection{Rouse model}
 Polymer chains, composed of repeating monomer units, exhibit complex 
@@ -715,7 +743,7 @@ affects chain dynamics.
     \end{center}
 \end{figure}
 
-Figure \ref{fig:anchored_flex_chain_vs_rouse} shows, that by anchoring the chain
+\autoref{fig:anchored_flex_chain_vs_rouse} shows, that by anchoring the chain
 the the transition into plateau is shifted to the right, increasing the 
 relaxation time (Eq. \ref{eq:rouse_relaxation_time}), 
 however the scaling behavior is visually the same. Rouse relaxation time
@@ -752,6 +780,7 @@ to account for boundary conditions:
     \beta := \frac{\tau_{0, \textrm{empirical}}}{\tau_{0, \textrm{analytical}}} \approx 4.47
 \end{equation}
 
+\FloatBarrier
 
 
 \subsubsection{Impact of chain stiffness} \label{sec:impact_of_chain_stiffness}
@@ -767,8 +796,8 @@ Table \ref{table:kappa_values}. shows the range of stiffness values examined
 in this experiment.
 \\
 \\
-The MSD curves are plotted in Figure \ref{fig:msd_anchored_l_K} and logarithmic
-representation one can find in Figure \ref{fig:msd_anchored_l_K_log}.
+The MSD curves are plotted in \autoref{fig:msd_anchored_l_K} and logarithmic
+representation one can find in \autoref{fig:msd_anchored_l_K_log}.
 The following observations are made:
 \begin{itemize}
     \item The relaxation time grows non-linearly with rising $l_K$
@@ -805,10 +834,10 @@ The following observations are made:
 Further, the empirical results are compared to the predictions of the Rouse model.
 Firstly, the empirical results are compared to the Rouse model predictions for the fully
 flexible chain with $N_K$ segments of length $l_K$. The results of this comparison are shown
-in Figure \ref{fig:msd_anchored_l_K_rouse_fit_anal}. Then the empirical 
+in \autoref{fig:msd_anchored_l_K_rouse_fit_anal}. Then the empirical 
 results are compared to the Rouse model predictions for fully flexible chain 
 with $\tau_R$ as free parameter. The results of this comparison
-are displayed in Figure \ref{fig:msd_anchored_l_K_rouse_fit-tau}. It is clear, 
+are displayed in \autoref{fig:msd_anchored_l_K_rouse_fit-tau}. It is clear, 
 that Rouse model predictions for fully-flexible chain doesn't match
 the observed behavior of semi-flexible anchored chains even with $\tau_R$ as 
 free parameter. There are af few possible reasons for that: 
@@ -906,7 +935,7 @@ the scaling behavior of empirical MSD is analyzed. It is clear, that
 $\E{[\Delta \vec{R}(t)]^2} \propto t^{\alpha(t)}$ for the small times is valid
 in analogy to scaling behavior of MSD of last monomer of free chain. 
 The scaling exponent $\alpha$ is estimated from MSD curves as 
-described in \ref{} with 10 bins. The result is shown on Figure \ref{fig:alpha_anchored_l_K}.
+described in \ref{} with 10 bins. The result is shown on \autoref{fig:alpha_anchored_l_K}.
 For nearly flexible chain $l_K/L = 0.03$ scaling exponent value of $\frac{1}{2}$
 is observed, which matches theoretical expectations for fully flexible chain.
 For semi-flexible chains the value of scaling exponent is $\frac{3}{4}$, which
@@ -933,7 +962,7 @@ near the $\tau_{rot}$.
 
 \paragraph{Main-axis system perspective}
 Further, the MSD in main-axis coordinate system is analyzed.
-Figure \ref{fig:msd_anchored_l_K_by_dim} shows the MSD curves in main axis system
+\autoref{fig:msd_anchored_l_K_by_dim} shows the MSD curves in main axis system
 for each dimension. The analysis delivers following insights:
 \begin{itemize}
     \item The difference of MSD in $z$ dimension relative to the $x$ and $y$
@@ -978,6 +1007,8 @@ relaxation.
     \label{table:kappa_values}
 \end{table}
 
+\FloatBarrier
+
 \subsubsection{Impact of friction coefficient of chain end}
 In this subsection, the focus turns to the influence 
 of the friction coefficient at the chain end on anchored polymer chain dynamics.
@@ -997,13 +1028,13 @@ the one of the unbound EEA1 \cite{Singh:2022}.
 The approach mostly follows section \ref{sec:impact_of_chain_stiffness} with an exception that
 the friction coefficient of the chain end $\zeta_e$ is varied instead of Kuhn length $l_K$ 
 of the chain. The resulting MSD curves are shown on 
-Figure \ref{fig:msd_anchored_zeta}. Again, Adjusted Rouse model 
+\autoref{fig:msd_anchored_zeta}. Again, Adjusted Rouse model 
 (Eq. \ref{eq:adjusted_rouse_model_ete}) is fited to
-the MSD curves: Figure \ref{fig:msd_anchored_zeta-arm_fit}. The one can see
+the MSD curves: \autoref{fig:msd_anchored_zeta-arm_fit}. The one can see
 the perfect match on time scales $t > \tau_{rot}$. Also, the estimated $\tau_{rot}$
 rise with rising $\zeta_e$ and the scaling behavior on short time scales 
 varies. To investigate the scaling behavior the scaling exponent $\alpha$ is
-calculated within $20$ bins and is plotted on Figure \ref{fig:alpha_anchored_zeta}.
+calculated within $20$ bins and is plotted on \autoref{fig:alpha_anchored_zeta}.
 The rouse model for semi-flexible free chains predicts $\alpha=3/4$ on the
 time scales $t \ll \tau_{rot}$. To test if this holds for chains with larger
 friction coefficient of the chain end it's necessary to estimate $\alpha$ in this
@@ -1026,7 +1057,7 @@ non-neglible chance to observe free diffusion on short time scales.
 
 \paragraph{Main-axis system perspective}
 Additionaly different dimensions of MSD in main-axis coordinate system are
-analyzed and results are shown on Figure \ref{fig:msd_anchored_zeta-dim}.
+analyzed and results are shown on \autoref{fig:msd_anchored_zeta-dim}.
 The one can observe, that the visual patterns of 
 increasing $\zeta_e$ for all dimensions are the same.
 
@@ -1130,6 +1161,8 @@ increasing $\zeta_e$ for all dimensions are the same.
     }
     \label{fig:msd_anchored_zeta-dim}
 \end{figure}
+
+\FloatBarrier
 
 \subsection{Free chain dynamics}
 The following section focuses on the study of the dynamics of the 
