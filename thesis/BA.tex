@@ -831,6 +831,32 @@ The following observations are made:
     \label{fig:msd_anchored_l_K}
 \end{figure}
 
+\begin{table}
+    
+    \centering
+\begin{tabular}{rr}
+    \toprule
+    $\kappa$ & $l_K / L$ \\
+    \midrule
+    1.00 & 0.03 \\
+    11.00 & 0.33 \\
+    21.00 & 0.65 \\
+    31.00 & 0.97 \\
+    41.00 & 1.29 \\
+    51.00 & 1.60 \\
+    61.00 & 1.92 \\
+    71.00 & 2.24 \\
+    \bottomrule
+    \end{tabular}
+    \caption{
+        Values of $\kappa$ and corresponding $l_K$ tried in the study
+        of anchored chain dynamics.
+        }
+    \label{table:kappa_values}
+\end{table}
+
+\FloatBarrier
+
 \paragraph{Comparing with Rouse model predictions for flexible chains}
 
 Further, the empirical results are compared to the predictions of the Rouse model.
@@ -873,6 +899,8 @@ free parameter. There are af few possible reasons for that:
       }
     \end{center}
 \end{figure}
+
+\FloatBarrier
 
 \paragraph{Comparing with Rouse model predictions for semiflexible chains}
 
@@ -940,18 +968,22 @@ the scaling behavior of empirical MSD is analyzed. It is clear, that
 $\E{[\Delta \vec{R}(t)]^2} \propto t^{\alpha(t)}$ for the small times is valid
 in analogy to scaling behavior of MSD of last monomer of free chain. 
 The scaling exponent $\alpha$ is estimated from MSD curves as 
-described in Section \ref{sec:est-alpha-msd} with $n=10$ bins. The result is shown on \autoref{fig:alpha_anchored_l_K}.
-For nearly flexible chain $l_K/L = 0.03$ scaling exponent value of $\frac{1}{2}$
+described in Section \ref{sec:est-alpha-msd} with $n=10$ bins. 
+The result is shown on \autoref{fig:alpha_anchored_l_K}.
+Further in this paragraph $\alpha_{min}$ refers to scaling exponent $\alpha$
+in region where the overdamped motion takes place and $t \ll \tau_{rot}$. 
+For nearly flexible chain $l_K/L = 0.03$ $\alpha_{min} \approx \frac{1}{2}$
 is observed, which matches theoretical expectations for fully flexible chain.
-For semi-flexible chains the value of scaling exponent is $\frac{3}{4}$, which
-matches the scaling behavior of free chain at short times. Larger
+For semi-flexible chains the value $\alpha_{min}$ is close to $\frac{3}{4}$, which
+matches the scaling behavior of free chain at short times. 
+One can see, that $\alpha_{min}$ gets closer to $\frac{3}{4}$ with rising $l_K$. Larger
 scaling factor in the region $[1, 10]$ is due to transition from 
 ballistic motion at time scales $t<\frac{1}{\sigma} = 1$ to the overdamped motion.
 Additionaly, $\alpha$ for $t>\tau_{rot}$ matches the one of rouse model prediction
 for free semiflexible chain as well as $\alpha$ transitions in this regime smoothly
 near the $\tau_{rot}$.
 
-\begin{figure}
+\begin{figure}[h]
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-rouse_fit-tau-a_alpha.png}
       \caption{\label{fig:alpha_anchored_l_K}
@@ -963,6 +995,8 @@ near the $\tau_{rot}$.
       }
     \end{center}
 \end{figure}
+
+\FloatBarrier
 
 
 \paragraph{Main-axis system perspective}
@@ -987,30 +1021,6 @@ relaxation.
       }
     \end{center}
 \end{figure}
-
-\begin{table}[p]
-    
-    \centering
-\begin{tabular}{rr}
-    \toprule
-    $\kappa$ & $l_K / L$ \\
-    \midrule
-    1.00 & 0.03 \\
-    11.00 & 0.33 \\
-    21.00 & 0.65 \\
-    31.00 & 0.97 \\
-    41.00 & 1.29 \\
-    51.00 & 1.60 \\
-    61.00 & 1.92 \\
-    71.00 & 2.24 \\
-    \bottomrule
-    \end{tabular}
-    \caption{
-        Values of $\kappa$ and corresponding $l_K$ tried in the study
-        of anchored chain dynamics.
-        }
-    \label{table:kappa_values}
-\end{table}
 
 \FloatBarrier
 
