@@ -481,7 +481,7 @@ with $\tau_1$ given by \cite{Nikoubashman2016}:
 \end{equation}
 and $\tau_{rot}$ given by \cite{Nikoubashman2016}: 
 \begin{equation}
-    \tau_{rot} \approx \tau_0 (L/b)^3
+    \tau_{rot} \approx \tau_0 (L/l_b)^3
 \end{equation}
 The case $\tau_0 < t < \tau_1$ for $\tau_0 < t \ll \tau_1$ can be approximated as \cite{Nikoubashman2016}:
 \begin{equation}
@@ -1026,7 +1026,8 @@ relaxation.
 
 \subsubsection{Impact of friction coefficient of chain end}
 In this subsection, the focus turns to the influence 
-of the friction coefficient at the chain end on anchored polymer chain dynamics.
+of the friction coefficient at the chain end on the dynamics of anchored chain with high
+stiffness.
 \\
 \\
 In the simulation this is achieved by changing the value of damp parameter of Langevin thermostat
@@ -1049,13 +1050,15 @@ the MSD curves: \autoref{fig:msd_anchored_zeta-arm_fit}. The one can see
 the perfect match on time scales $t > \tau_{rot}$. Also, the estimated $\tau_{rot}$
 rise with rising $\zeta_e$ and the scaling behavior on short time scales 
 varies. To investigate the scaling behavior the scaling exponent $\alpha$ is
-calculated within $20$ bins and is plotted on \autoref{fig:alpha_anchored_zeta}.
-The rouse model for semi-flexible free chains predicts $\alpha=3/4$ on the
-time scales $t \ll \tau_{rot}$. To test if this holds for chains with larger
+calculated as described in Section \ref{sec:est-alpha-msd} 
+within $n=20$ bins and is plotted on \autoref{fig:alpha_anchored_zeta}.
+The rouse model for semiflexible free chains predicts $\alpha=3/4$ on the
+time scales $t < \tau_{1} \ll \tau_{rot}$. To test if this holds for chains with larger
 friction coefficient of the chain end it's necessary to estimate $\alpha$ in this
 region. The $\alpha_m := \alpha \text{ for } t \ll \tau_{rot}$ is defined.
 Based on \emph{Nikoubashman et. al.} \cite{Nikoubashman2016} finding,
-that ballistic motion lasts 2 decades of time instead of 1, it is assumed, 
+that the crossover from ballistic motion to anomalous diffusion, as described 
+in Rouse model, lasts 2 decades of time, it is assumed, 
 that the left border of this region is given by the end of the region of ballistic
 motion of the end bead $\tau_b  := 10 \frac{m}{\zeta_e}$. The right border is
 assumed to be $\tau_{rot} / 10$ to match $t \ll \tau_{rot}$ requirement.
@@ -1063,12 +1066,10 @@ The borders of the region are plotted with red dashed line and vizually match
 the observed scaling behavior. The $\alpha_m$ is then calculated as the mean
 of observed $\alpha$ in the region. The measurement uncertainty is estimated
 as 3 standard deviations of the mean. All estimated quantities are summarized
-in table \ref{table:anchored_chain_zeta_estimations}. The one can see the small increase of 
-$\alpha_m$ by transition from $\zeta_e=1$ to $\zeta_e=10$ and, 
+in table \ref{table:anchored_chain_zeta_estimations}. The one can see the 
+small increase of $\alpha_m$ by transition from $\zeta_e=1$ to $\zeta_e=10$ and, 
 given the confidence interval, there is no difference between 
-$\alpha_m$ for $\zeta_e = 10$ and $\zeta_e=20$. It is also interesting, that
-in case $\zeta=20$ the confidence interval includes $1$, which means
-non-neglible chance to observe free diffusion on short time scales.
+$\alpha_m$ for $\zeta_e = 10$ and $\zeta_e=20$.
 
 \paragraph{Main-axis system perspective}
 Additionaly different dimensions of MSD in main-axis coordinate system are
@@ -1315,12 +1316,15 @@ excluded volume interactions and larger $L$.
 \section{Summary and Outlook}
 In conclusion, the goals of this work are partially achieved.
 \paragraph{Anchored chains}
-The specific dynamical quantity MSD of ETE (in following: MSD) was considered. It is shown,
+The specific dynamical quantity MSD of ETE (in following: MSD) was considered.
+\\
+\\
+It is shown,
 that the relaxation of free full flexible chain is faster then the one of
 anchored ($\tau_{R,\text{free}} < \tau_{R,\text{anchored}}$). The Rouse model predictions
 for free full flexible chains hold for anchored full flexible chains, if one considers
-$\tau_R$ as free parameter, effectively deliver the correction factor for $\tau_R$
-to account for anchoring.
+$\tau_R$ as free parameter. The estimation of $\tau_R$ for anchored full flexible chain 
+delivers the correction factor for $\tau_R$ to account for anchoring.
 \\
 \\
 In case of semiflexible chain several conclusions are made. As expected,
@@ -1340,6 +1344,28 @@ Furthermore, the MSD was considered in different dimensions in "main-axis" coord
 system (Section \ref{sec:main-axis}). It is shown, that the difference with $z$ 
 dimension increases with growing $l_p$, specifically, MSD in $z$ dimension is 
 characterized through smaller relaxation time and lower value in long time limit.
+\\
+\\
+Further the impact of the friction coefficient of chain end ($\zeta_e$) 
+on dynamical properties of semiflexible chain in rod limit was studied.
+The specific value of $l_p/L=3.01$ was selected to match the stiffness of
+EEA1. Similarly to the study of impact of chain stiffness, it is shown,
+that proportionality ($\propto \exp\left(-\frac{t}{\tau_{rot}}\right)$) holds
+for $t>\tau_{rot}$ if $\tau_{rot}$ is considered as free parameter.
+The increase of estimated $\tau_{rot}$ with rising $\zeta_e$ is observed.
+The $\alpha(t)$ was calculated and the $\alpha$ value in the region of subdiffusive motion
+(here called $\alpha_m$) was estimated. The small
+increase of $\alpha_m$
+($0.74 \pm 0.06 \rightarrow 0.92 \pm 0.07$) by the 
+increase of $\zeta_e$ from $1$ to $10$ was observed and no difference was observed
+in case of $\zeta_e$ transition from $10$ to $20$. Additionally, different dimensions
+of MSD were considered in "main-axis" coordinate system, however, the effects of 
+increased $\zeta_e$ are shown to be vizually consistent across the different dimensions.
+
+\paragraph{Free chains}
+The specific dynamical quantity MSD of the chain end (in following: MSDLM) was 
+considered.  
+
 
 % Erklärung
 \clearpage
