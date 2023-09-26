@@ -1243,11 +1243,10 @@ increased $\zeta_e$ causes non-neglible increase of $\alpha_{min}$:
     \item In case $l_K/L=0.6$: $0.659 \pm 0.002 \rightarrow 0.775 \pm 0.001$ $\Rightarrow$ $\Delta\approx0.116$
 \end{itemize}
 Given also the MSDLM curves in \autoref{fig:msd_free}, the one can conclude,
-that if the estimation of the $l_p$ as 
-in Singh \emph{et al.} \cite{Singh:2022} would be done in absence of
-excluded volume interactions, the value of $l_p$ would be overestimated. 
-Further research is needed to find if this holds in the presence of the 
-excluded volume interactions and larger $L$.
+that the change in $\zeta_e$ affects the dynamics of the chains which is reflected in
+the bahavior of MSDLM. Therefore when using the fit of analytical expression of MSDLM
+to the empirical MSDLM to estimate some properties of the chain, one needs to account
+for increased $\zeta_e$ to obtain more precise estimates.
 
 
 \begin{figure}
@@ -1314,7 +1313,11 @@ excluded volume interactions and larger $L$.
 \end{table}
 
 \section{Summary and Outlook}
-In conclusion, the goals of this work are partially achieved.
+In conclusion, the goals of this work are partially achieved. Multiple simulations 
+are performed varying the chain stiffness and friction coefficient of the chain end, 
+ignoring the hydrodynamic interactions. Resulting trajectories are processed and 
+carefully analyzed. 
+
 \paragraph{Anchored chains}
 The specific dynamical quantity MSD of ETE (in following: MSD) was considered.
 \\
@@ -1364,7 +1367,29 @@ increased $\zeta_e$ are shown to be vizually consistent across the different dim
 
 \paragraph{Free chains}
 The specific dynamical quantity MSD of the chain end (in following: MSDLM) was 
-considered.  
+considered. The scaling exponent $\alpha(t)$ of MSDLM was examined. 
+It is observed, that $\alpha_{min}$ decreases from $0.727 \pm 0.001$ to $0.659 \pm 0.002$ 
+by the change of $l_p/L=3.01$ to $l_p/L=0.3$ in case $\zeta=\zeta_e=1$.
+Furthermore it is shown, that
+by increasing the $\zeta_e$, the minimum of scaling exponent $\alpha_{min}$ is also 
+significantly increased in both cases: rod like $l_p/L \approx 3.01$ (matches the 
+estimate for EEA1 in \cite{Singh:2022}) and
+coil like  $l_p/L \approx 0.3$ (matches the estimate for EEA1+Rab5 in \cite{Singh:2022}).
+Therefore, taking into account the observed MSDLM curves, the conclusion is made,
+that when using the fit of analytical expression of MSDLM to the empirical MSDLM 
+to estimate some properties of the chain, one needs to account
+for increased $\zeta_e$ to obtain more precise estimates.
+
+\paragraph{Outlook}
+There are several limitations of this work, which can be improved in the future research.
+Firstly it is necessary to increase the chain contour length $L$ to better match both the
+theoretical requirement $l_b \ll L$ and the length of EEA1 chain. Then, the improvement 
+would be to consider a grid of $l_p$ and $\zeta_e$ values to obtain the 
+curves of characteristic times and $\alpha_{min}$ values in dependence of 
+$l_p$ and $\zeta_e$. Of specific interest is the value of $\zeta_e$ which matches 
+the value of real Rab5 bound to the end of EEA1. Finally, one needs to
+consider hydrodynamic interactions, which may have significant impact on the dynamical
+properties.  
 
 
 % Erklärung
