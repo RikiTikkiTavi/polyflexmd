@@ -285,7 +285,7 @@ The end-to-end distance of the chain can be written as:
     \E{R^2} = 2 l_p L - 2 l_p^2 (1-\exp(-\frac{L}{l_p}))
 \end{equation}
 And the following relation holds between persistence length and angles of the chain:
-\begin{equation}
+\begin{equation} \label{eq:worm-like-chain-cos-theta-ij}
     \E{cos(\theta_{ij})} = exp(-\frac{l_b |j-i|}{l_p})
 \end{equation}
 which is usefull if one needs to estimate the persistence length from the chain angles.
@@ -1117,7 +1117,10 @@ increasing $\zeta_e$ for all dimensions are the same.
     \end{subfigure}
     \caption{Empirical MSD of ETE of anchored chains with different values of
     friction coefficient of the chain end $\zeta_e$. 
-    Configured and estimated Kuhn length is shown in text box.
+    Configured and estimated Kuhn length is shown in text box (as
+    additional check of plausibility).
+    Estimation of Kuhn length is done using fit of 
+    \autoref{eq:worm-like-chain-cos-theta-ij} with $l_p$ as free parameter.
     }
     \label{fig:msd_anchored_zeta}
 \end{figure}
