@@ -426,7 +426,7 @@ The important time scale is Rouse relaxation time $\tau_R$:
 \end{equation}
 which matches (except of factor $1/3\pi^2$) the time needed for the chain to diffuse over 
 it's End-to-End distance. Other important time scale is relaxation time of the single monomer $\tau_0$:
-\begin{equation}
+\begin{equation} \label{eq:rouse_tau_0}
     \tau_0 = \frac{3 \pi^2 \tau_R}{N^2} = \frac{l_b^2 \zeta}{k_B T} \text{ ,}
 \end{equation}
 which matches the time needed for a free particle of size $l_b$ to diffuse over a distance
@@ -754,22 +754,30 @@ unless an other value is mentioned.
 This section unveils the outcomes of an investigation into the dynamic
 characteristics of anchored and free polymer chains. 
 The focus of the study lies in assessing the impact 
-of two properties: chain stiffness and the friction of chain end.
+of two properties: chain stiffness and the friction of the (free) chain end.
 
 \subsection{Anchored chain dynamics}
-Firstly, this study focuses on a a comparative analysis between the 
+Firstly, this study focuses on a comparative analysis between the 
 dynamics of anchored polymer chains and their free counterparts.
 To execute this comparison, the focus is narrowed onto a specific dynamical
 quantity - the mean squared displacement of the end-to-end distance (MSD of ETE)
-further referred as MSD.
+further referred to as MSD.
 
 \subsubsection{Comparison to free chain}
 
 In this section, the investigation focuses on understanding 
 the influence of anchoring on chain dynamics. 
 This is achieved by comparing the MSD of a fully-flexible anchored 
-chain with the predictions provided by the Rouse model. 
-By contrasting simulation observations with theoretical
+chain with the predictions provided by the Rouse model.
+According to the Rouse model predictions for the free full flexible chain, the MSDLM
+of such chain has 3 regions or scaling regimes: anomalous diffusion region,
+$\text{MSDLM} \propto t^{1/2}$, $\alpha=1/2$, intermediate or crossover region, where the transition
+from anomalous diffusion to the free diffusion takes place and free diffusion region, 
+$\text{MSDLM} \propto t$, $\alpha=1$, because of the chain movement as a whole. 
+However, for the anchored full flexible chain
+is expected, that in the crossover region of MSD or MSDLM the transition occurs from 
+anomalous diffusion region, $\alpha=1/2$, to the $\alpha=0$ region, because the chain 
+is anchored. By contrasting simulation results with theoretical
 expectations, insights are gained into how anchoring 
 affects chain dynamics.
 
@@ -787,16 +795,21 @@ affects chain dynamics.
 \end{figure}
 
 \autoref{fig:anchored_flex_chain_vs_rouse} shows, that by anchoring the chain
-the transition into plateau is shifted to the right, increasing the 
+the transition into a plateau is shifted to the right, increasing the 
 relaxation time (Eq. \ref{eq:rouse_relaxation_time}), 
-however the scaling behavior is visually the same. Rouse relaxation time
-of the free chain predicted using rouse model is: $\tau_R=130.16$, $\tau_0=0.941$. 
-The rouse relaxation time of the anchored chain estimated 
+however the scaling behavior is visually the same. The Rouse relaxation time
+of the free chain predicted using the Rouse model 
+is: $\tau_R=130.16$ (Eq. \ref{eq:rouse_relaxation_time}), 
+$\tau_0=0.941$ (Eq. \ref{eq:rouse_tau_0}). 
+The Rouse relaxation time of the anchored chain estimated 
 using the fit of the Eq. \ref{eq:rouse_msd_ete} with $\tau_R$ as free parameter
 to the MSD curve of acnhored chain is: 
 $\tau_R=582.3 \pm 28.6$, $\tau_0=4.21 \pm 0.07$, which is approximately $4.47$ times
-larger. The fitted curve is displayed on
-\autoref{fig:anchored_flex_chain_vs_rouse_fitted}.
+larger. The usage of $\tau_R$ as free parameter relies on the assumption, that
+the dynamics of anchored chain obeys the same equations as dynamics of free chain, 
+but with different time scales. The fitted curve is displayed on
+\autoref{fig:anchored_flex_chain_vs_rouse_fitted}. The match of 
+the fitted curve to the simulation data indirectly verifies this assumption.
 Intuitively such difference is clear, the beginning of the anchored chain
 can't move and therefore the chain needs more time to achieve the MSD limit, which
 in case of fully flexible free chain is $2Nl_b^2$ as the one can see from Eq. \ref{eq:rouse_msd_ete}. 
@@ -817,7 +830,7 @@ in case of fully flexible free chain is $2Nl_b^2$ as the one can see from Eq. \r
 \end{figure}
 
 It is possible to introduce correction factor based on the estimated $\tau_R$
-to account for boundary conditions:
+to account for the boundary conditions:
 \begin{equation}
     \label{eq:adj_factor_beta}
     \beta := \frac{\tau_{0, \textrm{empirical}}}{\tau_{0, \textrm{analytical}}} \approx 4.47
