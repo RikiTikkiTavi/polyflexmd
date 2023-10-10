@@ -335,7 +335,7 @@ of polymer chains in a theta solvent. This model simplifies the complex
 behavior of polymer chains by representing them as linear chains of noninteracting 
 connected beads inside an immobile solvent.
 
-\subsubsection{Flexible chain}
+\subsubsection{Flexible chain} \label{sec:rouse_flexible_chain}
 Firstly Rouse model for flexible free chains is introduced.
 \paragraph{Assumptions}
 The Rouse model makes certain key assumptions to facilitate its analytical treatment:
@@ -763,7 +763,7 @@ To execute this comparison, the focus is narrowed onto a specific dynamical
 quantity - the mean squared displacement of the end-to-end distance (MSD of ETE)
 further referred to as MSD.
 
-\subsubsection{Comparison to free chain}
+\subsubsection{Comparison to free chain} \label{sec:comp_to_free_chain}
 
 In this section, the investigation focuses on understanding 
 the influence of anchoring on chain dynamics. 
@@ -971,43 +971,45 @@ than the fully flexible ones within the Rouse model.
 
 \FloatBarrier
 
-\paragraph{Comparing with Rouse model predictions for semiflexible chains}
+\paragraph{Comparison with Rouse model predictions for semiflexible chains}
 
 Furthermore, the empirical MSD curves are compared to the predictions
 of the Rouse model for the semiflexible chains. The autocorrelation function
-of End-to-End vector was already discussed in Section \ref{sec:rouse_semiflex_chain}.
+of the End-to-End vector was already discussed in Section \ref{sec:rouse_semiflex_chain}.
 The MSD can be written as 
 $$\E{[\Delta \vec{R}(t)]^2} = \E{R^2(t)} - 2 \E{\vec{R}(t)\vec{R}(0)} + \E{R^2(0)} = 2(\E{R^2} - \E{\vec{R}(t)\vec{R}(0)})$$
 where the term $\E{\vec{R}(t)\vec{R}(0)}$ in case of free semiflexible chain obeys 
 the relationships discussed in Section \ref{sec:rouse_semiflex_chain}.
 
-To compare the long time case with empirical results the expression
-$2(\E{R^2} - k \exp(-t/\tau_{rot}))$ with $k$ as free paramater was fit 
-to the part of corresponding empirical MSD curves as specified in 
+To compare the long time case with empirical results, the expression
+$2(\E{R^2} - k \exp(-t/\tau_{rot}))$ with $k$ as free paramater was fitted 
+to the part of the corresponding empirical MSD curves as specified in 
 Eq. \ref{eq:autocorr_ete_coil_limit_long_time} and Eq. \ref{eq:autocorr_ete_rod_limit}.
-The result was then visually examined against empirical curve.
+The result was then visually examined against the empirical curve.
 This comparison revealed, that MSD in long time limit based on 
 Eq. \ref{eq:autocorr_ete_coil_limit_long_time} and 
-Eq. \ref{eq:autocorr_ete_rod_limit} does not correspond to empirical curves.
-However, introduction of two meaningfull free parameters ($a$, $\tau_{rot}$) is able to dismiss
-the discrepancy between theoretical approach for free chain and empirical 
-results for anchored chain:
+Eq. \ref{eq:autocorr_ete_rod_limit} does not correspond to the empirical curves.
+However, an introduction of two meaningful free parameters 
+($a$, $\tau_{rot}$) is able to dismiss
+the discrepancy between theoretical approach for the free chain and empirical 
+results for the anchored chain:
 \begin{equation}
     \label{eq:adjusted_rouse_model_ete}
-    \E{[\Delta \vec{R}(t)]^2}  = a\E{R^2}[1 - exp(-\frac{t}{\tau_{rot}})]
+    \E{[\Delta \vec{R}(t)]^2}  = a\E{R^2}\left[1 - exp\left(-\frac{t}{\tau_{rot}}\right)\right]
 \end{equation}
-The free parameter $a$ accounts for large-time limit of MSD and $\tau_{rot}$ 
-accounts location of the transition into the plateau. However, one
-can only speculate, that new $\tau_{rot}$ has the same meaning
+This equation is referred further as "Adjusted Rouse model".
+The free parameter $a$ accounts the for large-time limit of MSD and $\tau_{rot}$ 
+accounts for the location of the transition into the plateau. However, one
+can only speculate, whether the new $\tau_{rot}$ has the same meaning
 as the old one. The results of this fit are shown in 
 \autoref{fig:msd_anchored_l_K_rouse_fit_tau-a}.
-It is possible to conclude, that in case of anchored chain the proportionality
+It is possible to conclude, that in case of anchored chains the proportionality
 $\E{\vec{R}(t)\vec{R}(0)} \propto exp(-\frac{t}{\tau_{rot}})$
-holds for $t>\tau_{rot}$ but with different value (and eventually meaning) of $\tau_{rot}$.
-In case of the chains close to rod-limit the one can see that in analogy with 
-the case of free chains in rod limit there should be some analogy of 
-characteristic time $\tau_1$ (from Eq. \ref{eq:autocorr_ete_rod_limit}) which 
-is smaller then estimated $\tau_{rot}$ and where the above mentioned 
+holds for $t>\tau_{rot}$ but with a different value (and eventually meaning) of $\tau_{rot}$.
+In case of the chains close the to rod-limit one can see that in analogy with 
+the case of free chains in the rod limit there should be some analogy of 
+characteristic time $\tau_1$ (from Eq. \ref{eq:autocorr_ete_rod_limit}), which 
+is smaller than the simulated $\tau_{rot}$, and where the above mentioned 
 proportionality starts to be valid.
 
 \begin{figure}
@@ -1015,7 +1017,7 @@ proportionality starts to be valid.
     \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[width=\textwidth]{4-exp-delta_R-rouse_fit-tau-a.png}
-        \caption{normal scale}
+        \caption{linear scale}
         \label{fig:msd_anchored_l_K_rouse_fit_tau-a_normal}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
@@ -1024,26 +1026,28 @@ proportionality starts to be valid.
         \caption{log-log scale}
         \label{fig:msd_anchored_l_K_rouse_fit_tau-a_log}
     \end{subfigure}
-    \caption{Empirical MSD of ETE of anchored chains with different Kuhn length values (blue line)
-    and fit of modified Rouse model prediction for semi-flexible chains 
+    \caption{Empirical MSD of ETE of anchored chains with different Kuhn length values 
+    (blue line),
+    and fit of the modified Rouse model prediction for semiflexible chains 
     (Eq.\ref{eq:adjusted_rouse_model_ete}, dashed line) on log-log scale.
     Estimated (empirical) $\tau_{rot}$ is drawn as vertical dashed line.}
     \label{fig:msd_anchored_l_K_rouse_fit_tau-a}
 \end{figure}
 
 \vspace{0.5cm}
-Further, the case of short times is examined. To execute this comparison
-the scaling behavior of empirical MSD is analyzed. It is clear, that
+Further, the case of short times is examined. To execute this comparison,
+the scaling behavior of the empirical MSD is analyzed. It is clear, that
 $\E{[\Delta \vec{R}(t)]^2} \propto t^{\alpha(t)}$ for the small times is valid
-in analogy to scaling behavior of MSD of last monomer of free chain. 
-The scaling exponent $\alpha$ is estimated from MSD curves as 
+in analogy to the scaling behavior of MSD of the last monomer of the free chain. 
+The scaling exponent $\alpha$ is estimated from the MSD curves as 
 described in Section \ref{sec:est-alpha-msd} with $n=10$ bins. 
 The result is shown on \autoref{fig:alpha_anchored_l_K}.
-Further in this paragraph $\alpha_{min}$ refers to scaling exponent $\alpha$
-in region where the overdamped motion takes place and $t \ll \tau_{rot}$. 
-For nearly flexible chain $l_K/L = 0.03$ $\alpha_{min} \approx \frac{1}{2}$
-is observed, which matches theoretical expectations for fully flexible chain.
-For semi-flexible chains the value $\alpha_{min}$ is close to $\frac{3}{4}$, which
+Further in this paragraph $\alpha_{min}$ refers to the scaling exponent $\alpha$
+in the region in which the overdamped motion takes place and $t \ll \tau_{rot}$. 
+For the nearly flexible chain $l_K/L = 0.03$ $\alpha_{min} \approx \frac{1}{2}$
+is observed, which matches theoretical expectations for fully flexible chain 
+(section \ref{sec:rouse_flexible_chain}).
+For semiflexible chains the value $\alpha_{min}$ is close to $\frac{3}{4}$, which
 matches the scaling behavior of free chain at short times. 
 One can see, that $\alpha_{min}$ gets closer to $\frac{3}{4}$ with rising $l_K$. Larger
 scaling factor in the region $[1, 10]$ is due to transition from 
@@ -1057,10 +1061,16 @@ near the $\tau_{rot}$.
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-rouse_fit-tau-a_alpha.png}
       \caption{\label{fig:alpha_anchored_l_K}
       Scaling exponent $\alpha$ of the MSD of ETE of anchored semiflexible chain (blue points) and 
-      scaling exponent $\alpha$ of modified Rouse model prediction for semi-flexible chains 
+      scaling exponent $\alpha$ of the Adjusted Rouse model prediction for semi-flexible chains 
       (Eq.\ref{eq:adjusted_rouse_model_ete}, orange line).
       Estimated (empirical) $\tau_{rot}$ is drawn as vertical dashed line.
       Horizontal grey dashed line corresponds to $\frac{3}{4}$ value.
+      Black line on the top left plot corresponds to the scaling exponent 
+      $\alpha$ of the modified Rouse model prediction 
+      (Eq. \ref{eq:rouse_msd_ete}
+      with $\tau_R$ as free parameter, estimated in section \ref{sec:comp_to_free_chain},
+      $\tau_R \approx 582.3$) for 
+      for anchored flexible chains as explained in section \ref{sec:comp_to_free_chain}.
       }
     \end{center}
 \end{figure}
@@ -1068,8 +1078,9 @@ near the $\tau_{rot}$.
 \FloatBarrier
 
 
-\paragraph{Main-axis system perspective}
-Further, the MSD in main-axis coordinate system is analyzed.
+\paragraph{Separation of the dynamics into components parallel and perpendicular
+to the main-axis}
+Further, the MSD in main-axis coordinate system (section \ref{sec:main-axis}) is analyzed.
 \autoref{fig:msd_anchored_l_K_by_dim} shows the MSD curves in main axis system
 for each dimension. The analysis delivers following insights:
 \begin{itemize}
@@ -1078,7 +1089,7 @@ for each dimension. The analysis delivers following insights:
     \item The MSD in $z$ dimension has smaller relaxation time in case $l_K/L \ge 0.95$ 
 \end{itemize}
 The chain becomes more straight with rising stiffness and therefore has less
-movement freedom along $z$ direction, which results in smaller MSD and quicker
+freedom of movement along the $z$ direction, which results in a smaller MSD and quicker
 relaxation.
 
 \begin{figure}
@@ -1086,64 +1097,68 @@ relaxation.
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-msd_by_dim.png}
       \caption{\label{fig:msd_anchored_l_K_by_dim}
       Empirical MSD of ETE of anchored chains with different Kuhn length values in
-      main-axis coordinate system (See section \ref{sec:main-axis}).
+      main-axis coordinate system (See section \ref{sec:main-axis}). For reasons of
+      the system's symmetry, the x and y components have to behave identically.
       }
     \end{center}
 \end{figure}
 
 \FloatBarrier
 
-\subsubsection{Impact of friction coefficient of chain end}
+\subsubsection{Impact of the friction coefficient of the chain end}
 In this subsection, the focus turns to the influence 
 of the friction coefficient at the chain end on the dynamics of anchored chain with high
 stiffness.
 \\
 \\
-In the simulation this is achieved by changing the value of damp parameter of Langevin thermostat
+In the simulation this is achieved by changing the value of the damping constant 
+of the Langevin thermostat
 for the last bead of the chain. Assuming the Stokes friction, 
-changing the value of damp parameter effectively means change of the mass or change of the 
-bead diameter. The mass of the end bead is set to the $m_e = 1.5$ and friction coefficient of end bead
+changing the value of the damping parameter effectively means a change of the 
+bead diameter. The mass of the end bead is set to the $m_e = 1.5$ 
+and friction coefficient of end bead
 is varied: $\zeta_e = 10, 15$, which corresponds to the end-bead diamaters: $15, 30$.
 The reference value provides simulation of the chain with $\zeta_e=\zeta=1$ and $m_e=m=1$.
 In all 3 cases $\kappa=190.2$, which results in Kuhn length $l_K/L=6.02$. The chosen
 persistence length of the chains relative to their contour length $l_p/L=l_K/(2L)=3.01$ matches
 the one of the unbound EEA1 \cite{Singh:2022}.
 
-\paragraph{Comparing with Rouse model}
+\paragraph{Comparison with the Rouse model}
 The approach mostly follows section \ref{sec:impact_of_chain_stiffness} with an exception that
 the friction coefficient of the chain end $\zeta_e$ is varied instead of Kuhn length $l_K$ 
 of the chain. The resulting MSD curves are shown on 
-\autoref{fig:msd_anchored_zeta}. Again, Adjusted Rouse model 
-(Eq. \ref{eq:adjusted_rouse_model_ete}) is fited to
-the MSD curves: \autoref{fig:msd_anchored_zeta-arm_fit}. The one can see
+\autoref{fig:msd_anchored_zeta}. Again, the adjusted Rouse model 
+(Eq. \ref{eq:adjusted_rouse_model_ete}) is fitted to
+the MSD curves (\autoref{fig:msd_anchored_zeta-arm_fit}). One can see
 the perfect match on time scales $t > \tau_{rot}$. Also, the estimated $\tau_{rot}$
 rise with rising $\zeta_e$ and the scaling behavior on short time scales 
-varies. To investigate the scaling behavior the scaling exponent $\alpha$ is
-calculated as described in Section \ref{sec:est-alpha-msd} 
+varies. To investigate the scaling behavior, the scaling exponent $\alpha$ is
+calculated as described in section \ref{sec:est-alpha-msd} 
 within $n=20$ bins and is plotted on \autoref{fig:alpha_anchored_zeta}.
 The rouse model for semiflexible free chains predicts $\alpha=3/4$ on the
 time scales $t < \tau_{1} \ll \tau_{rot}$. To test if this holds for chains with larger
 friction coefficient of the chain end it's necessary to estimate $\alpha$ in this
-region. The $\alpha_m := \alpha \text{ for } t \ll \tau_{rot}$ is defined.
+region. We define $\alpha_m := \alpha \text{ for } t \ll \tau_{rot}$.
 Based on \emph{Nikoubashman et. al.} \cite{Nikoubashman2016} finding,
 that the crossover from ballistic motion to anomalous diffusion, as described 
 in Rouse model, lasts 2 decades of time, it is assumed, 
-that the left border of this region is given by the end of the region of ballistic
-motion of the end bead $\tau_b  := 10 \frac{m}{\zeta_e}$. The right border is
+that the left boundary of this region is given by the end of the region of ballistic
+motion of the end bead, $\tau_b  := 10 \frac{m}{\zeta_e}$. The right boundary is
 assumed to be $\tau_{rot} / 10$ to match $t \ll \tau_{rot}$ requirement.
-The borders of the region are plotted with red dashed line and vizually match
-the observed scaling behavior. The $\alpha_m$ is then calculated as the mean
+The boundaries of the region are plotted as a red dashed line and vizually match
+the observed scaling behavior. $\alpha_m$ is then calculated as the mean
 of observed $\alpha$ in the region. The measurement uncertainty is estimated
 as 3 standard deviations of the mean. All estimated quantities are summarized
-in table \ref{table:anchored_chain_zeta_estimations}. The one can see the 
+in \autoref{table:anchored_chain_zeta_estimations}. One can see the 
 small increase of $\alpha_m$ by transition from $\zeta_e=1$ to $\zeta_e=10$ and, 
 given the confidence interval, there is no difference between 
 $\alpha_m$ for $\zeta_e = 10$ and $\zeta_e=20$.
 
-\paragraph{Main-axis system perspective}
-Additionaly different dimensions of MSD in main-axis coordinate system are
-analyzed and results are shown on \autoref{fig:msd_anchored_zeta-dim}.
-The one can observe, that the visual patterns of 
+\paragraph{Separation of the dynamics into components parallel and perpendicular to
+the main axis}
+Additionaly different dimensions of the MSD in main-axis coordinate system are
+analyzed and the results are shown on \autoref{fig:msd_anchored_zeta-dim}.
+One can observe, that the visual patterns of 
 increasing $\zeta_e$ for all dimensions are the same.
 
 \begin{figure}
@@ -1151,7 +1166,7 @@ increasing $\zeta_e$ for all dimensions are the same.
     \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[width=\textwidth]{14+15+16-exp-msd.png}
-        \caption{normal scale}
+        \caption{linear scale}
         \label{fig:msd_anchored_zeta-normal}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
@@ -1175,7 +1190,7 @@ increasing $\zeta_e$ for all dimensions are the same.
     \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[width=\textwidth]{14+15+16-exp-msd-log-arm_fit.png}
-        \caption{normal scale}
+        \caption{linear scale}
         \label{fig:msd_anchored_zeta-arm_fit-normal}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
