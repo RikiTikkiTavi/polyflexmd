@@ -610,7 +610,7 @@ the minimum ($2^{1/6}\sigma_{LJ}$) of the Lennard-Jones potential.
 \label{par:bend_potential}
 An entropic worm-like potential \cite{svaneborg_2020} is introduced to control the persistence length of the chain \cite{svaneborg_2020}.
 The potential is defined by:
-\begin{equation}
+\begin{equation} \label{eq:angle_potential}
     U_{bend}(\theta) = \kappa (1 - \cos(\theta))
 \end{equation}
 
@@ -781,12 +781,14 @@ is anchored. By contrasting simulation results with theoretical
 expectations, insights are gained into how anchoring 
 affects chain dynamics.
 
-\begin{figure}
+\begin{figure}[h]
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.9cm},clip]{3-exp-fixed-param-log.png}
       \caption{\label{fig:anchored_flex_chain_vs_rouse}
-      MSD of ETE of anchored full-flexible chain vs predictions of rouse model (free chain, Eq. \ref{eq:rouse_msd_ete}).
-      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
+      MSD of ETE of an anchored fully flexible chain vs predictions of
+      the analytical Rouse model (free chain, Eq. \ref{eq:rouse_msd_ete}).
+      Filled area corresponds to the MSD curve $\pm$ 3 standard deviations of the mean. 
+      The
       line connecting data points and the filled area between data points doesn't make
       any statements about probability of measuring values in this interval and is
       added for readability.
@@ -815,13 +817,15 @@ can't move and therefore the chain needs more time to achieve the MSD limit, whi
 in case of fully flexible free chain is $2Nl_b^2$ as the one can see from Eq. \ref{eq:rouse_msd_ete}. 
 
 
-\begin{figure}
+\begin{figure}[h]
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.8cm},clip]{3-exp-free-param-log.png}
       \caption{\label{fig:anchored_flex_chain_vs_rouse_fitted}
-      MSD of ETE of anchored full-flexible chain vs fit of rouse model prediction 
+      MSD of ETE of an anchored fully flexible chain vs fit of the modified 
+      rouse model prediction 
       (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
-      Filled area corresponds MSD curve $\pm$ 3 standard deviations of the mean. The
+      Filled area corresponds to the MSD curve $\pm$ 
+      3 standard deviations of the mean. The
       blue line connecting data points and the filled area between data points doesn't make
       any statements about probability of measuring values in this interval and is
       added for readability.
@@ -835,6 +839,17 @@ to account for the boundary conditions:
     \label{eq:adj_factor_beta}
     \beta := \frac{\tau_{0, \textrm{empirical}}}{\tau_{0, \textrm{analytical}}} \approx 4.47
 \end{equation}
+\\
+In this section predictions of the analytical Rouse model for 
+the free fully flexible chains were compared to the data obtained 
+from the simulation of the anchored fully flexible chains.
+It has been found, that analytical Rouse model predictions of the MSD of the 
+free fully flexible chain (Eq. \ref{eq:rouse_msd_ete}) can describe the 
+anchored chain if $\tau_R$ is considered as free parameter. The comparison of 
+analytically calculated $\tau_R$ (Eq. \ref{eq:rouse_relaxation_time}) of the free chain
+with estimated $\tau_R$ of the anchored chain revealed, that 
+$\tau_R$ of the anchored chain is significantly (4.47 times) larger. Finally, the
+correction factor $\beta$ for $\tau_0$ was introduced to account for anchoring.
 
 \FloatBarrier
 
@@ -843,21 +858,22 @@ to account for the boundary conditions:
 Within this subsection, the focus shifts 
 toward exploring the influence of chain stiffness on
 the dynamics of anchored chains. 
-By manipulating with angle potential the MSD curves for different values
-of Kuhn length $l_K$ were measured. 
+By manipulating the angle potential (Eq. \ref{eq:angle_potential})
+the MSD curves for different values
+of the Kuhn length $l_K$ were measured. 
 The analysis provides insights into 
 how varying the chain stiffness exert an influence on the 
 dynamics exhibited by anchored chain.
 \autoref{table:kappa_values} shows the range of stiffness values examined
-in this experiment.
+in this set simulations.
 \\
 \\
-The MSD curves are plotted in \autoref{fig:msd_anchored_l_K} and logarithmic
-representation one can find in \autoref{fig:msd_anchored_l_K_log}.
+The MSD curves are plotted in \autoref{fig:msd_anchored_l_K} and the logarithmic
+representation is given in \autoref{fig:msd_anchored_l_K_log}.
 The following observations are made:
 \begin{itemize}
-    \item The relaxation time grows non-linearly with rising $l_K$
-    \item Long time MSD limit grows non-linearly with rising $l_K$,
+    \item The relaxation time grows non-linearly with increasing $l_K$
+    \item The long time MSD limit grows non-linearly with increasing $l_K$,
     however for $l_K/L >= 0.65$ it is not possible to distinguish 
     the curves any more because of the uncertainty.
 \end{itemize}
@@ -868,7 +884,7 @@ The following observations are made:
         \centering
         \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.0cm},clip]{4-exp-delta_R-bare.png}
         \caption{\label{fig:msd_anchored_l_K_normal}
-        normal scale
+        linear scale
         }
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
@@ -886,30 +902,31 @@ The following observations are made:
 \begin{table}
     
     \centering
-\begin{tabular}{rr}
-    \toprule
-    $\kappa$ & $l_K / L$ \\
-    \midrule
-    1.00 & 0.03 \\
-    11.00 & 0.33 \\
-    21.00 & 0.65 \\
-    31.00 & 0.97 \\
-    41.00 & 1.29 \\
-    51.00 & 1.60 \\
-    61.00 & 1.92 \\
-    71.00 & 2.24 \\
-    \bottomrule
-    \end{tabular}
+    \begin{tabular}{rrr}
+        \toprule
+        $\kappa$ & $N_K$ & $l_K/L$ \\
+        \midrule
+        0.00 & 63.00 & $l_b/L \approx 0.016$  \\
+        1.00 & 32.96 & 0.03 \\
+        11.00 & 3.00 & 0.33 \\
+        21.00 & 1.54 & 0.65 \\
+        31.00 & 1.03 & 0.97 \\
+        41.00 & 0.78 & 1.29 \\
+        51.00 & 0.62 & 1.60 \\
+        61.00 & 0.52 & 1.92 \\
+        71.00 & 0.45 & 2.24 \\
+        \bottomrule
+        \end{tabular}
     \caption{
         Values of $\kappa$ and corresponding $l_K$ tried in the study
-        of anchored chain dynamics.
+        of anchored chain dynamics. Contour length $L=61.11$.
         }
     \label{table:kappa_values}
 \end{table}
 
 \FloatBarrier
 
-\paragraph{Comparing with Rouse model predictions for flexible chains}
+\paragraph{Comparison with the Rouse model predictions for flexible chains}
 
 Further, the empirical results are compared to the predictions of the Rouse model.
 Firstly, the empirical results are compared to the Rouse model predictions for the fully
@@ -918,14 +935,14 @@ in \autoref{fig:msd_anchored_l_K_rouse_fit_anal}. Then the empirical
 results are compared to the Rouse model predictions for fully flexible chain 
 with $\tau_R$ as free parameter. The results of this comparison
 are displayed in \autoref{fig:msd_anchored_l_K_rouse_fit-tau}. It is clear, 
-that Rouse model predictions for fully-flexible chain doesn't match
-the observed behavior of semi-flexible anchored chains even with $\tau_R$ as 
-free parameter. There are af few possible reasons for that: 
-\begin{enumerate}
-    \item Violation of contunious chain assumption, because the small number of 
-    chain segments
-    \item Change of boundary conditions (anchoring).
-\end{enumerate}
+that the Rouse model predictions for fully flexible chain doesn't match
+the observed behavior of semiflexible anchored chains even with $\tau_R$ as 
+free parameter. This result matches the intuition, that deviations from  
+the Rouse model predictions for the free, fully flexible chains increase 
+with increasing $l_K$, because semiflexible chains require separate and more complicated
+description (section \ref{sec:rouse_semiflex_chain}), 
+than the fully flexible ones within the Rouse model.
+
 
 \begin{figure}
     \begin{center}
@@ -946,8 +963,8 @@ free parameter. There are af few possible reasons for that:
       and fit of Rouse model prediction for fully-flexible chains 
       (Eq.\ref{eq:rouse_msd_ete}) with $N_b = N_K$ if $N_K \ge 1$ or $N_b=1$ otherwise.
       $\tau_R$ is free parameter. The summation in Eq.\ref{eq:rouse_msd_ete}
-      goes not up to $N_K$ as it strictyly must, but up to number of bonds (63)
-      of fully flexible chain.
+      does not extend to $N_K$ as it should strictly do, but up to the number of bonds (63)
+      of the fully flexible chain.
       }
     \end{center}
 \end{figure}
