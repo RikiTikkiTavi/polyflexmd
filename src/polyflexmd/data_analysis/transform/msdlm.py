@@ -36,6 +36,27 @@ def extract_lm_trajectory_df(
     return gb.apply(extract_lm, meta=pd.DataFrame(columns=["x", "y", "z"]))
 
 
+def extract_fm(df_molecule_traj_step: pd.DataFrame) -> pd.Series:
+    root_atom_data: pd.Series = df_molecule_traj_step \
+        .loc[df_molecule_traj_step["type"] == constants.AtomGroup.ROOT.value] \
+        .sort_values("id", ascending=True) \
+        .iloc[0]
+
+    return root_atom_data[['x', 'y', 'z']]
+
+
+def extract_fm_trajectory_df(
+        df_trajectories: dask.dataframe.DataFrame,
+        group_by_columns: list[str],
+        time_col="t"
+) -> dask.dataframe.DataFrame:
+    """
+    Extracts first monomer positions
+    """
+    gb = df_trajectories.groupby([time_col, *group_by_columns, "molecule-ID"])
+    return gb.apply(extract_fm, meta=pd.DataFrame(columns=["x", "y", "z"]))
+
+
 def calculate_msd_lm(df_lm_t: pd.DataFrame, df_lm_t_0: pd.DataFrame) -> pd.Series:
     dims = ["x", "y", "z"]
 
@@ -127,11 +148,12 @@ def change_basis_df_lm_trajectory(df_lm_trajectory: pd.DataFrame, df_main_axis: 
     return pd.concat(dfs)
 
 
-def calculate_msd_alpha_df(df_msdlm: pd.DataFrame, n_bins: int, bins: typing.Optional[list[float]] = None, col: str = "dr_N^2"):
-
+def calculate_msd_alpha_df(df_msdlm: pd.DataFrame, n_bins: int, bins: typing.Optional[list[float]] = None,
+                           col: str = "dr_N^2"):
     def linregbin(df):
         if len(df) < 3:
-            return pd.Series([np.NAN, np.NAN, np.NAN, np.NAN, np.NAN, np.NAN], index=["t/LJ", "alpha", "delta alpha", "delta t", "interval", "count"])
+            return pd.Series([np.NAN, np.NAN, np.NAN, np.NAN, np.NAN, np.NAN],
+                             index=["t/LJ", "alpha", "delta alpha", "delta t", "interval", "count"])
         f = lambda x, k: k * x
         xs = np.log10(df["t/LJ"])
         ys = np.log10(df[col])
