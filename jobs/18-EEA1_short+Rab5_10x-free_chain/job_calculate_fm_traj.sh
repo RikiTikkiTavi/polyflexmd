@@ -16,7 +16,7 @@ source /beegfs/ws/0/s4610340-polyflexmd/polyflexmd/.venv/bin/activate
 
 python -m polyflexmd.data_analysis.transform.cli extract-fm-trajectory \
   "/beegfs/ws/0/s4610340-polyflexmd/data/experiment_results/FENE-beadspring-free_chain-vary-l_K-vary-d_end/18-EEA1_short+Rab5_10x-free_chain/ef6e4e76/data/processed/trajectories/*.csv" \
-  --style l_K \
+  --style "l_K+d_end" \
   --output-path /beegfs/ws/0/s4610340-polyflexmd/data/experiment_results/FENE-beadspring-free_chain-vary-l_K-vary-d_end/18-EEA1_short+Rab5_10x-free_chain/ef6e4e76/data/processed/fm_trajectory.csv \
   --partition "romeo" \
   --cores 6 \
