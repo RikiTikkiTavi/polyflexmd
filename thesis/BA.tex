@@ -1290,39 +1290,39 @@ Long term limits of are not affected by the damping constant.
 
 \subsection{Free chain dynamics}
 The following section focuses on the study of the dynamics of the 
-free polymer chains. Specifically the the focus is on the verification
+free polymer chains. Specifically the focus is on the verification
 of the hypothesis arising from the discussion in the paper of 
 Singh \emph{et. al.} \cite{Singh:2022}. Their work shows, that upon the 
-binding of RAB5 to the EEA1 the scaling behavior of MSDLM in 
-early time regime shifts from $3/4$ to the $2/3$. This behavior is explained
+binding of RAB5 to the EEA1 the scaling behavior of MSDLM shifts in 
+the early time regime from $3/4$ to the $2/3$. This behavior is explained
 with the change of stiffness of the EEA1 upon the binding of RAB5, because
 the scaling regime of MSDLM $\alpha=3/4$ corresponds the chains in the rod limit
 and the $\alpha=2/3$ to the fully flexible chains in presence of excluded
-volume interactions. The persistence length is estimated \emph{inderectly} by 
-fitting the equation of MSDLM \cite{Singh:2022} derived in 
-the Hinczewski \emph{et al.} \cite{Hinczewski_2009}. Therefore this approach does
-not proove that change of scaling behavior is caused by exactly the change
+volume interactions. The persistence length is estimated \emph{indirectly} by 
+fitting the equation of MSDLM \cite{Singh:2022} derived by 
+Hinczewski \emph{et al.} \cite{Hinczewski_2009}. Therefore this approach does
+not proove that a change of the scaling behavior is necessarily caused by the change
 of stiffness. An other factor possibly affecting the scaling behavior
-is the increased friction coefficient of the end of the chain caused by 
+is the increased friction coefficient of the end of the chain caused by the
 bonded RAB5. Hence in this section the impact of the increased friction 
 coefficient of the chain end ($\zeta_e$) on the scaling behavior of MSDLM is explored.
-Additionally is checked if by changing the chain $l_p$ from the 
+Additionally it is checked whether by changing the chain $l_p$ from the 
 esimated for EEA1 value ($l_p/L_{\text{EEA1}} \approx 3.01$ \cite{Singh:2022}) to
 the estimated for EEA1+RAB5 value 
-($l_p/L_{\text{EEA1+RAB5}} \approx 0.3$ \cite{Singh:2022}) causes the 
-similar to experimentally observed change of scaling behavior.
+($l_p/L_{\text{EEA1+RAB5}} \approx 0.3$ \cite{Singh:2022}) causes a change of its 
+scaling behavior similar to the experimentally observed change.
 Some simplifications are made to reduce the computational resources
 requirements and implementation complexity of simulation and analysis:
-the number of beads of the chain is set to $N_b=64$ which results in 
-contour length $L=61.11\text{LJ}$ which is smaller then the contour length of EEA1
+the number of beads of the chain is set to $N_b=64$ which results in a
+contour length $L=61.11\text{LJ}$, which is smaller than the contour length of EEA1,
 $L_{\text{EEA1}}\approx222\text{nm}$.
 \\
 \\
-The obtained MSDLM curves are shown on the \autoref{fig:msd_free}, the 
-estimated scaling behavior on the \autoref{fig:alpha_free} and the 
+The obtained MSDLM curves are shown in \autoref{fig:msd_free}, the 
+estimated scaling behavior in \autoref{fig:alpha_free} and the 
 corresponding $\alpha_{min}$ values are available in \autoref{table:free_chain_alpha_estimations}.
-For the plausibility check the estimated scaling behavior of full flexible free chain is
-displayed on \autoref{fig:alpha_free_full_flex}. 
+As a plausibility check the estimated scaling behavior of fully flexible free chains is
+displayed in \autoref{fig:alpha_free_full_flex}. 
 \\
 \\
 Firstly, the $\alpha_{min} \approx 0.727$
