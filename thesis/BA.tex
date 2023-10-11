@@ -508,11 +508,11 @@ in the rod limit ($l_p \gg L$) is given by \cite{Nikoubashman2016}:
     \end{cases}
 \end{equation}
 with $\tau_1$ given by \cite{Nikoubashman2016}:
-\begin{equation}
+\begin{equation} \label{eq:tau_1_rod_limit}
     \tau_1 \approx \tau_0 L^4 / (l_p l_b^3) \quad \text{if} \quad l_p \gg L
 \end{equation}
 and $\tau_{rot}$ given by \cite{Nikoubashman2016}: 
-\begin{equation}
+\begin{equation} \label{eq:tau_rot_rod_limit}
     \tau_{rot} \approx \tau_0 (L/l_b)^3
 \end{equation}
 and $\Gamma$ referring to $\Gamma$-function.
@@ -972,6 +972,7 @@ than the fully flexible ones within the Rouse model.
 \FloatBarrier
 
 \paragraph{Comparison with Rouse model predictions for semiflexible chains}
+\label{sec:comp_with_rouse_semiflex}
 
 Furthermore, the empirical MSD curves are compared to the predictions
 of the Rouse model for the semiflexible chains. The autocorrelation function
@@ -1006,7 +1007,7 @@ as the old one. The results of this fit are shown in
 It is possible to conclude, that in case of anchored chains the proportionality
 $\E{\vec{R}(t)\vec{R}(0)} \propto exp(-\frac{t}{\tau_{rot}})$
 holds for $t>\tau_{rot}$ but with a different value (and eventually meaning) of $\tau_{rot}$.
-In case of the chains close the to rod-limit one can see that in analogy with 
+In case of the chains close to the rod-limit one can see that in analogy with 
 the case of free chains in the rod limit there should be some analogy of 
 characteristic time $\tau_1$ (from Eq. \ref{eq:autocorr_ete_rod_limit}), which 
 is smaller than the simulated $\tau_{rot}$, and where the above mentioned 
@@ -1106,6 +1107,7 @@ relaxation.
 \FloatBarrier
 
 \subsubsection{Impact of the friction coefficient of the chain end}
+\label{sec:impact_of_zeta_e}
 In this subsection, the focus turns to the influence 
 of the friction coefficient at the chain end on the dynamics of anchored chain with high
 stiffness.
@@ -1155,7 +1157,7 @@ given the confidence interval, there is no difference between
 $\alpha_m$ for $\zeta_e = 10$ and $\zeta_e=20$.
 
 \paragraph{Separation of the dynamics into components parallel and perpendicular to
-the main axis}
+the main-axis}
 Additionaly different dimensions of the MSD in main-axis coordinate system are
 analyzed and the results are shown on \autoref{fig:msd_anchored_zeta-dim}.
 One can observe, that the visual patterns of 
@@ -1232,10 +1234,12 @@ increasing $\zeta_e$ for all dimensions are the same.
     \includegraphics[width=\textwidth]{14+15+16-exp-alpha.png}
     \caption{Scaling exponent $\alpha$ of MSD of ETE 
     of anchored chains with different values of
-    friction coefficient of the chain end $\zeta_e$ (blue dots);
-    Scaling exponent $\alpha$ of corresponding fit
-    of the Adjusted Rouse model (Eq.\ref{eq:adjusted_rouse_model_ete}, 
-    orange line); Estimated scaling exponent for the time interval
+    friction coefficient of the chain end $\zeta_e$ (blue dots).
+    Scaling exponent $\alpha$ of corresponding fit 
+    (section \ref{sec:impact_of_zeta_e}, 
+    paragraph: Comparison with the Rouse model)
+    of the adjusted Rouse model (Eq.\ref{eq:adjusted_rouse_model_ete}, 
+    orange line). Estimated scaling exponent for the time interval
     $t \ll \tau_{rot}$: $\alpha_m$ (grey dashed line); Red dashed lines
     correspond to $\alpha_m$ scaling region which is estimated as:
     $[10 \frac{m}{\zeta_e}, \frac{\tau_{rot}}{10}]$
@@ -1259,11 +1263,28 @@ increasing $\zeta_e$ for all dimensions are the same.
     \end{subfigure}
     \caption{
         Empirical MSD of ETE of anchored chains with different values of
-        friction coefficient of the chain end $\zeta_e$ in main-axis system
+        the friction coefficient of the chain end $\zeta_e$ in main-axis system
         by dimension.
     }
     \label{fig:msd_anchored_zeta-dim}
 \end{figure}
+
+\paragraph{Summary}
+To summarize the findings of Section \ref{sec:impact_of_chain_stiffness}, we note:
+A higher friction of the chain end slows down the overall dynamics of the chain and leads
+to a delayed plateau phase. The expected (Eq. \ref{eq:autocorr_ete_rod_limit}) 
+proportionality for longer time scales
+$\E{\vec{R}(t)\vec{R}(0)} \propto \exp\left(-\frac{t}{\tau_{rot}}\right)$
+holds for $t > \tau_{rot}$, however estimated $\tau_{rot}$ have different value and
+eventually meaning than the analytical one (Eq. \ref{eq:tau_rot_rod_limit}).
+Also, \autoref{fig:msd_anchored_zeta-arm_fit-log} shows, that there might be 
+some analogy of characteristic time $\tau_1 < \tau_{rot}$ (Eq. \ref{eq:tau_1_rod_limit})
+where above mentioned proportionality starts to be valid in analogy with Rouse model
+predictions for the free semiflexible chains. On shorter timescales $t \ll \tau_{rot}$
+scaling exponent $\alpha$ increases (\autoref{table:anchored_chain_zeta_estimations})
+when $\zeta_e$ is increased from 1.0 to 10.0 and is not in agreement with 
+Rouse model predictions for free semiflexible chains (section \ref{sec:rouse_semiflex_chain}).
+Long term limits of are not affected by the damping constant.
 
 \FloatBarrier
 
