@@ -1318,43 +1318,62 @@ contour length $L=61.11\text{LJ}$, which is smaller than the contour length of E
 $L_{\text{EEA1}}\approx222\text{nm}$.
 \\
 \\
-The obtained MSDLM curves are shown in \autoref{fig:msd_free}, the 
-estimated scaling behavior in \autoref{fig:alpha_free} and the 
-corresponding $\alpha_{min}$ values are available in \autoref{table:free_chain_alpha_estimations}.
+When doing the analysis of the simulation data it is possible to 
+calculate MSDLM of the one or another
+chain end. In case of the symmetric chains, where $\zeta_e=\zeta=1$, both ends should 
+deliver the similar (within confidence interval) results. In case of asymmetric chains,
+where $\zeta_e > \zeta$, the results can be different. In this study
+both chain ends are analyzed. We refer to the chain end, for which $\zeta_e$ is set,
+as larger chain end and to the chain end, for which $\zeta$ is never changed, as 
+smaller chain end. The smaller chain end corresponds to the 
+chain end measured by Singh \emph{et al.} \cite{Singh:2022}.
+\\
+\\
+For the larger chain end the obtained MSDLM curves are shown in 
+\autoref{fig:msd_free}, the estimated scaling 
+behavior in \autoref{fig:alpha_free} and the 
+corresponding $\alpha_{min}$ values are available in 
+\autoref{table:free_chain_alpha_estimations}.
+For the smaller chain end the obtained MSDLM curves are shown in 
+\autoref{fig:msd_fm_free}, the estimated scaling 
+behavior in \autoref{fig:alpha_fm_free} and the 
+corresponding $\alpha_{min}$ values are available in 
+\autoref{table:free_chain_alpha_estimations_fm}.
 As a plausibility check the estimated scaling behavior of fully flexible free chains is
 displayed in \autoref{fig:alpha_free_full_flex}. 
 \\
 \\
+\paragraph{Larger chain end}
 Firstly, the $\alpha_{min} \approx 0.727$
 in case $l_K/L=6.02$ approaches the expected value for the chain in the rod limit ($3/4$) 
 and the $\alpha_{min} \approx 0.5$ (\autoref{fig:alpha_free_full_flex}) in 
-case of the full flexible chain matches  almost exactly the expected value 
+case of the full flexible chain matches almost exactly the expected value 
 ($1/2$), which is a good hint towards the results plausibility.
 \\
 \\
-Secondly, the drop of $\alpha_{min}$ observed 
-($0.727\pm0.001 \rightarrow 0.659\pm0.002 \Rightarrow \Delta\approx0.068$) by transition from $l_K/L=6.02$
-to the $l_K/L=0.6$. 
-Surprisingly both values are very close (however outside of CI) to the ones
+Secondly, a drop of $\alpha_{min}$ is observed 
+($0.727\pm0.001 \rightarrow 0.659\pm0.002 \Rightarrow \Delta\approx0.068$) during the
+transition from $l_K/L=6.02$ to the $l_K/L=0.6$ (\autoref{fig:alpha_free}). 
+Both values are very close (however outside of CI) to the ones
 of Singh \emph{et al.} \cite{Singh:2022}.
 However, in case $l_K/L=0.6$ the $\alpha_{min}$ is 
-far larger then $a_{min}$ of full flexible chain in contrast with the results
-of Singh \emph{et al.} \cite{Singh:2022} where the $\alpha_{min}=2/3$ match 
-the one of full-flexible chain, taking into account the presence of 
+far larger then $a_{min}$ of fully flexible chain in contrast with the results
+of Singh \emph{et al.} \cite{Singh:2022} ($\alpha_{min} \approx 3/4$ for EEA1 and 
+$\alpha_{min} \approx 2/3$ for EEA1+RAB5) 
+where $\alpha_{min}=2/3$ matches 
+the one of the fully flexible chain, taking into account the presence of 
 excluded volume interactions.
 \\
 \\
-Thirdly, it is observed, that 
-increased $\zeta_e$ causes non-neglible increase of $\alpha_{min}$:
-\begin{itemize}
-    \item In case $l_K/L=6.02$: $0.727 \pm 0.001 \rightarrow 0.803 \pm 0.001$ $\Rightarrow$ $\Delta\approx0.076$
-    \item In case $l_K/L=0.6$: $0.659 \pm 0.002 \rightarrow 0.775 \pm 0.001$ $\Rightarrow$ $\Delta\approx0.116$
-\end{itemize}
-Given also the MSDLM curves in \autoref{fig:msd_free}, the one can conclude,
+Thirdly, it is observed, that an
+increase of $\zeta_e$ causes a non-neglible increase of $\alpha_{min}$:
+In case $l_K/L=6.02$ from $0.727 \pm 0.001$ to $0.803 \pm 0.001$, $\Delta\approx0.076$.
+In case $l_K/L=0.6$ from $0.659 \pm 0.002$ to $0.775 \pm 0.001$, $\Delta\approx0.116$.
+Given also the MSDLM curves in \autoref{fig:msd_free}, one can conclude,
 that the change in $\zeta_e$ affects the dynamics of the chains which is reflected in
-the bahavior of MSDLM. Therefore when using the fit of analytical expression of MSDLM
+the behavior of MSDLM. Therefore when using the fit of analytical expression of MSDLM
 to the empirical MSDLM to estimate some properties of the chain, one needs to account
-for increased $\zeta_e$ to obtain more precise estimates.
+for the increased $\zeta_e$ to obtain more precise estimates.
 
 
 \begin{figure}
@@ -1362,7 +1381,7 @@ for increased $\zeta_e$ to obtain more precise estimates.
     \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[width=\textwidth]{17+18+19+20-exp-msd.png}
-        \caption{normal scale}
+        \caption{linear scale}
         \label{fig:msd_free-normal}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
@@ -1375,6 +1394,7 @@ for increased $\zeta_e$ to obtain more precise estimates.
         Empirical MSD of chain end (MSDLM) of free chains
         with different stiffness and end-bead friction values and
         Rouse model prediction for fully flexible chains.
+        The larger end of the chain was measured.
     }
     \label{fig:msd_free}
 \end{figure}
@@ -1385,6 +1405,7 @@ for increased $\zeta_e$ to obtain more precise estimates.
     \caption{Scaling exponent $\alpha$ of MSD of chain end (MSDLM) 
     of free chains with different stiffness and end-bead friction values;
     Grey dashed lines correspond to $3/4$, $2/3$, $1/2$ values.
+    The larger end of the chain was measured. 
     }
     \label{fig:alpha_free}
 \end{figure}
@@ -1415,9 +1436,64 @@ for increased $\zeta_e$ to obtain more precise estimates.
     \caption{
         Free chains with different stiffness and end-bead friction values: 
         Estimated values of the minimum of the scaling exponent $\alpha$ and
-        characteristic time scales.
+        characteristic time scales. The larger chain end is measured.
     }
     \label{table:free_chain_alpha_estimations}
+\end{table}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{17+18+19+20-exp-msd-fm.png}
+        \caption{linear scale}
+        \label{fig:msd_fm_free-normal}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{17+18+19+20-exp-msd-fm-log.png}
+        \caption{log-log scale}
+        \label{fig:msd_fm_free-log}
+    \end{subfigure}
+    \caption{
+        Empirical MSD of chain end (MSDLM) of free chains
+        with different stiffness and end-bead friction values and
+        Rouse model prediction for fully flexible chains.
+        The smaller end of the chain was measured.
+    }
+    \label{fig:msd_fm_free}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{17+18+19+20-exp-alpha-fm.png}
+    \caption{Scaling exponent $\alpha$ of MSD of chain end (MSDLM) 
+    of free chains with different stiffness and end-bead friction values;
+    Grey dashed lines correspond to $3/4$, $2/3$, $1/2$ values.
+    The smaller end of the chain was measured. 
+    }
+    \label{fig:alpha_fm_free}
+\end{figure}
+
+\begin{table}[p]
+    \centering
+    
+    \begin{tabular}{rrlllrrr}
+        \toprule
+        $\zeta_e$ & $l_K/L$ & $\tau_1$ & $\tau_b$ & $\tau_0$ & $\alpha_{min}$ & $\Delta \alpha_{min}$ \\
+        \midrule
+        1 & 6.02 & 78162.53 & 11.00 & 0.94 & 0.731 & 0.016 \\
+        10 & 6.02 & 781625.32 & 1.65 & 9.41 & 0.668 & 0.018 \\
+        1 & 0.6 & 6352.27 & 11.00 & 0.94 & 0.652 & 0.002 \\
+        10 & 0.6 & 63522.69 & 1.65 & 9.41 & 0.640 & 0.002 \\
+        \bottomrule
+        \end{tabular}
+    \caption{
+        Free chains with different stiffness and end-bead friction values: 
+        Estimated values of the minimum of the scaling exponent $\alpha$ and
+        characteristic time scales. The smaller chain end is measured.
+    }
+    \label{table:free_chain_alpha_estimations_fm}
 \end{table}
 
 \section{Summary and Outlook}

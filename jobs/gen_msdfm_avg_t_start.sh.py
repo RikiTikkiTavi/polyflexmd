@@ -27,7 +27,7 @@ python -m polyflexmd.data_analysis.transform.cli calculate-msdlm-avg-over-t-star
 
 experiments = [
     {
-        "path": "/beegfs/ws/0/s4610340-polyflexmd/data/experiment_results/FENE-beadspring-free_chain-vary-l_K/17-EEA1_short-free_chain/538accb2",
+        "path": "/beegfs/ws/0/s4610340-polyflexmd/data/experiment_results/FENE-beadspring-free_chain-vary-l_K/17-EEA1_short-free_chain/ef6e4e76",
         "style": "l_K",
         "name": "17-EEA1_short-free_chain"
     },
