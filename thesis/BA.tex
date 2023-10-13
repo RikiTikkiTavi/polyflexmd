@@ -1319,7 +1319,7 @@ $L_{\text{EEA1}}\approx222\text{nm}$.
 \\
 \\
 When doing the analysis of the simulation data it is possible to 
-calculate MSDLM of the one or another
+calculate MSD of the one or another
 chain end. In case of the symmetric chains, where $\zeta_e=\zeta=1$, both ends should 
 deliver the similar (within confidence interval) results. In case of asymmetric chains,
 where $\zeta_e > \zeta$, the results can be different. In this study
@@ -1345,19 +1345,48 @@ displayed in \autoref{fig:alpha_free_full_flex}.
 \\
 \paragraph{Larger chain end}
 Firstly, the $\alpha_{min} \approx 0.727$
-in case $l_K/L=6.02$ approaches the expected value for the chain in the rod limit ($3/4$) 
-and the $\alpha_{min} \approx 0.5$ (\autoref{fig:alpha_free_full_flex}) in 
-case of the full flexible chain matches almost exactly the expected value 
-($1/2$), which is a good hint towards the results plausibility.
+in case $l_K/L=6.02$, $\zeta_e=\zeta=1$ approaches the expected value for 
+the chain in the rod limit ($3/4$) 
+and the $\approx 0.5$ (\autoref{fig:alpha_free_full_flex}) in 
+case of the fully flexible chain matches almost exactly the expected value 
+($1/2$), which indicates a high reliability of the method.
 \\
 \\
 Secondly, a drop of $\alpha_{min}$ is observed 
-($0.727\pm0.001 \rightarrow 0.659\pm0.002 \Rightarrow \Delta\approx0.068$) during the
-transition from $l_K/L=6.02$ to the $l_K/L=0.6$ (\autoref{fig:alpha_free}). 
-Both values are very close (however outside of CI) to the ones
+(from $0.727\pm0.001$ to $0.659\pm0.002$, $\Delta\approx0.068$) during the
+transition from $l_K/L=6.02$ to the $l_K/L=0.6$ by $\zeta_e=\zeta=1$ 
+(\autoref{fig:alpha_free}).
+\\
+\\
+Thirdly, it is observed, that an
+increase of the $\zeta_e$ from the $\zeta_e=\zeta=1$ to the $\zeta_e=10$ causes a 
+non-neglible increase of $\alpha_{min}$:
+In case $l_K/L=6.02$ from $0.727 \pm 0.001$ to $0.803 \pm 0.001$, $\Delta\approx0.076$.
+In case $l_K/L=0.6$ from $0.659 \pm 0.002$ to $0.775 \pm 0.001$, $\Delta\approx0.116$.
+Given also the MSDLM curves in \autoref{fig:msd_free}, one can conclude,
+that the change in $\zeta_e$ affects the dynamics of the chains which is reflected in
+the behavior of MSD of larger chain end. Therefore when using the fit of 
+analytical expression of MSDLM
+to the empirical MSD of larger chain end to estimate some properties of the chain, 
+one needs to account for the increased $\zeta_e$ to obtain more precise estimates.
+
+\paragraph{Smaller chain end}
+Firstly, we note, that the $\alpha_{min} = 0.73 \pm 0.02$
+in case $l_K/L=6.02$, $\zeta_e=\zeta=1$ approaches the expected value for 
+the chain in the rod limit ($3/4$) and the $\alpha_{min} = 0.652 \pm 0.002$ in case
+$l_K/L=0.6$, $\zeta_e=\zeta=1$ is between $1/2$ and $3/4$ in agreement with the 
+theoretical expectations. This is, similarly to the case of larger chain end, 
+an indication of the high reliability of the method.
+\\
+\\
+Secondly, a drop of $\alpha_{min}$ is observed 
+(from $0.73\pm0.02$ to $0.652\pm0.002$, $\Delta\approx0.08$) during the
+transition from $l_K/L=6.02$ to the $l_K/L=0.6$ by $\zeta_e=\zeta=1$ 
+(\autoref{fig:alpha_fm_free}). Both values are very close 
+(however second one is outside of the CI) to the ones
 of Singh \emph{et al.} \cite{Singh:2022}.
 However, in case $l_K/L=0.6$ the $\alpha_{min}$ is 
-far larger then $a_{min}$ of fully flexible chain in contrast with the results
+far larger then $\alpha_{min}$ of fully flexible chain in contrast with the results
 of Singh \emph{et al.} \cite{Singh:2022} ($\alpha_{min} \approx 3/4$ for EEA1 and 
 $\alpha_{min} \approx 2/3$ for EEA1+RAB5) 
 where $\alpha_{min}=2/3$ matches 
@@ -1366,14 +1395,24 @@ excluded volume interactions.
 \\
 \\
 Thirdly, it is observed, that an
-increase of $\zeta_e$ causes a non-neglible increase of $\alpha_{min}$:
-In case $l_K/L=6.02$ from $0.727 \pm 0.001$ to $0.803 \pm 0.001$, $\Delta\approx0.076$.
-In case $l_K/L=0.6$ from $0.659 \pm 0.002$ to $0.775 \pm 0.001$, $\Delta\approx0.116$.
-Given also the MSDLM curves in \autoref{fig:msd_free}, one can conclude,
-that the change in $\zeta_e$ affects the dynamics of the chains which is reflected in
-the behavior of MSDLM. Therefore when using the fit of analytical expression of MSDLM
-to the empirical MSDLM to estimate some properties of the chain, one needs to account
-for the increased $\zeta_e$ to obtain more precise estimates.
+increase of the $\zeta_e$ from the $\zeta_e=\zeta=1$ to the $\zeta_e=10$ causes, in contrast
+to the larger chain end, a non-neglible decrease of the $\alpha_{min}$:
+In case $l_K/L=6.02$ from $0.73 \pm 0.02$ to $0.67 \pm 0.02$, $\Delta=0.06\pm0.03$.
+In case $l_K/L=0.6$ from $0.652 \pm 0.002$ to $0.640 \pm 0.002$, $\Delta=0.012\pm0.003$.
+One can conclude, that a
+change of the friction coefficient of the chain end affects the scaling behavior
+of the MSD of the smaller chain end, decreasing corresponding scaling exponent $\alpha$ 
+in the region of the subdiffusive motion. However, the influence decreases with 
+decreasing stiffness of the chain.
+\\
+\\
+Furthermore, analyzing transition from $l_K/L=6.02$, $\zeta_e=1$ 
+to the $l_K/L=6.02$, $\zeta_e=10$, which models the transition from 
+EEA1 to the EEA1+RAB5, one can see the decrease of the $\alpha_{min}$ from
+the $0.73 \pm 0.02$ to the $0.64 \pm 0.002$, $\Delta=0.09 \pm 0.02$.
+This result is qualitatively and quantitatively comptatible with the change
+of $\alpha_{min}$ observed by Singl \emph{et al.} \cite{Singh:2022} 
+(from $3/4$ to the $2/3$, $\Delta\approx0.083$). 
 
 
 \begin{figure}
@@ -1482,10 +1521,10 @@ for the increased $\zeta_e$ to obtain more precise estimates.
         \toprule
         $\zeta_e$ & $l_K/L$ & $\tau_1$ & $\tau_b$ & $\tau_0$ & $\alpha_{min}$ & $\Delta \alpha_{min}$ \\
         \midrule
-        1 & 6.02 & 78162.53 & 11.00 & 0.94 & 0.731 & 0.016 \\
-        10 & 6.02 & 781625.32 & 1.65 & 9.41 & 0.668 & 0.018 \\
-        1 & 0.6 & 6352.27 & 11.00 & 0.94 & 0.652 & 0.002 \\
-        10 & 0.6 & 63522.69 & 1.65 & 9.41 & 0.640 & 0.002 \\
+        1 & 6.02 & 78162.53 & 1.65 & 0.94 & 0.73 & 0.02 \\
+        10 & 6.02 & 781625.32 & 1.65 & 0.94 & 0.67 & 0.02 \\
+        1 & 0.6 & 6352.27 & 1.65 & 0.94 & 0.652 & 0.002 \\
+        10 & 0.6 & 63522.69 & 1.65 & 0.94 & 0.640 & 0.002 \\
         \bottomrule
         \end{tabular}
     \caption{
