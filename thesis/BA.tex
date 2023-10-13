@@ -1288,7 +1288,7 @@ Long term limits of are not affected by the damping constant.
 
 \FloatBarrier
 
-\subsection{Free chain dynamics}
+\subsection{Free chain dynamics} \label{sec:free_chain_dynamicss}
 The following section focuses on the study of the dynamics of the 
 free polymer chains. Specifically the focus is on the verification
 of the hypothesis arising from the discussion in the paper of 
@@ -1379,13 +1379,21 @@ theoretical expectations. This is, similarly to the case of larger chain end,
 an indication of the high reliability of the method.
 \\
 \\
-Secondly, a drop of $\alpha_{min}$ is observed 
-(from $0.73\pm0.02$ to $0.652\pm0.002$, $\Delta\approx0.08$) during the
-transition from $l_K/L=6.02$ to the $l_K/L=0.6$ by $\zeta_e=\zeta=1$ 
-(\autoref{fig:alpha_fm_free}). Both values are very close 
+Secondly, a drop of $\alpha_{min}$ is observed during the transition from $l_K/L=6.02$ to the $l_K/L=0.6$ by $\zeta_e=\zeta=1$ 
+(\autoref{fig:alpha_fm_free}, a $\rightarrow$ c):
+\begin{equation} \label{eq:alpha_min_l_p_trans}
+    \begin{aligned}
+        & \alpha_{min}(a):= \alpha_{min}(l_K/L=6.02,\zeta_e=1) = 0.73\pm0.02 \\
+        & \alpha_{min}(c):= \alpha_{min}(l_K/L=0.6,\zeta_e=1) = 0.652 \pm 0.002 \\
+        & \Delta \alpha_{min} (a \rightarrow c) := \Delta \alpha_{min}(l_K/L=6.02,\zeta_e=1 \rightarrow l_K/L=0.6,\zeta_e=1) = 0.08 \pm 0.02
+    \end{aligned}
+\end{equation}  
+Both values are very close 
 (however second one is outside of the CI) to the ones
-of Singh \emph{et al.} \cite{Singh:2022}.
-However, in case $l_K/L=0.6$ the $\alpha_{min}$ is 
+of Singh \emph{et al.} \cite{Singh:2022}. Moreover, $\Delta \alpha_{min} (a \rightarrow c)$
+is in agreement with the change of $\alpha_{min}$ from EEA1 to EEA1+RAB5 ($\approx 0.083$)
+obtained by Singh \emph{et al.} \cite{Singh:2022}.
+However, in case $l_K/L=0.6$ the $\alpha_{min}$ is
 far larger then $\alpha_{min}$ of fully flexible chain in contrast with the results
 of Singh \emph{et al.} \cite{Singh:2022} ($\alpha_{min} \approx 3/4$ for EEA1 and 
 $\alpha_{min} \approx 2/3$ for EEA1+RAB5) 
@@ -1397,22 +1405,38 @@ excluded volume interactions.
 Thirdly, it is observed, that an
 increase of the $\zeta_e$ from the $\zeta_e=\zeta=1$ to the $\zeta_e=10$ causes, in contrast
 to the larger chain end, a non-neglible decrease of the $\alpha_{min}$:
-In case $l_K/L=6.02$ from $0.73 \pm 0.02$ to $0.67 \pm 0.02$, $\Delta=0.06\pm0.03$.
-In case $l_K/L=0.6$ from $0.652 \pm 0.002$ to $0.640 \pm 0.002$, $\Delta=0.012\pm0.003$.
+\begin{equation}
+    \begin{aligned} \label{eq:alpha_min_zeta_e_trans}
+        & \alpha_{min}(b) := \alpha_{min}(l_K/L=6.02, \zeta_e=10) = 0.67 \pm 0.02 \\
+        & \alpha_{min}(d) := \alpha_{min}(l_K/L=0.6, \zeta_e=10) = 0.640 \pm 0.002 \\
+        & \Delta \alpha_{min}(a \rightarrow b) := \Delta \alpha_{min}(l_K/L=6.02,\zeta_e=1 \rightarrow l_K/L=6.02,\zeta_e=10) = 0.06\pm0.03\\
+        & \Delta \alpha_{min}(c \rightarrow d) := \Delta \alpha_{min}(l_K/L=0.6,\zeta_e=1 \rightarrow l_K/L=0.6,\zeta_e=10) = 0.012\pm0.003
+    \end{aligned}
+\end{equation}
 One can conclude, that a
 change of the friction coefficient of the chain end affects the scaling behavior
 of the MSD of the smaller chain end, decreasing corresponding scaling exponent $\alpha$ 
 in the region of the subdiffusive motion. However, the influence decreases with 
-decreasing stiffness of the chain.
+decreasing stiffness of the chain. The change $\Delta \alpha_{min}(a \rightarrow b)$ is also
+in agreement (within the CI) with the change of $\alpha_{min}$ EEA1 to EEA1+RAB5 ($\approx 0.083$)
+obtained by Singh \emph{et al.} \cite{Singh:2022}.
 \\
 \\
-Furthermore, analyzing transition from $l_K/L=6.02$, $\zeta_e=1$ 
-to the $l_K/L=6.02$, $\zeta_e=10$, which models the transition from 
-EEA1 to the EEA1+RAB5, one can see the decrease of the $\alpha_{min}$ from
-the $0.73 \pm 0.02$ to the $0.64 \pm 0.002$, $\Delta=0.09 \pm 0.02$.
-This result is qualitatively and quantitatively comptatible with the change
+Furthermore, analyzing transition $a \rightarrow d$, which models the transition from 
+EEA1 to the EEA1+RAB5, one can see the decrease of the $\alpha_{min}$:
+\begin{equation} \label{eq:alpha_min_l_p_zeta_e_trans}
+    \Delta \alpha_{min}(a \rightarrow d) := \Delta \alpha_{min}(l_K/L=6.02,\zeta_e=1 \rightarrow l_K/L=0.6,\zeta_e=10) = 0.09 \pm 0.02
+\end{equation}
+Apart from $\alpha_{min}(d)$ being close, but outside of the CI, to the $\alpha_{min}$
+of EEA1+RAB5, this result is qualitatively and quantitatively comptatible with the change
 of $\alpha_{min}$ observed by Singl \emph{et al.} \cite{Singh:2022} 
-(from $3/4$ to the $2/3$, $\Delta\approx0.083$). 
+(from $3/4$ to the $2/3$, $\Delta\approx0.083$).
+\\
+\\
+To summarize, we have shown, that the change of $\alpha{min}=3/4$ to $\alpha_{min}=2/3$
+observed by Singh \emph{et al.} \cite{Singh:2022} upon the binding of RAB5 to the EEA1
+can be caused by both, 
+stiffness transition and increase of friction coefficient of the chain end. 
 
 
 \begin{figure}
@@ -1591,19 +1615,46 @@ of the MSD were considered in the "main-axis" coordinate system, however, the ef
 increased $\zeta_e$ are vizually shown to be consistent across the different dimensions.
 
 \paragraph{Free chains}
-The specific dynamical quantity MSD of the chain end (in following: MSDLM) was 
-considered. The scaling exponent $\alpha(t)$ of MSDLM was examined. 
-It is observed, that $\alpha_{min}$ decreases from $0.727 \pm 0.001$ to $0.659 \pm 0.002$ 
-by the change of $l_p/L=3.01$ to $l_p/L=0.3$ in case $\zeta=\zeta_e=1$.
+The specific dynamical quantity, MSD of the chain end (in following: MSDLM), was evaluated for both 
+the larger chain end and the smaller chain end (following the naming convention introduced 
+in Section \ref{sec:free_chain_dynamicss}). 
+The scaling exponent $\alpha(t)$ of MSDLM was examined.
+\\
+\\
+For larger chain end we conclude: The $\alpha_{min}$ 
+significantly decreases by the change from $l_p/L=3.01$ to $l_p/L=0.3$ 
+in case of $\zeta=\zeta_e=1$. Both values are in agreement 
+with theoretical expectations.
 Furthermore it is shown, that
-by increasing the $\zeta_e$, the minimum of scaling exponent $\alpha_{min}$ is also 
+by increasing $\zeta_e$, the minimum of the scaling exponent $\alpha_{min}$ is also 
 significantly increased in both cases: rod like $l_p/L \approx 3.01$ (matches the 
 estimate for EEA1 in \cite{Singh:2022}) and
 coil like  $l_p/L \approx 0.3$ (matches the estimate for EEA1+Rab5 in \cite{Singh:2022}).
 Therefore, taking into account the observed MSDLM curves, the conclusion is made,
-that when using the fit of analytical expression of MSDLM to the empirical MSDLM 
-to estimate some properties of the chain, one needs to account
-for increased $\zeta_e$ to obtain more precise estimates.
+that when using the fit of analytical expression of MSDLM to the empirical MSD of
+larger chain end to estimate some properties of the chain, one needs to account
+for an increased $\zeta_e$ to obtain more precise estimates.
+\\
+\\
+For smaller chain end we conclude: The $\alpha_{min}$ significantly
+decreases by the change from $l_p/L=3.01$ to $l_p/L=0.3$ 
+in case of $\zeta=\zeta_e=1$. Both values are in agreement with theoretical expectations.
+The $\alpha_{min}$ for $l_p/L=3.01$, $\zeta=\zeta_e=1$ matches within the confidence interval
+the $\alpha_{min}$ of EEA1 obtained by Singh \emph{et al.} \cite{Singh:2022}.
+The $\alpha_{min}$ for $l_p/L=0.3$, $\zeta=\zeta_e=1$ does not match the 
+the $\alpha_{min}$ of EEA1+RAB5 obtained by Singh \emph{et al.} \cite{Singh:2022}, which
+can be explained with an absence of excluded volume and hydrodynamic interactions in the
+simulation. However, the difference,
+$\alpha_{min}(l_p/L=3.01, \zeta_e=1) - \alpha_{min}(l_p/L=0.3, \zeta_e=1)$, matches
+within the confidence interval the one observed by Singh \emph{et al.} \cite{Singh:2022}.
+The $\alpha_{min}$ for $l_p/L=3.01$, $\zeta=\zeta_e=1$ is i
+Furthermore it is shown, that by increasing $\zeta_e$, 
+the minimum of the scaling exponent $\alpha_{min}$ decreases, in contrast to
+$\alpha_{min}$ of the MSD of larger chain end. The corresponding differences are
+$\Delta=0.06\pm0.03$ in case $l_p/L=3.01$ and  
+$\Delta=0.012\pm0.003$ in case $l_p/L=0.3$ for the change from $\zeta_e=\zeta=1$ 
+to $\zeta_e=10$. The $\Delta$ decreases  
+
 
 \paragraph{Outlook}
 There are several limitations of this work, which can be improved in the future research.
