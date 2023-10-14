@@ -112,10 +112,10 @@
 % Gutachterseite
 \thispagestyle{empty}\vspace*{48em}
 
-Eingereicht am xx.~Monat~20xx\vspace{1.5em}
+Eingereicht am xx.~November~2023\vspace{1.5em}
 \par{\large\begin{tabular}{ll}
-        1. Gutachter: & Prof.~Dr.~XX \\
-        2. Gutachter: & Prof.~Dr.~YY \\
+        1. Gutachter: & Prof. Dr. Jens-Uwe Sommer \\
+        2. Gutachter: & Prof. Dr. Dr. Arash Nikoubashman \\
     \end{tabular}}
 
 
@@ -184,7 +184,7 @@ understood \cite{Singh:2022}. There are recent discussions in the literature
 about the role of the long dimeric coiled-coil molecules in the process
 of overcoming the distance barriers that physically separate 
 membranes \cite{Singh:2022}. Specifically, the process of membrane tethering was
-obseved, driven by the conformational changes of the early endosomal
+observed, driven by the conformational changes of the early endosomal
 tether EEA1, caused by its binding to the small GTPase Rab5 \cite{Murray2016}.
 The conformational changes of EEA1 upon the binding of Rab5 are then closely
 studied by Singh \emph{et al.} \cite{Singh:2022}. 
@@ -1389,7 +1389,8 @@ Secondly, a drop of $\alpha_{min}$ is observed during the transition from $l_K/L
     \end{aligned}
 \end{equation}  
 Both values are very close 
-(however second one is outside of the CI) to the ones
+(however second one is outside the CI, 
+which can be explained with abcent hydrodynamic and excluded volume interactions) to the ones
 of Singh \emph{et al.} \cite{Singh:2022}. Moreover, $\Delta \alpha_{min} (a \rightarrow c)$
 is in agreement with the change of $\alpha_{min}$ from EEA1 to EEA1+RAB5 ($\approx 0.083$)
 obtained by Singh \emph{et al.} \cite{Singh:2022}.
@@ -1403,7 +1404,8 @@ excluded volume interactions.
 \\
 \\
 Thirdly, it is observed, that an
-increase of the $\zeta_e$ from the $\zeta_e=\zeta=1$ to the $\zeta_e=10$ causes, in contrast
+increase of the $\zeta_e$ from the $\zeta_e=\zeta=1$ to the $\zeta_e=10$ 
+(\autoref{fig:alpha_fm_free}, $a \rightarrow b$, $c \rightarrow d$) causes, in contrast
 to the larger chain end, a non-neglible decrease of the $\alpha_{min}$:
 \begin{equation}
     \begin{aligned} \label{eq:alpha_min_zeta_e_trans}
@@ -1418,25 +1420,27 @@ change of the friction coefficient of the chain end affects the scaling behavior
 of the MSD of the smaller chain end, decreasing corresponding scaling exponent $\alpha$ 
 in the region of the subdiffusive motion. However, the influence decreases with 
 decreasing stiffness of the chain. The change $\Delta \alpha_{min}(a \rightarrow b)$ is also
-in agreement (within the CI) with the change of $\alpha_{min}$ EEA1 to EEA1+RAB5 ($\approx 0.083$)
-obtained by Singh \emph{et al.} \cite{Singh:2022}.
+in agreement (within the CI) with the change of $\alpha_{min}$ by RAB5 binding to the EEA1 
+($\approx 0.083$) obtained by Singh \emph{et al.} \cite{Singh:2022}.
 \\
 \\
-Furthermore, analyzing transition $a \rightarrow d$, which models the transition from 
+Furthermore, analyzing transition $a \rightarrow d$ (\autoref{fig:alpha_fm_free}, $a \rightarrow d$), 
+which models the transition from 
 EEA1 to the EEA1+RAB5, one can see the decrease of the $\alpha_{min}$:
 \begin{equation} \label{eq:alpha_min_l_p_zeta_e_trans}
     \Delta \alpha_{min}(a \rightarrow d) := \Delta \alpha_{min}(l_K/L=6.02,\zeta_e=1 \rightarrow l_K/L=0.6,\zeta_e=10) = 0.09 \pm 0.02
 \end{equation}
-Apart from $\alpha_{min}(d)$ being close, but outside of the CI, to the $\alpha_{min}$
+Apart from $\alpha_{min}(d)$ being close, but outside the CI 
+(which can be explained with abcent hydrodynamic and excluded volume interactions), to the $\alpha_{min}$
 of EEA1+RAB5, this result is qualitatively and quantitatively comptatible with the change
 of $\alpha_{min}$ observed by Singl \emph{et al.} \cite{Singh:2022} 
 (from $3/4$ to the $2/3$, $\Delta\approx0.083$).
 \\
 \\
-To summarize, we have shown, that the change of $\alpha{min}=3/4$ to $\alpha_{min}=2/3$
+To summarize, we have shown, that the change of $\alpha_{min}=3/4$ to $\alpha_{min}=2/3$
 observed by Singh \emph{et al.} \cite{Singh:2022} upon the binding of RAB5 to the EEA1
 can be caused by both, 
-stiffness transition and increase of friction coefficient of the chain end. 
+stiffness transition of the chain and increase of friction coefficient of the chain end. 
 
 
 \begin{figure}
@@ -1453,7 +1457,7 @@ stiffness transition and increase of friction coefficient of the chain end.
         \caption{log-log scale}
         \label{fig:msd_free-log}
     \end{subfigure}
-    \caption{
+    \caption{   
         Empirical MSD of chain end (MSDLM) of free chains
         with different stiffness and end-bead friction values and
         Rouse model prediction for fully flexible chains.
@@ -1483,7 +1487,7 @@ stiffness transition and increase of friction coefficient of the chain end.
     \label{fig:alpha_free_full_flex}
 \end{figure}
 
-\begin{table}[p]
+\begin{table}
     \centering
     
     \begin{tabular}{rrlllrrr}
@@ -1538,7 +1542,7 @@ stiffness transition and increase of friction coefficient of the chain end.
     \label{fig:alpha_fm_free}
 \end{figure}
 
-\begin{table}[p]
+\begin{table}
     \centering
     
     \begin{tabular}{rrlllrrr}
@@ -1546,9 +1550,9 @@ stiffness transition and increase of friction coefficient of the chain end.
         $\zeta_e$ & $l_K/L$ & $\tau_1$ & $\tau_b$ & $\tau_0$ & $\alpha_{min}$ & $\Delta \alpha_{min}$ \\
         \midrule
         1 & 6.02 & 78162.53 & 1.65 & 0.94 & 0.73 & 0.02 \\
-        10 & 6.02 & 781625.32 & 1.65 & 0.94 & 0.67 & 0.02 \\
+        10 & 6.02 & 78162.53 & 1.65 & 0.94 & 0.67 & 0.02 \\
         1 & 0.6 & 6352.27 & 1.65 & 0.94 & 0.652 & 0.002 \\
-        10 & 0.6 & 63522.69 & 1.65 & 0.94 & 0.640 & 0.002 \\
+        10 & 0.6 & 6352.27 & 1.65 & 0.94 & 0.640 & 0.002 \\
         \bottomrule
         \end{tabular}
     \caption{
@@ -1637,35 +1641,42 @@ for an increased $\zeta_e$ to obtain more precise estimates.
 \\
 \\
 For smaller chain end we conclude: The $\alpha_{min}$ significantly
-decreases by the change from $l_p/L=3.01$ to $l_p/L=0.3$ 
-in case of $\zeta=\zeta_e=1$. Both values are in agreement with theoretical expectations.
-The $\alpha_{min}$ for $l_p/L=3.01$, $\zeta=\zeta_e=1$ matches within the confidence interval
+decreases by the stiffness decrease $a \rightarrow c$ 
+(Eq. \ref{eq:alpha_min_l_p_trans}, \autoref{fig:alpha_fm_free}: $a$, $c$). 
+Both values are in agreement with theoretical expectations.
+The $\alpha_{min}(a)$ matches within the confidence interval
 the $\alpha_{min}$ of EEA1 obtained by Singh \emph{et al.} \cite{Singh:2022}.
-The $\alpha_{min}$ for $l_p/L=0.3$, $\zeta=\zeta_e=1$ does not match the 
-the $\alpha_{min}$ of EEA1+RAB5 obtained by Singh \emph{et al.} \cite{Singh:2022}, which
+The $\alpha_{min}(c)$ does not match the $\alpha_{min}$ of EEA1+RAB5 obtained 
+by Singh \emph{et al.} \cite{Singh:2022}, which
 can be explained with an absence of excluded volume and hydrodynamic interactions in the
 simulation. However, the difference,
-$\alpha_{min}(l_p/L=3.01, \zeta_e=1) - \alpha_{min}(l_p/L=0.3, \zeta_e=1)$, matches
+$\Delta \alpha_{min}(a \rightarrow c)$, matches
 within the confidence interval the one observed by Singh \emph{et al.} \cite{Singh:2022}.
-The $\alpha_{min}$ for $l_p/L=3.01$, $\zeta=\zeta_e=1$ is i
-Furthermore it is shown, that by increasing $\zeta_e$, 
-the minimum of the scaling exponent $\alpha_{min}$ decreases, in contrast to
-$\alpha_{min}$ of the MSD of larger chain end. The corresponding differences are
-$\Delta=0.06\pm0.03$ in case $l_p/L=3.01$ and  
-$\Delta=0.012\pm0.003$ in case $l_p/L=0.3$ for the change from $\zeta_e=\zeta=1$ 
-to $\zeta_e=10$. The $\Delta$ decreases  
+Furthermore, it is shown, that increase of the $\zeta_e$ ($a \rightarrow b$, $c \rightarrow d$) 
+causes the decreases of the $\alpha_{min}$ (Eq. \ref{eq:alpha_min_zeta_e_trans}, \autoref{fig:alpha_fm_free}),
+with an effect being smaller with decreasing stiffness. The difference, $\Delta \alpha_{min}(a \rightarrow b)$ 
+matches, within the CI, the one observed by Singh \emph{et al.} \cite{Singh:2022}.
+$\alpha_{min}(d)$ is close, however outside of the CI, 
+to the one observed by Singh \emph{et al.} \cite{Singh:2022}, which is explained with abcence of hydrodynamic
+and excluded volume interactions in the simulation. The difference, $\Delta \alpha_{min}(a \rightarrow d)$,
+is in agreement, within the CI, to the one observed by Singh \emph{et al.} \cite{Singh:2022}.
+Therefore, we have shown (taking into account the limitations of this work), 
+that the change of $\alpha_{min} = 3/4$ to $\alpha_{min} = 2/3$ observed by
+Singh \emph{et al.} \cite{Singh:2022} upon the binding of RAB5 to the EEA1 can be caused by both, stiffness
+transition of the chain and increase of friction coefficient of the chain end.
+
 
 
 \paragraph{Outlook}
 There are several limitations of this work, which can be improved in the future research.
 Firstly it is necessary to increase the chain contour length $L$ to better match both the
-theoretical requirement $l_b \ll L$ and the length of EEA1 chain. Then, the improvement 
+theoretical requirement $l_b \ll L$ and the length of the EEA1 chain. Then, an improvement 
 would be to consider a grid of $l_p$ and $\zeta_e$ values to obtain the 
 curves of characteristic times and $\alpha_{min}$ values in dependence of 
 $l_p$ and $\zeta_e$. Of specific interest is the value of $\zeta_e$ which matches 
 the value of real Rab5 bound to the end of EEA1. Finally, one needs to
-consider hydrodynamic interactions, which may have significant impact on the dynamical
-properties.  
+consider hydrodynamic and excluded volume interactions, 
+which may have significant impact on the dynamical properties.  
 
 
 % Erklärung
@@ -1673,13 +1684,13 @@ properties.
 \thispagestyle{empty}
 \minisec{Erklärung}\vspace*{1.5em}
 
-Hiermit erkläre ich, dass ich diese Arbeit im Rahmen der Betreuung am Institut
-für ??? Physik ohne unzulässige Hilfe Dritter verfasst und alle Quellen als solche gekennzeichnet habe.
+Hiermit erkläre ich, dass ich diese Arbeit im Rahmen der Betreuung am Leibniz-Institut für Polymerforschung Dresden e. V.
+ohne unzulässige Hilfe Dritter verfasst und alle Quellen als solche gekennzeichnet habe.
 
 \vspace*{45em}
 
-Vorname Nachname \par
-Dresden, Monat 2019
+Yahor Paromau \par
+Dresden, November 2023
 
 \bibliographystyle{plain}
 \bibliography{sources}
