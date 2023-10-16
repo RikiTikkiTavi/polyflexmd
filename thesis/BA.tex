@@ -1314,14 +1314,14 @@ scaling behavior similar to the experimentally observed change.
 Some simplifications are made to reduce the computational resources
 requirements and implementation complexity of simulation and analysis:
 the number of beads of the chain is set to $N_b=64$ which results in a
-contour length $L=61.11\text{LJ}$, which is smaller than the contour length of EEA1,
+contour length $L=61.11\text{LJ}$, which then corresponds to the contour length of EEA1,
 $L_{\text{EEA1}}\approx222\text{nm}$.
 \\
 \\
 When doing the analysis of the simulation data it is possible to 
-calculate MSD of the one or another
+calculate MSD of one or another
 chain end. In case of the symmetric chains, where $\zeta_e=\zeta=1$, both ends should 
-deliver the similar (within confidence interval) results. In case of asymmetric chains,
+deliver similar (within confidence interval) results. In case of asymmetric chains,
 where $\zeta_e > \zeta$, the results can be different. In this study
 both chain ends are analyzed. We refer to the chain end, for which $\zeta_e$ is set,
 as larger chain end and to the chain end, for which $\zeta$ is never changed, as 
@@ -1344,10 +1344,10 @@ displayed in \autoref{fig:alpha_free_full_flex}.
 \\
 \\
 \paragraph{Larger chain end}
-Firstly, the $\alpha_{min} \approx 0.727$
+Firstly, $\alpha_{min} \approx 0.727$
 in case $l_K/L=6.02$, $\zeta_e=\zeta=1$ approaches the expected value for 
 the chain in the rod limit ($3/4$) 
-and the $\approx 0.5$ (\autoref{fig:alpha_free_full_flex}) in 
+and $\approx 0.5$ (\autoref{fig:alpha_free_full_flex}) in 
 case of the fully flexible chain matches almost exactly the expected value 
 ($1/2$), which indicates a high reliability of the method.
 \\
@@ -1359,15 +1359,15 @@ transition from $l_K/L=6.02$ to the $l_K/L=0.6$ by $\zeta_e=\zeta=1$
 \\
 \\
 Thirdly, it is observed, that an
-increase of the $\zeta_e$ from the $\zeta_e=\zeta=1$ to the $\zeta_e=10$ causes a 
+increase of $\zeta_e$ from $\zeta_e=\zeta=1$ to $\zeta_e=10$ causes a 
 non-neglible increase of $\alpha_{min}$:
 In case $l_K/L=6.02$ from $0.727 \pm 0.001$ to $0.803 \pm 0.001$, $\Delta\approx0.076$.
 In case $l_K/L=0.6$ from $0.659 \pm 0.002$ to $0.775 \pm 0.001$, $\Delta\approx0.116$.
 Given also the MSDLM curves in \autoref{fig:msd_free}, one can conclude,
 that the change in $\zeta_e$ affects the dynamics of the chains which is reflected in
-the behavior of MSD of larger chain end. Therefore when using the fit of 
+the behavior of the MSD of the larger chain end. Therefore when using the fit of 
 analytical expression of MSDLM
-to the empirical MSD of larger chain end to estimate some properties of the chain, 
+to the empirical MSD of the larger chain end to estimate some properties of the chain, 
 one needs to account for the increased $\zeta_e$ to obtain more precise estimates.
 
 \paragraph{Smaller chain end}
@@ -1375,12 +1375,12 @@ Firstly, we note, that the $\alpha_{min} = 0.73 \pm 0.02$
 in case $l_K/L=6.02$, $\zeta_e=\zeta=1$ approaches the expected value for 
 the chain in the rod limit ($3/4$) and the $\alpha_{min} = 0.652 \pm 0.002$ in case
 $l_K/L=0.6$, $\zeta_e=\zeta=1$ is between $1/2$ and $3/4$ in agreement with the 
-theoretical expectations. This is, similarly to the case of larger chain end, 
-an indication of the high reliability of the method.
+theoretical expectations. This is, similarly to the case of the larger chain end, 
+an indication for the high reliability of the method.
 \\
 \\
 Secondly, a drop of $\alpha_{min}$ is observed during the transition from $l_K/L=6.02$ to the $l_K/L=0.6$ by $\zeta_e=\zeta=1$ 
-(\autoref{fig:alpha_fm_free}, a $\rightarrow$ c):
+(\autoref{fig:alpha_fm_free}, a $\rightarrow$ c, \autoref{fig:alpha_and_delta_alpha_fm}):
 \begin{equation} \label{eq:alpha_min_l_p_trans}
     \begin{aligned}
         & \alpha_{min}(a):= \alpha_{min}(l_K/L=6.02,\zeta_e=1) = 0.73\pm0.02 \\
@@ -1389,13 +1389,13 @@ Secondly, a drop of $\alpha_{min}$ is observed during the transition from $l_K/L
     \end{aligned}
 \end{equation}  
 Both values are very close 
-(however second one is outside the CI, 
-which can be explained with abcent hydrodynamic and excluded volume interactions) to the ones
+(however the second one is outside the CI, 
+which can be explained with absence of hydrodynamic and excluded volume interactions) to the ones
 of Singh \emph{et al.} \cite{Singh:2022}. Moreover, $\Delta \alpha_{min} (a \rightarrow c)$
 is in agreement with the change of $\alpha_{min}$ from EEA1 to EEA1+RAB5 ($\approx 0.083$)
 obtained by Singh \emph{et al.} \cite{Singh:2022}.
-However, in case $l_K/L=0.6$ the $\alpha_{min}$ is
-far larger then $\alpha_{min}$ of fully flexible chain in contrast with the results
+However, in case $l_K/L=0.6$ $\alpha_{min}$ is
+far larger than $\alpha_{min}$ of the fully flexible chain in contrast with the results
 of Singh \emph{et al.} \cite{Singh:2022} ($\alpha_{min} \approx 3/4$ for EEA1 and 
 $\alpha_{min} \approx 2/3$ for EEA1+RAB5) 
 where $\alpha_{min}=2/3$ matches 
@@ -1404,9 +1404,9 @@ excluded volume interactions.
 \\
 \\
 Thirdly, it is observed, that an
-increase of the $\zeta_e$ from the $\zeta_e=\zeta=1$ to the $\zeta_e=10$ 
+increase of $\zeta_e$ from $\zeta_e=\zeta=1$ to $\zeta_e=10$ 
 (\autoref{fig:alpha_fm_free}, $a \rightarrow b$, $c \rightarrow d$) causes, in contrast
-to the larger chain end, a non-neglible decrease of the $\alpha_{min}$:
+to the larger chain end, a non-neglible decrease of the $\alpha_{min}$ (\autoref{fig:alpha_and_delta_alpha_fm}):
 \begin{equation}
     \begin{aligned} \label{eq:alpha_min_zeta_e_trans}
         & \alpha_{min}(b) := \alpha_{min}(l_K/L=6.02, \zeta_e=10) = 0.67 \pm 0.02 \\
@@ -1424,24 +1424,24 @@ in agreement (within the CI) with the change of $\alpha_{min}$ by RAB5 binding t
 ($\approx 0.083$) obtained by Singh \emph{et al.} \cite{Singh:2022}.
 \\
 \\
-Furthermore, analyzing transition $a \rightarrow d$ (\autoref{fig:alpha_fm_free}, $a \rightarrow d$), 
+Furthermore, analyzing the transition $a \rightarrow d$ (\autoref{fig:alpha_fm_free}, $a \rightarrow d$), 
 which models the transition from 
-EEA1 to the EEA1+RAB5, one can see the decrease of the $\alpha_{min}$:
+EEA1 to the EEA1+RAB5, one can see the decrease of $\alpha_{min}$ (\autoref{fig:alpha_and_delta_alpha_fm}):
 \begin{equation} \label{eq:alpha_min_l_p_zeta_e_trans}
     \Delta \alpha_{min}(a \rightarrow d) := \Delta \alpha_{min}(l_K/L=6.02,\zeta_e=1 \rightarrow l_K/L=0.6,\zeta_e=10) = 0.09 \pm 0.02
 \end{equation}
 Apart from $\alpha_{min}(d)$ being close, but outside the CI 
-(which can be explained with abcent hydrodynamic and excluded volume interactions), to the $\alpha_{min}$
+(which can be explained with the absence of hydrodynamic 
+and excluded volume interactions), to the $\alpha_{min}$
 of EEA1+RAB5, this result is qualitatively and quantitatively comptatible with the change
 of $\alpha_{min}$ observed by Singl \emph{et al.} \cite{Singh:2022} 
 (from $3/4$ to the $2/3$, $\Delta\approx0.083$).
 \\
 \\
-To summarize, we have shown, that the change of $\alpha_{min}=3/4$ to $\alpha_{min}=2/3$
-observed by Singh \emph{et al.} \cite{Singh:2022} upon the binding of RAB5 to the EEA1
-can be caused by both, 
-stiffness transition of the chain and increase of friction coefficient of the chain end. 
-
+To summarize, we have shown, that both, stiffness transition of the chain
+and 10x increase of friction coefficient of the chain end can cause the change
+of $\alpha_{min}$, as observed by Singh \emph{et al.} \cite{Singh:2022} 
+upon the binding of RAB5 to the EEA1.
 
 \begin{figure}
     \centering
@@ -1542,6 +1542,28 @@ stiffness transition of the chain and increase of friction coefficient of the ch
     \label{fig:alpha_fm_free}
 \end{figure}
 
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{17+18+19+20-exp-alpha_min_fm.png}
+        \caption{$\alpha_{min}$, smaller end of the chain}
+        \label{fig:alpha_min_fm}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{17+18+19+20-exp-delta_alpha_min_fm.png}
+        \caption{$\Delta \alpha_{min}$, smaller end of the chain}
+        \label{fig:delta_alpha_min_fm}
+    \end{subfigure}
+    \caption{
+        $\alpha_{min}$ and $\Delta \alpha_{min}$ of the MSD of the smaller end of the free chain.
+        Notation follows \autoref{fig:alpha_fm_free}, Eq. \ref{eq:alpha_min_l_p_trans},
+        Eq. \ref{eq:alpha_min_zeta_e_trans}, Eq. \ref{eq:alpha_min_l_p_zeta_e_trans}.
+    }
+    \label{fig:alpha_and_delta_alpha_fm}
+\end{figure}
+
 \begin{table}
     \centering
     
@@ -1581,10 +1603,10 @@ $\tau_R$ as a free parameter. The estimation of $\tau_R$ for anchored fully flex
 delivers the correction factor required to account for anchoring.
 \\
 \\
-In case of semiflexible chain several conclusions are made. As expected,
-Rouse model predictions for flexible chains quickly diverge with observations made 
+In case of the semiflexible chain several conclusions can be made. As expected,
+Rouse model predictions for flexible chains quickly deviate from observations made 
 for semiflexible chains even with small stiffness ($l_p/L \approx 0.15$).
-It is shown, that MSD of anchored semiflexible chains, 
+It is shown, that the MSD of anchored semiflexible chains, 
 similar to the case of full flexible chains, obeys the same 
 proportionality ($\propto \exp\left(-\frac{t}{\tau_{rot}}\right)$) 
 as anchored semiflexible chains for longer time scales, however with
@@ -1625,7 +1647,7 @@ in Section \ref{sec:free_chain_dynamicss}).
 The scaling exponent $\alpha(t)$ of MSDLM was examined.
 \\
 \\
-For larger chain end we conclude: The $\alpha_{min}$ 
+For the larger chain end we conclude: $\alpha_{min}$ 
 significantly decreases by the change from $l_p/L=3.01$ to $l_p/L=0.3$ 
 in case of $\zeta=\zeta_e=1$. Both values are in agreement 
 with theoretical expectations.
@@ -1640,37 +1662,52 @@ larger chain end to estimate some properties of the chain, one needs to account
 for an increased $\zeta_e$ to obtain more precise estimates.
 \\
 \\
-For smaller chain end we conclude: The $\alpha_{min}$ significantly
+For the smaller chain end we conclude: $\alpha_{min}$ significantly
 decreases by the stiffness decrease $a \rightarrow c$ 
-(Eq. \ref{eq:alpha_min_l_p_trans}, \autoref{fig:alpha_fm_free}: $a$, $c$). 
+(Eq. \ref{eq:alpha_min_l_p_trans}, \autoref{fig:alpha_fm_free}: $a$, $c$, 
+\autoref{fig:alpha_and_delta_alpha_fm}). 
 Both values are in agreement with theoretical expectations.
-The $\alpha_{min}(a)$ matches within the confidence interval
-the $\alpha_{min}$ of EEA1 obtained by Singh \emph{et al.} \cite{Singh:2022}.
-The $\alpha_{min}(c)$ does not match the $\alpha_{min}$ of EEA1+RAB5 obtained 
+$\alpha_{min}(a)$ matches within the confidence interval
+$\alpha_{min}$ of EEA1 obtained by Singh \emph{et al.} \cite{Singh:2022}.
+$\alpha_{min}(c)$ does not match $\alpha_{min}$ of EEA1+RAB5 obtained 
 by Singh \emph{et al.} \cite{Singh:2022}, which
 can be explained with an absence of excluded volume and hydrodynamic interactions in the
 simulation. However, the difference,
 $\Delta \alpha_{min}(a \rightarrow c)$, matches
 within the confidence interval the one observed by Singh \emph{et al.} \cite{Singh:2022}.
 Furthermore, it is shown, that increase of the $\zeta_e$ ($a \rightarrow b$, $c \rightarrow d$) 
-causes the decreases of the $\alpha_{min}$ (Eq. \ref{eq:alpha_min_zeta_e_trans}, \autoref{fig:alpha_fm_free}),
-with an effect being smaller with decreasing stiffness. The difference, $\Delta \alpha_{min}(a \rightarrow b)$ 
+causes a decrease of $\alpha_{min}$ (Eq. \ref{eq:alpha_min_zeta_e_trans}, 
+\autoref{fig:alpha_fm_free}, \autoref{fig:alpha_and_delta_alpha_fm}),
+although this decrease is less pronounced than in the case 
+of a reduction of the chain stiffness.
+The difference, $\Delta \alpha_{min}(a \rightarrow b)$ 
 matches, within the CI, the one observed by Singh \emph{et al.} \cite{Singh:2022}.
 $\alpha_{min}(d)$ is close, however outside of the CI, 
-to the one observed by Singh \emph{et al.} \cite{Singh:2022}, which is explained with abcence of hydrodynamic
-and excluded volume interactions in the simulation. The difference, $\Delta \alpha_{min}(a \rightarrow d)$,
+to the one observed by Singh \emph{et al.} \cite{Singh:2022}, 
+which is explained with absence of hydrodynamic
+and excluded volume interactions in the simulation. 
+The difference, $\Delta \alpha_{min}(a \rightarrow d)$,
 is in agreement, within the CI, to the one observed by Singh \emph{et al.} \cite{Singh:2022}.
-Therefore, we have shown (taking into account the limitations of this work), 
-that the change of $\alpha_{min} = 3/4$ to $\alpha_{min} = 2/3$ observed by
-Singh \emph{et al.} \cite{Singh:2022} upon the binding of RAB5 to the EEA1 can be caused by both, stiffness
-transition of the chain and increase of friction coefficient of the chain end.
+Therefore, we have shown, that both, stiffness transition of the chain
+and 10x increase of friction coefficient of the chain end can cause the change
+of $\alpha_{min}$, as observed by Singh \emph{et al.} \cite{Singh:2022} 
+upon the binding of RAB5 to the EEA1. However, our simulations have overemphasized
+the effects of the larger chain end by using a 10x increase of the friction coefficient
+of the chain's end ($\zeta_e$). Therefore,
+considering that $\Delta \alpha_{min} (a \rightarrow b)$ is much less likely to match the one
+experimentally observed by Singh \emph{et al.} \cite{Singh:2022},  
+than $\Delta \alpha_{min} (a \rightarrow c)$ 
+(see \autoref{fig:alpha_and_delta_alpha_fm}), we hypothesize, that a smaller
+increase of $\zeta_e$ would not explain the change of $\alpha_{min}$ observed by
+Singh \emph{et al.} \cite{Singh:2022}.
 
 
 
 \paragraph{Outlook}
 There are several limitations of this work, which can be improved in the future research.
 Firstly it is necessary to increase the chain contour length $L$ to better match both the
-theoretical requirement $l_b \ll L$ and the length of the EEA1 chain. Then, an improvement 
+theoretical requirement $l_b \ll L$ and the length of the EEA1 chain. Also, one needs to
+consider the smaller value of $\zeta_e$ to verify our hypothesis. Then, an improvement 
 would be to consider a grid of $l_p$ and $\zeta_e$ values to obtain the 
 curves of characteristic times and $\alpha_{min}$ values in dependence of 
 $l_p$ and $\zeta_e$. Of specific interest is the value of $\zeta_e$ which matches 
