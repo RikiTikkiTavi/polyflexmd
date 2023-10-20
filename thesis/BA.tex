@@ -138,28 +138,26 @@ stiffness and terminal bead radius. This study is conducted within the
 framework of ideal chain models, 
 excluding hydrodynamic interactions. Results of this study reveal insights 
 into the influence of chain stiffness and friction coefficient of the chain end
-on the dynamical properties of the chain in solution and provide 
-valuable considerations for future research in this field.
+on the dynamical properties of the chain in solution.
 
 
 \vspace{15em}
 Kurzzusammenfassung \\
-Mithilfe von Molekulardynamiksimulationen wird in dieser Studie untersucht, 
+Mithilfe von Molekulardynamiksimulationen wird in dieser Arbeit untersucht, 
 ob Veränderungen der mechanischen Eigenschaften einer Kette, 
 wie Steifigkeit und Reibungskonstante des Endmonomers, 
 zu den beobachteten Veränderungen im Skalierungsverhalten beitragen, 
 wie sie von Singh \emph{et al.} \cite{Singh:2022} festgestellt wurden. 
-Zusätzlich dazu, während umfangreiche Forschung zur Dynamik freier Ketten 
-durchgeführt wurde, bleiben die Dynamik von verankerten semiflexiblen Ketten, 
+Während umfangreiche Forschung zur Dynamik freier Ketten 
+durchgeführt wurde, ist die Dynamik von verankerten semiflexiblen Ketten, 
 wie sie beim Prozess des Membrantetherings beobachtet werden, 
-vergleichsweise unerforscht. Diese Arbeit zielt darauf ab, die dynamischen 
+vergleichsweise wenig forscht. Diese Arbeit zielt darauf ab, die dynamischen 
 Eigenschaften von verankerten semiflexiblen Ketten zu untersuchen, 
 während ihre Steifigkeit und Reibungskonstante des Endmonomers der Endperle 
 variiert werden. Die Studie erfolgt im Rahmen von Modellen idealer Ketten und schließt 
 hydrodynamische Wechselwirkungen aus. Die Ergebnisse geben Einblicke in den 
 Einfluss der Kettensteifigkeit und des Reibungskoeffizienten des Kettenendes auf 
-ihre dynamischen Eigenschaften und liefern wertvolle Überlegungen für 
-zukünftige Forschung in diesem Bereich.
+ihre dynamischen Eigenschaften.
 % Inhaltsverzeichnis
 
 \cleardoublepage
@@ -173,24 +171,19 @@ zukünftige Forschung in diesem Bereich.
 
 \section{Introduction}
 \subsection{Motivation and goal}
-An intracellular traffic constitutes an intricate interplay of both mechanical 
-and chemical processes starting from formation of vesicle, proceeding with 
-its movement along the cytoskeletal tracks and ending with tethering and merging
-with their corresponding target membrane compartment \cite{Singh:2022}.
-Membrane tethering process, in some cases driven by the pairing of
-small GTPases with long dimeric coiled-coil tether molecules, \cite{Singh:2022}  
-is the coupling of chemistry with mechanics, which is not yet well 
-understood \cite{Singh:2022}. There are recent discussions in the literature
-about the role of the long dimeric coiled-coil molecules in the process
-of overcoming the distance barriers that physically separate 
-membranes \cite{Singh:2022}. Specifically, the process of membrane tethering was
+Intracellular traffic represents an exciting realm, 
+where the mechanisms of chemistry and mechanics are in harmony.
+An important process in this realm is pairing of 
+small GTPases with long dimeric coiled-coil tether molecules \cite{Singh:2022},
+which is a part of a recent discussions in the literature \cite{Singh:2022}. 
+Specifically, the process of membrane tethering was
 observed, driven by the conformational changes of the early endosomal
 tether EEA1, caused by its binding to the small GTPase Rab5 \cite{Murray2016}.
 The conformational changes of EEA1 upon the binding of Rab5 are then closely
 studied by Singh \emph{et al.} \cite{Singh:2022}. 
 Among others they observed 
 a change in the scaling behavior of the mean squared displacement of 
-chains end upon the binding of the Rab5. They also have shown \emph{indirectly} 
+chains end upon the binding of the Rab5. They also have shown indirectly 
 that this change is caused by a stiffness transition of the chain.
 However, the underlying molecules constitute a complex biological system, and
 there might be other factors affecting the change in the scaling behavior.
@@ -200,8 +193,8 @@ be caused by the change of mechanical properties of the chain, such as stiffness
 friction coefficient of the chain end, 
 which is increased upon the binding of Rab5. Also, while the dynamical
 properties of free chains were already considered in various studies 
-(among others: \cite{Singh:2022} \cite{Nikoubashman2016} 
-\cite{Kremer_ChemPhys} \cite{Hinczewski_2009}), the dynamics of anchored
+\cite{Singh:2022} \cite{Nikoubashman2016} 
+\cite{Kremer_ChemPhys} \cite{Hinczewski_2009}, the dynamics of anchored
 semiflexible chains
 (as they occur in the process of membrane terhering, anchored to the endosome)
 is not yet well studied. 
@@ -291,8 +284,8 @@ and the following relation holds between persistence length and angles of the ch
 which is usefull if one needs to estimate the persistence length from the chain angles.
 
 \subsection{Langevin equation} \label{section:langevin_eq}
-The discussion of chain dynamics should start from the description of
-the dynamics of single particle. This can be done using the Langevin equation. 
+The Langevin equation plays an important role in the description of the dynamics
+of polymer chains in a theta solvent \cite{Doi_Edwards_PD:1994}. 
 The Langevin equation is a fundamental stochastic differential equation 
 widely used in statistical mechanics and molecular dynamics to describe the 
 dynamics of particles or molecules subjected to random forces in a 
@@ -344,7 +337,7 @@ The Rouse model makes certain key assumptions to facilitate its analytical treat
     \item \label{rouse_assumption_2} Thermal forces acting on each bead follow Gaussian statistics.
     \item \label{rouse_assumption_3} Overdamped motion of the bead, which implies that inertia term vanishes: $m \ddot{\vec{r}} \approx 0$.
     Which is usually fulfilled in polymeric systems \cite{Doi_Intro_PP:2005}.
-    \item \label{rouse_assumption_4} Beads continuously distributed along polymer chain.
+    \item \label{rouse_assumption_4} Beads continuously distributed along polymer chain \cite{Doi_Edwards_PD:1994}.
 \end{enumerate}
 
 \paragraph{Equation}
@@ -359,9 +352,13 @@ The initial equation of motion of single bead then becomes a diffusion equation 
 with friction coefficient $\zeta = \sigma m$.
 
 \paragraph{Boundary conditions}
-The chain ends are connected to one spring only. These free ends could be modelled by adding two 
-fictious beads to both ends with $\vec{r}_0=\vec{r}_1$ and $\vec{r}_N=\vec{r}_{N+1}$. The Boundary 
-conditions for the diffusion equation can then be written as follows \cite{Rub_Colby_PolyPhy:2005}:
+The chain ends are connected to one spring only. Free ends could be modelled by 
+introducing free boundary conditions. Two 
+fictious beads are added to both ends with 
+$\vec{r}_0=\vec{r}_1$ and $\vec{r}_N=\vec{r}_{N+1}$ \cite{Doi_Edwards_PD:1994}. 
+The Boundary 
+conditions for the diffusion equation can then 
+be written as follows \cite{Doi_Edwards_PD:1994}:
 \begin{equation}
     \label{eq:rouse_boundary}
     \begin{aligned}
