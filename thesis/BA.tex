@@ -402,7 +402,7 @@ with the formal solution \cite{Doi_Edwards_PD:1994}:
     \vec{X}_p(t) = \frac{1}{\zeta_p} \int_{-\infty}^{t} dt' \frac{\exp(t-t')}{\tau_p} \vec{f^p}
 \end{equation}
 with
-\begin{equation}
+\begin{equation} \label{eq:tau_p_rouse_fullflex}
     \tau_p = \zeta_p / k_p
 \end{equation}
 
@@ -470,7 +470,7 @@ with the following asymptotic behavior \cite{svaneborg_2020}:
 \end{equation}
 
 \paragraph{Extension to the anchored chains}
-The Rouse model can be extended to describe the anchored chains. To do that the boundary conditions 
+To describe the anchored chains, the boundary conditions 
 must be adjusted to account for anchoring. Using the continous approximation as described in 
 \cite{Doi_Edwards_PD:1994}, new boundary conditions can be evaluated as:
 \begin{equation}
@@ -480,6 +480,7 @@ must be adjusted to account for anchoring. Using the continous approximation as 
         & \left(\frac{\partial \vec{r}}{\partial n}\right)_{n=N} = 0
     \end{aligned}
 \end{equation}
+where $\vec{r}_0$ is the position of the fictious bead as in case of free boundary conditions. 
 Further the possible solution path is sketched, however the solution itself remains outside of the scope
 of this work. In analogy with the case of the free chain, one needs to decouple the polymer motion in 
 the modes of independent motion $\vec{X}_p$, which might in this case have different expression 
@@ -491,7 +492,7 @@ be used to calculate relevant observables.
 \label{sec:rouse_semiflex_chain}
 The Rouse model prediction for semiflexible chains is more complicated
 as one need take into account the bending potential. 
-Fortunately, the topic has already been studied so the behavior of the
+The topic has already been studied, so the behavior of the
 observables $\E{\vec{R}(t)\vec{R}(0)}$ and $\E{[\Delta \vec{r}_N(t)]^2}$ 
 is available in the literature \cite{Nikoubashman2016} for the asymptotic
 cases: rod limit $l_p \gg L$ and coil limit $l_p \ll L$.
@@ -517,8 +518,8 @@ The case $\tau_0 < t < \tau_1$ for $\tau_0 < t \ll \tau_1$ can be approximated a
 \begin{equation}
     \E{\vec{R}(t)\vec{R}(0)} \propto 1-\frac{8 \Gamma(1/4)}{3 \pi}\frac{L}{l_p}\left(\frac{t}{\tau_1}\right)^{3/4} \quad \text{if} \quad \tau_0 < t \ll \tau_1 \text{; } l_p \gg L 
 \end{equation}
-which delivers a $\alpha = \frac{3}{4}$ scaling behavior of MSD of ETE of a free 
-chain in the rod limit.
+which delivers a $\alpha = \frac{3}{4}$ scaling exponent of the ETE autocorrelation function of
+a free chain in the rod limit.
 \\
 \\
 The behavior of MSDLM $\E{[\Delta \vec{r}_N(t)]^2}$
@@ -527,9 +528,9 @@ is given by \cite{Nikoubashman2016}:
 \begin{equation}
     \E{[\Delta \vec{r}_N(t)]^2} \approx l_b^2\left(\frac{l_b}{l_p}\right)^{1/4}\left(\frac{t}{\tau_0}\right)^{3/4} \quad \text{if} \quad \tau_0 < t < \tau_1 \text{; } l_p \gg L
 \end{equation}
-One observes the same scaling behavior as in case of MSD of ETE: $\alpha=\frac{3}{4}$.
+One observes the same scaling exponent as in case of MSD of ETE: $\alpha=\frac{3}{4}$.
 However, on the time scale, on which free diffusion takes place, the scaling
-behavior remains unchanged relative to the flexible chain and is given by 
+exponent remains unchanged relative to the flexible chain and is given by 
 $\alpha=1$, because chain stiffness does not affect the chain translational 
 diffusion as a whole \cite{Nikoubashman2016}.
 \paragraph{Coil limit}
@@ -538,16 +539,18 @@ In the coil limit $l_p \ll L$ there are several timescales \cite{Nikoubashman201
     \begin{split}
         \tau_1 & \approx \tau_0 \left(\frac{l_p}{l_b}\right)^3 \quad \text{if} \quad l_p \ll L\\ 
         \tau_{rot} & \approx \frac{L^2 l_p \tau_0}{l_b^3} \quad \text{if} \quad l_p \ll L\\
-        \tau_R & \propto \tau_{rot} \quad \text{if} \quad l_p \ll L
+        \tau_R & \propto \tau_{rot} \quad \text{if} \quad l_p \ll L \text{,}
     \end{split}
 \end{equation}
+$\tau_1$ is not equals $\tau_1$ (Eq. \ref{eq:tau_p_rouse_fullflex}) from predicton of Rouse model for fully flexible
+chains.
 On the timescale $t \ll \tau_1$ the autocorrelation function of the ETE is given by \cite{Nikoubashman2016}:
 \begin{equation}
     1 - \E{\vec{R}(t)\vec{R}(0)} \propto \frac{l_p}{L}\left(\frac{t}{\tau_1}\right)^{3/4} \quad \text{if} \quad t \ll \tau_1 \text{, } l_p \ll L
 \end{equation}
 On the timescale $\tau_1 < t \ll \tau_R$ the equations are given by the Rouse model
 predictions for flexible chains renormalized in space $l_b \rightarrow l_p$ and in time
-$\tau_0 \rightarrow \tau_1$ \cite{Nikoubashman2016}. The scaling behavior is then
+$\tau_0 \rightarrow \tau_1$ \cite{Nikoubashman2016}. The scaling exponent is then
 given by $\alpha=1/2$ \cite{Nikoubashman2016}. The crossover from $\alpha=1/2$ to
 $\alpha=3/4$ is expected for $t=\tau_1$ \cite{Nikoubashman2016}.
 \\
