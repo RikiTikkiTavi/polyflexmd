@@ -471,7 +471,7 @@ with the following asymptotic behavior \cite{svaneborg_2020}:
 
 \paragraph{Extension to the anchored chains}
 To describe the anchored chains, the boundary conditions 
-must be adjusted to account for anchoring. Using the continous approximation as described in 
+must be adjusted to account for anchoring. Using the continuous approximation as described in 
 \cite{Doi_Edwards_PD:1994}, new boundary conditions can be evaluated as:
 \begin{equation}
     \label{eq:rouse_boundary_anchored}
@@ -480,11 +480,11 @@ must be adjusted to account for anchoring. Using the continous approximation as 
         & \left(\frac{\partial \vec{r}}{\partial n}\right)_{n=N} = 0
     \end{aligned}
 \end{equation}
-where $\vec{r}_0$ is the position of the fictious bead as in case of free boundary conditions. 
-Further the possible solution path is sketched, however the solution itself remains outside of the scope
+where $\vec{r}_0$ is the position of the fictious bead as in the case of the free boundary conditions. 
+Further, the possible solution path is sketched, however the solution itself remains outside of the scope
 of this work. In analogy with the case of the free chain, one needs to decouple the polymer motion in 
-the modes of independent motion $\vec{X}_p$, which might in this case have different expression 
-as in case of the free chain. Then, the diffusion equation is rewritten using obtained $\vec{X}_p$.
+the modes of independent motion $\vec{X}_p$, which might in this case have a different expression 
+than in the case of the free chain. Then, the diffusion equation is rewritten using obtained $\vec{X}_p$.
 The solution $\vec{X}_p$ and the inverse transformation $\vec{r}_n(\{\vec{X}_p\})$ can eventually then
 be used to calculate relevant observables.
 
@@ -601,8 +601,10 @@ LAMMPS can be written as \cite{LAMMPS}:
         0 & \text{else}
     \end{cases}
 \end{equation}
-
-The potential consists of an attractive (first) and a repulsive (Lennard-Jones, second) term which is 
+with $R_0$ - the maximum extent of the bond, $k$ - spring constant, $\epsilon$ - parameter regulating
+the depth of the potential minimum, $\sigma_{LJ}$ - parameter regulating the location of the minumum
+of the potential. The potential consists of an attractive (first) and 
+a repulsive (Lennard-Jones, second) term which is 
 set to $0$ if $r$ is larger than
 the minimum ($2^{1/6}\sigma_{LJ}$) of the Lennard-Jones potential.
 
@@ -643,7 +645,7 @@ Chosen simulation settings and parameters are explained in this section.
 \\
 \\
 A LJ unit system is used, in which 
-mass, $\sigma, \epsilon, k_B = 1$ and the masses, distances, energies are specified
+mass, $\sigma_{LJ}, \epsilon, k_B = 1$ and the masses, distances, energies are specified
 as multiples of these values \cite{LAMMPS}.
 \\
 \\
@@ -652,7 +654,7 @@ dimensions are used. The polymer chain is modelled as series of interconnected
 beads, where each bead represents a monomer, and the bonds represent the bonds between monomers.
 The adjacent connected beads of the chain interact according to FENE potential $U_{bond}(r)$,
 as introduced in section \ref{par:bond_potential}, with parameters: 
-$K=30.0$, $R_0=1.5$, $\epsilon=1.0$, $\sigma=1.0$.
+$K=30.0$, $R_0=1.5$, $\epsilon=1.0$, $\sigma_{LJ}=1.0$.
 The angles between adjacent bonds of the same chain are affected by the bending potential
 $U_{bend}(\theta)$, as described in section \ref{par:bend_potential} and 
 $\kappa$ is varied to obtain the
@@ -690,16 +692,16 @@ of particle trajectories are performed.
 \subsection{Evaluation methods}
 
 \subsubsection{Measurement uncertainty}
-In this work the 3$\sigma$ confidence interval is used, which means
+In this work the $99.73 \%$ confidence interval is used, which means
 $\approx99.7 \%$ of observations would land in the given confidence interval.
 Gaussian error propagation is used to propagate the uncertainty. The normal
 distribution is assumed everywhere, where the measurement uncertainty is given.
 
 \subsubsection{Main-axis coordinate system}\label{sec:main-axis}
-To analyze the dynamics of the anchored chain, the so called main-axis coordinate
+To analyze the dynamics of the anchored chain, the main-axis coordinate
 system is introduced. In this system the $z$ axis is parallel to the
 first bond vector, connecting the first two beads, which are fixed.
-The orthonormal basis set that defines the system is calculated as follows:
+The orthonormal basis set, that defines the system, is calculated as follows:
 \begin{equation}
     \hat{z}_{MA} = \frac{\vec{r}_1 - \vec{r}_0}{\| \vec{r}_1 - \vec{r}_0 \|}
 \end{equation}
@@ -713,9 +715,10 @@ The orthonormal basis set that defines the system is calculated as follows:
 \begin{equation}
     \hat{x}_{MA} = \hat{z}_{MA} \times \hat{y}_{MA} 
 \end{equation}
+where $\hat{x}$, $\hat{y}$, $\hat{z}$ are the vectors of the standard basis. 
 
 \subsubsection{Estimation of scaling behavior of MSD of ETE} \label{sec:est-alpha-msd}
-To estimate the scaling behavior $\alpha(t)$ of the MSD-ETE curve the following
+To estimate the scaling exponent $\alpha(t)$ of the MSD-ETE curve the following
 algorithm is applied:
 \begin{enumerate}
     \item Split the MSD by the time (t/LJ) in $n$ bins logarithmically using
