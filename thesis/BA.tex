@@ -1142,6 +1142,8 @@ of the Langevin thermostat
 for the last bead of the chain. Assuming the Stokes friction, 
 changing the value of the damping parameter effectively means a change of the 
 bead diameter. The mass of the end bead is set to the $m_e = 1.5$ 
+(a modification of the mass is arbitrary, 
+but it affects the damping time $\tau_d=m_e/\zeta_e$)
 and friction coefficient of end bead
 is varied: $\zeta_e = 10, 15$, which corresponds to the end-bead diamaters: $15, 30$.
 The reference value provides simulation of the chain with $\zeta_e=\zeta=1$ and $m_e=m=1$.
@@ -1161,15 +1163,17 @@ rise with rising $\zeta_e$ and the scaling behavior on short time scales
 varies. To investigate the scaling behavior, the scaling exponent $\alpha$ is
 calculated as described in section \ref{sec:est-alpha-msd} 
 within $n=20$ bins and is plotted on \autoref{fig:alpha_anchored_zeta}.
-The rouse model for semiflexible free chains predicts $\alpha=3/4$ on the
+The Rouse model for semiflexible free chains predicts $\alpha=3/4$ on the
 time scales $t < \tau_{1} \ll \tau_{rot}$. To test if this holds for chains with larger
 friction coefficient of the chain end it's necessary to estimate $\alpha$ in this
 region. We define $\alpha_m := \alpha \text{ for } t \ll \tau_{rot}$.
 Based on \emph{Nikoubashman et. al.} \cite{Nikoubashman2016} finding,
 that the crossover from ballistic motion to anomalous diffusion, as described 
 in Rouse model, lasts 2 decades of time, it is assumed, 
-that the left boundary of this region is given by the end of the region of ballistic
-motion of the end bead, $\tau_b  := 10 \frac{m}{\zeta_e}$. The right boundary is
+that the left boundary of this region is given by the end of the region of the 
+crossover from the ballistic
+motion to the anomalous diffusion of the end bead, $\tau_b  := 10 \frac{m}{\zeta_e}$. 
+The right boundary is
 assumed to be $\tau_{rot} / 10$ to match $t \ll \tau_{rot}$ requirement.
 The boundaries of the region are plotted as a red dashed line and vizually match
 the observed scaling behavior. $\alpha_m$ is then calculated as the mean
@@ -1266,7 +1270,7 @@ increasing $\zeta_e$ for all dimensions are the same.
     orange line). Estimated scaling exponent for the time interval
     $t \ll \tau_{rot}$: $\alpha_m$ (grey dashed line); Red dashed lines
     correspond to $\alpha_m$ scaling region which is estimated as:
-    $[10 \frac{m}{\zeta_e}, \frac{\tau_{rot}}{10}]$
+    $[10 \frac{m_e}{\zeta_e}, \frac{\tau_{rot}}{10}]$
     }
     \label{fig:alpha_anchored_zeta}
 \end{figure}
@@ -1321,8 +1325,8 @@ binding of RAB5 to the EEA1 the scaling behavior of MSDLM shifts in
 the early time regime from $3/4$ to the $2/3$. This behavior is explained
 with the change of stiffness of the EEA1 upon the binding of RAB5, because
 the scaling regime of MSDLM $\alpha=3/4$ corresponds the chains in the rod limit
-and the $\alpha=2/3$ to the fully flexible chains in presence of excluded
-volume interactions. The persistence length is estimated \emph{indirectly} by 
+and the $\alpha=2/3$ to the fully flexible chains in presence of hydrodynamic 
+interactions. The persistence length is estimated indirectly by 
 fitting the equation of MSDLM \cite{Singh:2022} derived by 
 Hinczewski \emph{et al.} \cite{Hinczewski_2009}. Therefore this approach does
 not proove that a change of the scaling behavior is necessarily caused by the change
@@ -1345,7 +1349,7 @@ $L_{\text{EEA1}}\approx222\text{nm}$.
 When doing the analysis of the simulation data it is possible to 
 calculate MSD of one or another
 chain end. In case of the symmetric chains, where $\zeta_e=\zeta=1$, both ends should 
-deliver similar (within confidence interval) results. In case of asymmetric chains,
+deliver same (within confidence interval) results. In case of asymmetric chains,
 where $\zeta_e > \zeta$, the results can be different. In this study
 both chain ends are analyzed. We refer to the chain end, for which $\zeta_e$ is set,
 as larger chain end and to the chain end, for which $\zeta$ is never changed, as 
@@ -1394,6 +1398,73 @@ analytical expression of MSDLM
 to the empirical MSD of the larger chain end to estimate some properties of the chain, 
 one needs to account for the increased $\zeta_e$ to obtain more precise estimates.
 
+\begin{table}[H]
+    \centering
+    
+    \begin{tabular}{rrlllrrr}
+        \toprule
+        $\zeta_e$ & $l_K/L$ & $\tau_1$ & $\tau_b$ & $\tau_0$ & $\alpha_{min}$ & $\Delta \alpha_{min}$ \\
+        \midrule
+        1 & 6.02 & 78162.53 & 11.00 & 0.94 & 0.727 & 0.001\\
+        10 & 6.02 & 781625.32 & 1.65 & 9.41 & 0.803 & 0.001\\
+        1 & 0.6 & 6352.27 & 11.00 & 0.94 & 0.659 & 0.002\\
+        10 & 0.6 & 63522.69 & 1.65 & 9.41 & 0.775 & 0.001\\
+        \bottomrule
+        \end{tabular}
+    \caption{
+        Free chains with different stiffness and end-bead friction values: 
+        Estimated values of the minimum of the scaling exponent $\alpha$ and
+        characteristic time scales. The larger chain end is measured.
+    }
+    \label{table:free_chain_alpha_estimations}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{17+18+19+20-exp-msd.png}
+        \caption{linear scale}
+        \label{fig:msd_free-normal}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{17+18+19+20-exp-msd-log.png}
+        \caption{log-log scale}
+        \label{fig:msd_free-log}
+    \end{subfigure}
+    \caption{   
+        Empirical MSD of chain end (MSDLM) of free chains
+        with different stiffness and end-bead friction values and
+        Rouse model prediction for fully flexible chains.
+        The larger end of the chain was measured.
+    }
+    \label{fig:msd_free}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{17+18+19+20-exp-alpha.png}
+    \caption{Scaling exponent $\alpha$ of MSD of chain end (MSDLM) 
+    of free chains with different stiffness and end-bead friction values;
+    Grey dashed lines correspond to $3/4$, $2/3$, $1/2$ values.
+    The larger end of the chain was measured. 
+    }
+    \label{fig:alpha_free}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{17+18+19+20-exp-full-flex-alpha.png}
+    \caption{Scaling exponent $\alpha$ of MSD of chain end (MSDLM) 
+    of free full flexible chain. $\tau_0$ and $\tau_b$ are outside of the
+    x-axis boundaries. Estimated $\alpha_{min}=0.499 \pm 0.015$.
+    }
+    \label{fig:alpha_free_full_flex}
+\end{figure}
+
+
+
 \paragraph{Smaller chain end}
 Firstly, we note, that the $\alpha_{min} = 0.73 \pm 0.02$
 in case $l_K/L=6.02$, $\zeta_e=\zeta=1$ approaches the expected value for 
@@ -1403,6 +1474,16 @@ theoretical expectations. This is, similarly to the case of the larger chain end
 an indication for the high reliability of the method.
 \\
 \\
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{cases_diag.png}
+    \caption{
+        Overview of cases in simulations of free chains.
+        Arrows represent discussed transitions.
+    }
+    \label{fig:alpha_cases_diag}
+\end{figure}
+
 Secondly, a drop of $\alpha_{min}$ is observed during the transition from $l_K/L=6.02$ to the $l_K/L=0.6$ by $\zeta_e=\zeta=1$ 
 (\autoref{fig:alpha_fm_free}, a $\rightarrow$ c, \autoref{fig:alpha_and_delta_alpha_fm}):
 \begin{equation} \label{eq:alpha_min_l_p_trans}
@@ -1471,71 +1552,6 @@ upon the binding of RAB5 to the EEA1.
     \centering
     \begin{subfigure}[b]{\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{17+18+19+20-exp-msd.png}
-        \caption{linear scale}
-        \label{fig:msd_free-normal}
-    \end{subfigure}
-    \begin{subfigure}[b]{\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{17+18+19+20-exp-msd-log.png}
-        \caption{log-log scale}
-        \label{fig:msd_free-log}
-    \end{subfigure}
-    \caption{   
-        Empirical MSD of chain end (MSDLM) of free chains
-        with different stiffness and end-bead friction values and
-        Rouse model prediction for fully flexible chains.
-        The larger end of the chain was measured.
-    }
-    \label{fig:msd_free}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{17+18+19+20-exp-alpha.png}
-    \caption{Scaling exponent $\alpha$ of MSD of chain end (MSDLM) 
-    of free chains with different stiffness and end-bead friction values;
-    Grey dashed lines correspond to $3/4$, $2/3$, $1/2$ values.
-    The larger end of the chain was measured. 
-    }
-    \label{fig:alpha_free}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{17+18+19+20-exp-full-flex-alpha.png}
-    \caption{Scaling exponent $\alpha$ of MSD of chain end (MSDLM) 
-    of free full flexible chain. $\tau_0$ and $\tau_b$ are outside of the
-    x-axis boundaries. Estimated $\alpha_{min}=0.499 \pm 0.015$.
-    }
-    \label{fig:alpha_free_full_flex}
-\end{figure}
-
-\begin{table}
-    \centering
-    
-    \begin{tabular}{rrlllrrr}
-        \toprule
-        $\zeta_e$ & $l_K/L$ & $\tau_1$ & $\tau_b$ & $\tau_0$ & $\alpha_{min}$ & $\Delta \alpha_{min}$ \\
-        \midrule
-        1 & 6.02 & 78162.53 & 11.00 & 0.94 & 0.727 & 0.001\\
-        10 & 6.02 & 781625.32 & 1.65 & 9.41 & 0.803 & 0.001\\
-        1 & 0.6 & 6352.27 & 11.00 & 0.94 & 0.659 & 0.002\\
-        10 & 0.6 & 63522.69 & 1.65 & 9.41 & 0.775 & 0.001\\
-        \bottomrule
-        \end{tabular}
-    \caption{
-        Free chains with different stiffness and end-bead friction values: 
-        Estimated values of the minimum of the scaling exponent $\alpha$ and
-        characteristic time scales. The larger chain end is measured.
-    }
-    \label{table:free_chain_alpha_estimations}
-\end{table}
-
-\begin{figure}
-    \centering
-    \begin{subfigure}[b]{\textwidth}
-        \centering
         \includegraphics[width=\textwidth]{17+18+19+20-exp-msd-fm.png}
         \caption{linear scale}
         \label{fig:msd_fm_free-normal}
@@ -1588,7 +1604,7 @@ upon the binding of RAB5 to the EEA1.
     \label{fig:alpha_and_delta_alpha_fm}
 \end{figure}
 
-\begin{table}
+\begin{table}[H]
     \centering
     
     \begin{tabular}{rrlllrrr}
