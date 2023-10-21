@@ -640,7 +640,7 @@ between bonded monomers and adjacent bonds, so the problem of "image" interactio
 occur with long-range interactions, is excluded. 
 
 
-\subsubsection{Simulation setup}
+\subsubsection{Simulation setup} \label{sec:simulation_setup}
 Chosen simulation settings and parameters are explained in this section.
 \\
 \\
@@ -717,34 +717,54 @@ The orthonormal basis set, that defines the system, is calculated as follows:
 \end{equation}
 where $\hat{x}$, $\hat{y}$, $\hat{z}$ are the vectors of the standard basis. 
 
-\subsubsection{Estimation of scaling behavior of MSD of ETE} \label{sec:est-alpha-msd}
-To estimate the scaling exponent $\alpha(t)$ of the MSD-ETE curve the following
+\subsubsection{Estimation of scaling exponent of MSD of ETE} \label{sec:est-alpha-msd}
+The MSDLM in the case of free chains obeys the relationship \cite{Singh:2022}:
+\begin{equation} \label{eq:alpha_def}
+    \E{[\Delta \vec{r}_N(t)]^2} \propto t^{\alpha(t)}
+\end{equation}
+with $\alpha(t)$ being the scaling exponent. 
+Therefore, $\alpha(t)$ of MSDLM can be calculated
+using following equation \cite{Singh:2022}:
+\begin{equation} \label{eq:alpha_estimation_msdlm}
+    \alpha(t) = \frac {\partial \log(\E{[\Delta \vec{r}_N(t)]^2})}{\partial \log(t)}
+\end{equation}
+We then make an assumption, that the MSD-ETE of anchored chains 
+obeys the same proportionality as the MSDLM of free chains (Eq. \ref{eq:alpha_def}).
+Therefore, $\alpha(t)$ of the MSD-ETE can be calculated using the following relationship:
+\begin{equation} \label{eq:alpha_estimation_msdete}
+    \alpha(t) = \frac {\partial \log(\E{[\Delta \vec{R}(t)]^2})}{\partial \log(t)}
+\end{equation}
+To estimate $\alpha(t)$ of the MSD-ETE curve the following
 algorithm is applied:
 \begin{enumerate}
     \item Split the MSD by the time (t/LJ) in $n$ bins logarithmically using
     \mintinline{python3}{numpy.logspace} \cite{harris2020array}
     \item Within each bin:
     \begin{enumerate}
-        \item Calculate: $x=log_{10}(t)$, $y=log_{10}(\text{MSD})$
-        \item Shift to origin: $x=x-min(x)$, $y=y-min(y)$
+        \item Calculate: $x=\log_{10}(t)$, $y=\log_{10}(\text{MSD})$
+        \item Shift to origin: $x=x-\min(x)$, $y=y-\min(y)$
         \item Use \mintinline{python3}{scipy.optimize.curve_fit} 
         \cite{2020SciPy-NMeth} to fit the $f(x) = \alpha x$ to the $x,y$,
         obtaining $\alpha$, the scaling exponent within the bin.
     \end{enumerate}
 \end{enumerate}  
-$\Delta \alpha$ is estimated by calculating the 
-$\Delta y$ from $\Delta \text{MSD}$:
+Measurement uncertainty of the scaling exponent, $\Delta \alpha$, is estimated 
+by calculating the measurement uncertainty of $y$, $\Delta y$, from the 
+measurement uncertainty of the MSD-ETE (MSD), $\Delta \text{MSD}$:
 \begin{equation}
-    \Delta y = \frac{1}{\text{MSD} \ln(10)} \sigma_{\text{MSD}}
+    \Delta y = 3 \sigma_y = 3 \frac{1}{\text{MSD} \ln(10)} \sigma_{\text{MSD}}
 \end{equation}
-with $\sigma_{\text{MSD}}=\Delta \text{MSD} / 3$
-and then supplying it to the  
-\mintinline{python3}{scipy.optimize.curve_fit} \cite{2020SciPy-NMeth}
+where $\sigma_y$ is the standard deviation of $y$ and $\sigma_{MSD}$ is 
+the standard deviation of MSD.  
+$\sigma_y$ is then supplied to the  
+\mintinline{python3}{scipy.optimize.curve_fit} \cite{2020SciPy-NMeth},
 when calculating $\alpha$. The algorithm outputs the variance-covariance
-matrix, from which $\sigma_{\alpha}$ can be calculated.
+matrix, from which $\sigma_{\alpha}$, and, therefore, 
+$\Delta \alpha = 3 \sigma_{\alpha}$ can be calculated.
 
 \subsubsection{Estimation of scaling behavior of MSDLM} \label{sec:est-alpha-msdlm}
-To estimate the scaling behavior $\alpha(t)$ of the MSDLM curve, a similar
+To estimate the scaling behavior $\alpha(t)$ of the MSDLM curve 
+(Eq. \ref{eq:alpha_def}, Eq. \ref{eq:alpha_estimation_msdlm}), a similar
 algorithm as in case of MSD-ETE is applied, except that instead of
 splitting the curve into the bins, the rolling window of size defined in log scale is used.
 Basically $\alpha(t_i)$ is calculated using linear regression, as previously
@@ -804,6 +824,7 @@ the transition into a plateau is shifted to the right, increasing the
 relaxation time (Eq. \ref{eq:rouse_relaxation_time}), 
 however the scaling behavior is visually the same. The Rouse relaxation time
 of the free chain predicted using the Rouse model 
+(with the same parameters as in the simulation, Section \ref{sec:simulation_setup})
 is: $\tau_R=130.16$ (Eq. \ref{eq:rouse_relaxation_time}), 
 $\tau_0=0.941$ (Eq. \ref{eq:rouse_tau_0}). 
 The Rouse relaxation time of the anchored chain estimated 
@@ -999,7 +1020,7 @@ the discrepancy between theoretical approach for the free chain and empirical
 results for the anchored chain:
 \begin{equation}
     \label{eq:adjusted_rouse_model_ete}
-    \E{[\Delta \vec{R}(t)]^2}  = a\E{R^2}\left[1 - exp\left(-\frac{t}{\tau_{rot}}\right)\right]
+    \E{[\Delta \vec{R}(t)]^2}  = a\E{R^2}\left[1 - \exp\left(-\frac{t}{\tau_{rot}}\right)\right]
 \end{equation}
 This equation is referred further as "Adjusted Rouse model".
 The free parameter $a$ accounts the for large-time limit of MSD and $\tau_{rot}$ 
@@ -1008,7 +1029,7 @@ can only speculate, whether the new $\tau_{rot}$ has the same meaning
 as the old one. The results of this fit are shown in 
 \autoref{fig:msd_anchored_l_K_rouse_fit_tau-a}.
 It is possible to conclude, that in case of anchored chains the proportionality
-$\E{\vec{R}(t)\vec{R}(0)} \propto exp(-\frac{t}{\tau_{rot}})$
+$\E{\vec{R}(t)\vec{R}(0)} \propto \exp(-\frac{t}{\tau_{rot}})$
 holds for $t>\tau_{rot}$ but with a different value (and eventually meaning) of $\tau_{rot}$.
 In case of the chains close to the rod-limit one can see that in analogy with 
 the case of free chains in the rod limit there should be some analogy of 
