@@ -869,7 +869,12 @@ the free fully flexible chains were compared to the data obtained
 from the simulation of the anchored fully flexible chains.
 It has been found, that analytical Rouse model predictions of the MSD of the 
 free fully flexible chain (Eq. \ref{eq:rouse_msd_ete}) can describe the 
-anchored chain if $\tau_R$ is considered as free parameter. The comparison of 
+anchored chain, if $\tau_R$ is considered as free parameter. However, we note,
+that the predictions for anchored fully flexible chains can probably 
+be obtained analytically by solving the Rouse model within the anchored boundary conditions 
+(Eq. \ref{eq:rouse_boundary_anchored}) and the predictions obtained using the 
+fit are not equivalent to the predictions derived analytically.
+The comparison of 
 analytically calculated $\tau_R$ (Eq. \ref{eq:rouse_relaxation_time}) of the free chain
 with estimated $\tau_R$ of the anchored chain revealed, that 
 $\tau_R$ of the anchored chain is significantly (4.47 times) larger. Finally, the
@@ -1632,14 +1637,18 @@ ignoring the hydrodynamic and excluded volume interactions.
 The resulting trajectories are processed and carefully analyzed. 
 
 \paragraph{Anchored chains}
-The specific dynamical quantity MSD of ETE (in following: MSD) was considered.
+The specific dynamical quantity, mean squared displacement 
+of end-to-end distance (MSD of ETE, in following: MSD), was considered.
 \\
 \\
 It is shown,
 that the relaxation of the free fully flexible chain is faster then the relaxation of the
-anchored one ($\tau_{R,\text{free}} < \tau_{R,\text{anchored}}$). The Rouse model predictions
-for the free fully flexible chains holds for anchored fully flexible chains, if one considers
-$\tau_R$ as a free parameter. The estimation of $\tau_R$ for anchored fully flexible chains 
+anchored one ($\tau_{R,\text{free}} < \tau_{R,\text{anchored}}$). 
+As expected, the predictions of the Rouse model with free boundary conditions 
+for the fully flexible chains do not hold for anchored fully flexible chains.
+However, it is observed, that the predictions of the Rouse model with free boundary conditions 
+for the fully flexible chains with $\tau_R$ as free paramater hold for anchored fully flexible
+chains. The estimation of $\tau_R$ for anchored fully flexible chains 
 delivers the correction factor required to account for anchoring.
 \\
 \\
@@ -1652,8 +1661,10 @@ proportionality ($\propto \exp\left(-\frac{t}{\tau_{rot}}\right)$)
 as anchored semiflexible chains for longer time scales, however with
 different values of characteristic time $\tau_{rot}$. These characteristic times 
 $\tau_{rot}$ are estimated for different values of stiffness. It was observed, that 
-$\tau_{rot}$ grows with increasing stiffness of the chain. To explore the shorter time
-scales, the transient scaling exponent $\alpha$ of the MSD is computed. 
+$\tau_{rot}$ grows with increasing stiffness of the chain. 
+To explore the shorter time
+scales, the transient scaling exponent $\alpha$ of the MSD (defined in 
+Section \ref{sec:est-alpha-msd}, Eq. \ref{eq:alpha_estimation_msdete}) is computed.
 In the region of subdiffusive 
 motion with $t\ll\tau_{rot}$ the values of the scaling exponent $\alpha$ match
 qualitatively the expected minimum values of the scaling exponent of free chains.
@@ -1732,7 +1743,7 @@ Therefore, we have shown, that both, stiffness transition of the chain
 and 10x increase of friction coefficient of the chain end can cause the change
 of $\alpha_{min}$, as observed by Singh \emph{et al.} \cite{Singh:2022} 
 upon the binding of RAB5 to the EEA1. However, if, following the binding of RAB5 to EEA1, 
-the friction coefficient at the real chain end increases by a factor of less than 10, then   
+the friction coefficient at the EEA1 chain end increases by a factor of less than 10, then   
 our simulations have overemphasized the effects of the larger chain end. 
 Under this circumstance, it is worth noting, that 
 $\Delta \alpha_{min} (a \rightarrow b)$ is much less likely 
