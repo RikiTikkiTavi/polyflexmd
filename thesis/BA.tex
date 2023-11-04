@@ -593,7 +593,7 @@ is used to model the bonds between neighboured-monomers. This is a standard
 choice for bead-spring polymer models \cite{LAMMPS}. The potential equation used in
 LAMMPS can be written as \cite{LAMMPS}:
 
-\begin{equation}
+\begin{equation} \label{eq:bond_potential}
     U_{bond}(r) = 
     \begin{cases}
         -\frac{1}{2} k R_0^2 \ln\left[1 - \left(\frac{r}{R_0}\right)^2\right] + 4 \epsilon \left[\left(\frac{\sigma_{LJ}}{r}\right)^{12} - \left(\frac{\sigma_{LJ}}{r}\right)^6\right] + \epsilon & \text{if } r <= 2^{1/6} \sigma_{LJ} \\
@@ -808,9 +808,10 @@ affects chain dynamics.
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.9cm},clip]{3-exp-fixed-param-log.png}
       \caption{\label{fig:anchored_flex_chain_vs_rouse}
-      MSD of ETE of an anchored fully flexible chain vs predictions of
+      MSD of ETE of an anchored fully flexible chain and
+      MSD of ETE of a free fully flexible chain vs predictions of
       the analytical Rouse model (free chain, Eq. \ref{eq:rouse_msd_ete}).
-      Filled area corresponds to the MSD curve $\pm$ 3 standard deviations of the mean. 
+      The filled area corresponds to the MSD curve $\pm$ 3 standard deviations of the mean. 
       The
       line connecting data points and the filled area between data points doesn't make
       any statements about probability of measuring values in this interval and is
@@ -830,8 +831,18 @@ $\tau_0=0.941$ (Eq. \ref{eq:rouse_tau_0}).
 The Rouse relaxation time of the anchored chain estimated 
 using the fit of the Eq. \ref{eq:rouse_msd_ete} with $\tau_R$ as free parameter
 to the MSD curve of acnhored chain is: 
-$\tau_R=582.3 \pm 28.6$, $\tau_0=4.21 \pm 0.07$, which is approximately $4.47$ times
-larger. The usage of $\tau_R$ as free parameter relies on the assumption, that
+$\tau_R=555 \pm 62$, $\tau_0=4.1 \pm 0.5$, which is approximately $4$ times
+larger. One needs to take into account, that the bond potential used in the simulations, 
+FENE (Eq. \ref{eq:bond_potential}), does not match the bond potential 
+used in the Rouse model, harmonic spring potential. Therefore, it is also 
+necessary to compare the above mentioned results with the simulation of the free chain.
+On the \autoref{fig:anchored_flex_chain_vs_rouse} is shown, that the predictions
+of the Rouse model match the the resuts of the simulation of the free chains within the
+confidence interval. The Rouse relaxation time of the free chain, estimated 
+using the fit of the Eq. \ref{eq:rouse_msd_ete} with $\tau_R$ as free parameter
+to the MSD curve of free chain is $\tau_R=138.6 \pm 14.3$, $\tau_0=1.0 \pm 0.1$,
+which matches, within the confidence interval, the one analytically calculated.
+The usage of $\tau_R$ as free parameter relies on the assumption, that
 the dynamics of anchored chain obeys the same equations as dynamics of free chain, 
 but with different time scales. The fitted curve is displayed on
 \autoref{fig:anchored_flex_chain_vs_rouse_fitted}. The match of 
@@ -845,10 +856,14 @@ in case of fully flexible free chain is $2Nl_b^2$ as the one can see from Eq. \r
     \begin{center}
       \includegraphics[width=\columnwidth,trim={0cm 0cm 0cm 0.8cm},clip]{3-exp-free-param-log.png}
       \caption{\label{fig:anchored_flex_chain_vs_rouse_fitted}
-      MSD of ETE of an anchored fully flexible chain vs fit of the modified 
+      MSD of ETE of an anchored fully flexible chain (blue points) and 
+      MSD of ETE of a free fully flexible chain (green points).
+      Fit of the modified 
       rouse model prediction 
-      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as free parameter.
-      Filled area corresponds to the MSD curve $\pm$ 
+      (Eq. \ref{eq:rouse_msd_ete}) with $\tau_R$ as a free parameter to the 
+      MSD of ETE of an anchored fully flexible chain (grey line) and 
+      to the MSD of ETE of a free fully flexible chain (purple line).
+      The filled area corresponds to the MSD curve $\pm$ 
       3 standard deviations of the mean. The
       blue line connecting data points and the filled area between data points doesn't make
       any statements about probability of measuring values in this interval and is
@@ -861,7 +876,7 @@ It is possible to introduce correction factor based on the estimated $\tau_R$
 to account for the boundary conditions:
 \begin{equation}
     \label{eq:adj_factor_beta}
-    \beta := \frac{\tau_{0, \textrm{empirical}}}{\tau_{0, \textrm{analytical}}} \approx 4.47
+    \beta := \frac{\tau_{0, \textrm{simulation,anchored}}}{\tau_{0, \textrm{analytical, free}}} \approx 4.26
 \end{equation}
 \\
 In this section predictions of the analytical Rouse model for 
@@ -877,7 +892,7 @@ fit are not equivalent to the predictions derived analytically.
 The comparison of 
 analytically calculated $\tau_R$ (Eq. \ref{eq:rouse_relaxation_time}) of the free chain
 with estimated $\tau_R$ of the anchored chain revealed, that 
-$\tau_R$ of the anchored chain is significantly (4.47 times) larger. Finally, the
+$\tau_R$ of the anchored chain is significantly (4 times) larger. Finally, the
 correction factor $\beta$ for $\tau_0$ was introduced to account for anchoring.
 
 \FloatBarrier
