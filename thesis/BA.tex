@@ -681,13 +681,22 @@ steps to achive the equilibrium.
 \\
 \\
 The temperature of the system and forces on the beads are controlled with
-Langevin thermostat with parameters: $\text{damp}=\frac{1}{\sigma}=1.0$, $T=1.0$. In case of anchored
+Langevin thermostat with parameters: $\text{damp}=\frac{1}{\sigma}=1.0$, $T=1.0$. 
+In following, the friction coefficient of the bead $\zeta = m \sigma = 1$, 
+unless said otherwise.
+In case of anchored
 chain the forces acting on first two beads of the chain are set to 0 pinning the chain to the origin
 and excluding rotational degrees of freedom.
 \\
 \\
+The mean bond length is $l_b=0.97$. The variation of the bond length over considered 
+$\kappa$ (Eq. \ref{eq:bond_potential}) range is assumed to be 
+neglibly small \cite{svaneborg_2020}, and therefore $l_b$ is assumed to be constant.   
+\\
+\\
 The simulation initially runs until it reaches the equilibrium and then the measurements
 of particle trajectories are performed. 
+
 
 \subsection{Evaluation methods}
 
@@ -827,7 +836,7 @@ however the scaling behavior is visually the same. The Rouse relaxation time
 of the free chain predicted using the Rouse model 
 (with the same parameters as in the simulation, Section \ref{sec:simulation_setup})
 is: $\tau_R=130.16$ (Eq. \ref{eq:rouse_relaxation_time}), 
-$\tau_0=0.941$ (Eq. \ref{eq:rouse_tau_0}). 
+$\tau_0=0.941$ (Eq. \ref{eq:rouse_tau_0}).
 The Rouse relaxation time of the anchored chain estimated 
 using the fit of the Eq. \ref{eq:rouse_msd_ete} with $\tau_R$ as free parameter
 to the MSD curve of acnhored chain is: 
@@ -1788,6 +1797,41 @@ consider hydrodynamic and excluded volume interactions,
 which may have significant impact on the dynamical properties.  
 
 
+\clearpage
+\bibliographystyle{abbrv}
+\bibliography{sources}
+
+% Acknowledgement
+\clearpage
+\thispagestyle{empty}
+\minisec{Acknowledgement}\vspace*{1.5em}
+First of all I would like to express my gratitude to Prof. Dr. Jens-Uwe Sommer, 
+for providing me with the opportunity to write my bachelor 
+thesis at the Institute Theory of Polymers, 
+for all constructive feedback, for the initial assessment of my work and 
+professional advice.
+\\
+\\
+I would also like to extend my gratitude to the second assessor 
+of my thesis, Prof. Dr. Arash Nikoubashman.
+\\
+\\
+I am sincerely grateful to my supervisor, 
+Dr. Holger Merlitz, for the invaluable guidance and suppor throughout this academic journey.
+Specifically,
+I deeply appreciate his mentorship in understanding the theoretical framework, 
+his guidance in navigating LAMMPS, his professional advice
+and his proofreading of my thesis.
+\\
+\\
+A special and warm thanks to my loving wonderful wife, Zlata, for her support
+during all my studies, always being there for me, being my light during the dark times.
+I would like to thank my family, especially my parents (Aliaksandr and Valiantsina), 
+grandparents (Anna, Leonid, Liudmila), sister (Maria) and 
+parents-in-law (Vladimir and Tatjana). And, 
+of course, a big thanks to my cat, Proton, for contributing
+to my mental well-being.
+
 % Erklärung
 \clearpage
 \thispagestyle{empty}
@@ -1801,7 +1845,6 @@ ohne unzulässige Hilfe Dritter verfasst und alle Quellen als solche gekennzeich
 Yahor Paromau \par
 Dresden, November 2023
 
-\bibliographystyle{abbrv}
-\bibliography{sources}
+
 
 \end{document}
