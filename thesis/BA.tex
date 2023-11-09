@@ -64,6 +64,8 @@
 \usepackage[outputdir=out]{minted}
 \usemintedstyle{vs}
 
+\usepackage[toc,page]{appendix}
+
 \graphicspath{ {./img/} }
 
 \begin{document}
@@ -76,8 +78,8 @@
 % Titelpageseite
 \begin{titlepage}
     \begin{tabularx}{\linewidth}{X}
-        \includegraphics[width=6cm]{TU_Logo_SW} \\\hline\hline
-
+        \includegraphics[width=6cm]{TU_Logo_SW} \hfill \includegraphics[width=6cm]{ipf_logo.png} 
+        \\\hline\hline
         \vspace{4.5em}
 
         \begin{singlespace}\begin{center}\bfseries\Huge
@@ -1798,6 +1800,12 @@ the value of real Rab5 bound to the end of EEA1. Finally, one needs to
 consider hydrodynamic and excluded volume interactions, 
 which may have significant impact on the dynamical properties.  
 
+\clearpage
+\begin{appendices}
+    \section{Source code}
+    The source code is available at: 
+    \url{https://github.com/RikiTikkiTavi/polyflexmd} 
+\end{appendices}
 
 \clearpage
 \bibliographystyle{abbrv}
