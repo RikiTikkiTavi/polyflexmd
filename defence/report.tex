@@ -1,0 +1,531 @@
+\documentclass[handout]{beamer}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{wrapfig}
+\graphicspath{ {../thesis/img/}{./img} }
+\usetheme{default}
+
+\title{Molecular dynamics study of ideal polymer chains with variable persistence length}
+\subtitle{Bachelor thesis defense}
+\author{Yahor Paromau}
+\institute{ITP@IPF}
+\date{12.12.2023}
+
+\newcommand{\mean}[1]{\langle #1 \rangle}
+\newcommand{\E}[1]{\langle#1\rangle}
+
+\begin{document}
+
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Outline}
+    \tableofcontents
+\end{frame}
+
+\section{Introduction and Motivation}
+
+\begin{frame}
+    \frametitle{Motivation - context}
+    \begin{center}
+        \begin{tikzpicture}[>=latex, node distance=2.5cm]
+        
+        \node (intracellular) {Intracellular traffic};
+        \node (tethering) [below of=intracellular] {Membrane tethering};
+        \node (conformational) [below of=tethering,text width=9cm] {
+            Conformational changes of the early endosomal tether EEA1,
+            caused by its binding to the small GTPase Rab5
+            \cite{Murray2016}
+            };
+        
+        \draw[->] (intracellular) -- (tethering);
+        \draw[->] (tethering) -- (conformational);
+        
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Quantities - MSD and scaling exponent}
+    \begin{itemize}
+        \item Mean squared displacement (MSD) of the chain end (MSDLM):
+        $$\E{[\Delta\vec{r}_N(t)]^2} := \E{[\vec{r}_N(t)-\vec{r}_N(0)]^2}$$
+        \item (Local) scaling exponent alpha of the MSD \cite{Singh:2022}
+        $$\E{[\Delta\vec{r}_N(t)]^2} \propto t^{\alpha(t)}$$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Motivation - experimental study}
+    \begin{figure}[h]
+        \includegraphics[height=6.9cm]{./Singh_intro_a.png}
+        \caption{
+            Sketch of extended/collapsed states of EEA1 upon the binding of Rab5
+            \cite{Singh:2022}
+        }
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Motivation - experimental study}
+    \centering
+    \begin{figure}[h]
+        \centering
+        \begin{subfigure}[b]{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{./Singh_intro_с.png}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{./Singh_intro_d.png}
+        \end{subfigure}
+        \caption{
+            \textbf{c)} Mean square displacement (MSD) and \textbf{d)}
+            local scaling exponent $\alpha$ of the MSD \cite{Singh:2022}
+        }
+    \end{figure}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Motivation - summary}
+    \begin{itemize}
+        \item Change of stiffness is shown indirectly by fitting the 
+        analytical expression to the experimentally observed data before/after
+        the binding $\Rightarrow$ might be other impact factors (complex system)
+        \item The dynamics of anchored semiflexible chains is not yet well studied 
+    \end{itemize} 
+\end{frame}
+
+\begin{frame}
+    \frametitle{Motivation/Goals}
+
+    \begin{itemize}
+        \item Study dynamical properties of the anchored
+        semiflexible chains by varying stiffness and friction of the chain end
+        \item Change in mechanical properties (chain stiffness, friction coefficient of the chain end)
+        "$\Rightarrow$" change in scaling behavior of the MSD as in \cite{Singh:2022}? 
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Definitions, notations, units}
+
+    Notations and definitions:
+
+    \begin{itemize}
+        \item index "e" for variables referring end-monomer of the chain: $m_e$, $\zeta_e$ 
+    \end{itemize}
+    \vspace{1cm}
+    Conventions:
+    \begin{itemize}
+        \item Confidence interval specification: $\pm 3\sigma$ (Normal distribution assumed)
+    \end{itemize}
+\end{frame}
+    
+\begin{frame}
+    \frametitle{Common simulation settings and values}
+
+    \begin{itemize}
+        \item Only bonded beads interract (ideal chain)
+        \item Chain parameters: 64 monomers, monomer mass $m=1$
+        \item Ensemble size $ \ge $ 500 chains
+        \item Environment parameters: $\zeta=1$
+        \item Time step 0.0025 LJ
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Assumptions}
+    \begin{itemize}
+        \item Variation of $0.2\%$ of $l_b$ is neglectible \cite{svaneborg_2020} 
+        
+        $\Rightarrow$ $l_b=const$, $L=(N_b-1) l_b$=const
+
+        \item ...
+    \end{itemize} 
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Rouse model}
+    \begin{equation}
+        \mean{R^2}=N_b l_b^2
+    \end{equation}
+    \begin{equation}
+        g_4(t) := \mean{(\Delta R(t))^2} = 2 N_b l_b^2 (1-\frac{8}{\pi^2}\sum_{p=1,3,...}e^{\frac{-t p^2}{\tau_R}})
+    \end{equation}
+
+\end{frame}
+
+\section{Experiment 1: Fully flexible chain}
+
+
+\begin{frame}
+    \frametitle{Experiment 1: Fully flexible chain}
+    \framesubtitle{Settings}
+    Same potentials used as in \cite[Section 2.1]{svaneborg_2020}, except:
+    \begin{itemize}
+        \item Bending potential: $U_{bend}(\theta)=0$
+        \item Only bonded beads interract
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Experiment 1: Fully flexible chain}
+    \framesubtitle{$\tau_R$ calculated analytically}
+
+    \begin{figure}[h]
+        \includegraphics[trim={0.1cm 0.1cm 0.1cm 1cm},clip,height=6.9cm]{./3-exp-fixed-param.png}
+        \caption{MSD - compare simulation and Rouse model with $\tau_R$ calculated analytically.}
+        \label{fig:full-flex-chain-fixed}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Experiment 1: Fully flexible chain}
+    \framesubtitle{$\tau_R$ as free parameter}
+
+    \begin{figure}[h]
+        \includegraphics[trim={0.1cm 0.1cm 0.1cm 1cm},clip,height=6.5cm]{./3-exp-free-param.png}
+        \caption{MSD - compare simulation and Rouse model 
+        with $\tau_R$ estimated from fit of $g_4(t)$ to simulation data.}
+        \label{fig:full-flex-chain-free}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 1: Fully flexible chain}
+    \framesubtitle{$\tau_R$ as free parameter}
+
+    \begin{figure}[h]
+        \includegraphics[trim={0.1cm 0.1cm 0.1cm 1cm},clip,height=6.5cm]{./3-exp-free-param-log.png}
+        \caption{MSD - compare simulation and Rouse model 
+        with $\tau_R$ estimated from fit of $g_4(t)$ to simulation data.}
+        \label{fig:full-flex-chain-free-log}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Experiment 1: Fully flexible chain}
+    \framesubtitle{$\tau_R$ analytcal/free values}
+
+    Analytical: $\tau_R=130.16$, $\tau_0=0.941$
+    \\
+    Free parameter: $\tau_R=582.3 \pm 28.6$, $\tau_0=4.21 \pm 0.07$
+    \\
+    \vspace{1cm}
+    Define adjustment factor
+    $ \alpha := \frac{\tau_{0, \textrm{empirical}}}{\tau_{0, \textrm{analytical}}} \approx 4.47$
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 1: Fully flexible chain}
+    \framesubtitle{Conclusions / Results}
+    \begin{itemize}
+        \item Boundary conditions of Rouse model must be adjusted to describe dynamics on 
+        short/interim time-scales.
+        \item Rouse model with $\tau_R$ as free parameter is introduced to account for boundary
+        conditions. Based on $\tau_R$ estimate the adjustment factor for $\tau_0$ is calculated.
+        This allows to use the model on chains with different number of segments.
+
+    \end{itemize}
+\end{frame}
+
+\section{Experiment 2: Semi-flexible chain, vary persistence length}
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{Settings}
+    Same potentials used as in \cite[Section 2.1]{svaneborg_2020}, except:
+    \begin{itemize}
+        \item Only bonded beads interract
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{Used equations}
+
+    Kuhn length \cite{svaneborg_2020}:
+    \begin{equation}
+        l_K = l_b \frac{2\kappa + e^{-2 \kappa} - 1}{1-e^{-2\kappa}(2 \kappa + 1)}
+    \end{equation}
+    Number of Kuhn segments:
+    \begin{equation} 
+        N_K = \frac{L}{l_K}
+    \end{equation}
+    Rouse time:
+    \begin{equation} \label{eq:tau_R_kuhn}
+        \tau_R = \frac{1}{3 \pi^2} \frac{\zeta_{K} \mean{R^2}}{k_B T} = \frac{1}{3 \pi^2} \frac{\zeta N_b N_K l_K^2}{k_B T}
+    \end{equation}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{ETE in equilibrium}
+
+    \begin{figure}[h]
+        \includegraphics[width=8cm]{./4-exp-R_equi.png}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{ETE vs Kuhn length}
+
+    \begin{figure}[h]
+        \includegraphics[width=8cm]{./4-exp-R_sim_vs_theor.png}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{MSD: $\mean{[\Delta R(t)]^2}$}
+
+    \begin{figure}[h]
+        \includegraphics[width=9.5cm]{./4-exp-delta_R-bare.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{MSD: $\mean{[\Delta R(t)]^2}$ on log-log scale}
+
+    \begin{figure}[h]
+        \includegraphics[width=9.5cm]{./4-exp-msd-log.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{MSD: $\mean{[\Delta R(t)]^2}$ by dimension}
+
+    \begin{figure}[h]
+        \includegraphics[width=11cm]{./4-exp-msd_by_dim.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{MSD: $\mean{[\Delta R(t)]^2}$ by dimension on log scale}
+
+    \begin{figure}[h]
+        \includegraphics[width=11cm]{./4-exp-msd_by_dim-log.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{Conclusions 1}
+
+    \begin{enumerate}
+        \item The behavior of MSD for different $l_K$ is roughly the same for $l_K/L \gtrapprox 0.65$
+        \item The relaxation time grows non-linearly with rising $l_K$
+        \item MSD in z dimension is noticable different for $l_K \gtrapprox 0.97$. 
+        \begin{itemize}
+            \item The relaxation time in z dimension gets smaller 
+            relative to x,y dimensions with increasing $l_K$. Explanation: chain has less freedom along z axis with rising $l_K$. 
+            \item MSD is in z is smaller then in x,y on longer time scales. Explanation: same.
+        \end{itemize}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{$\mean{[\Delta R(t)]^2}$ vs Rouse with $\tau_R$ analytically}
+
+    \begin{figure}[h]
+        \includegraphics[width=11cm]{./4-exp-delta_R-rouse_anal.png}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{$\mean{[\Delta R(t)]^2}$ vs Rouse with $\tau_R$ as free parameter}
+
+    \begin{figure}[h]
+        \includegraphics[width=11cm]{./4-exp-delta_R-rouse_fit-tau.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{$\mean{[\Delta R(t)]^2}$ vs Adjusted Rouse with $\tau_R$, $a$ as free parameter}
+    $$ \mean{[\Delta R(t)]^2} = a \mean{R} [1 - \exp(-\frac{t}{\tau_R})] $$
+    \begin{figure}[h]
+        \includegraphics[width=11cm]{./4-exp-delta_R-rouse_fit-tau-a.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{$\mean{[\Delta R(t)]^2}$ vs Adjusted Rouse with $\tau_R$, $a$ as free parameter on log scale}
+    $$ \mean{[\Delta R(t)]^2} = a \mean{R} [1 - \exp(-\frac{t}{\tau_R})] $$
+    \begin{figure}[h]
+        \includegraphics[width=11cm]{./4-exp-delta_R-rouse_fit-tau-a_log.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \framesubtitle{Conclusions 2}
+    \begin{enumerate}
+        \item Rouse model is not able to describe semi-flexible chain with $\gtrapprox$ 3 segments
+        even with rouse time adjusted for boundary conditions. 
+        (Continuum assumption violated; ETE of worm-like chain is different.)
+        \item Rouse model with free $\tau_R$ doesn't work for small number 
+        of kuhn segments.
+        \item Introducion of Adjusted Rouse model helps to describe dynamics on 
+        interim and large time scales, however it's inaccurate on short time scales.
+    \end{enumerate}
+\end{frame}
+
+\section{Experiment 3: EEA1/EEA1+Rab5-like chain, anchored}
+
+\begin{frame}
+    \frametitle{Experiment 3: EEA1/EEA1+Rab5-like chain, anchored}
+    \framesubtitle{Settings}
+    Same potentials used as in \cite[Section 2.1]{svaneborg_2020}, except:
+    \begin{itemize}
+        \item Only bonded beads interract
+    \end{itemize}
+    Modelling EEA1 and EEA1+Rab5:
+    \begin{itemize}
+        \item EEA1: $\kappa = 190.2 \Rightarrow l_K/L=6.02$ 
+        \item EEA1+Rab5: $\zeta_e = 10\zeta, 20\zeta$; $m_e=1.5m$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 3: EEA1/EEA1+Rab5-like chain, anchored}
+    \framesubtitle{MSD}
+    \framesubtitle{}
+    \begin{figure}[h]
+        \includegraphics[width=10cm]{./14+15+16-exp-msd.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 3: EEA1/EEA1+Rab5-like chain, anchored}
+    \framesubtitle{MSD on log scale}
+    \begin{figure}[h]
+        \includegraphics[width=10cm]{./14+15+16-exp-msd-log.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 3: EEA1/EEA1+Rab5-like chain, anchored}
+    \framesubtitle{MSD by dimension}
+    \begin{figure}[h]
+        \includegraphics[width=11.2cm]{./14+15+16-exp-msd-dim.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 3: EEA1/EEA1+Rab5-like chain, anchored}
+    \framesubtitle{MSD by dimension on log scale}
+    \begin{figure}[h]
+        \includegraphics[width=11.2cm]{./14+15+16-exp-msd-dim-log.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 3: EEA1/EEA1+Rab5-like chain, anchored}
+    \framesubtitle{Conclusions / Results}
+    \begin{itemize}
+        \item $l_K$ of the EEA1-like- and EEA1+Rab5-like- anchored chain is the same.
+        \item Increased diameter of end monomer changes short- and interim-time scale 
+        dynamics. Relaxation time of the chain increases. Likely because of slower
+        diffusion of the end monomer and correspondingly of the part of the chain.
+    \end{itemize}
+\end{frame}
+
+\section{Experiment 4: EEA1/EEA1+Rab5-like chain, free}
+
+\begin{frame}
+    \frametitle{Experiment 4: EEA1/EEA1+Rab5-like chain, free}
+    \framesubtitle{MSD}
+    \begin{figure}[h]
+        \includegraphics[width=9cm]{./17-exp-msd.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 4: EEA1/EEA1+Rab5-like chain, free}
+    \framesubtitle{MSD on log scale}
+    \begin{figure}[h]
+        \includegraphics[width=9cm]{./17-exp-msd-log.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 4: EEA1/EEA1+Rab5-like chain, free}
+    \framesubtitle{MSD by dimension on log scale}
+    \begin{figure}[h]
+        \includegraphics[width=11.2cm]{./17-exp-msd-dim-log.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Experiment 4: EEA1/EEA1+Rab5-like chain, free}
+    \framesubtitle{Conclusions / Results}
+    \begin{itemize}
+        \item $l_K$ of the EEA1-like- and EEA1+Rab5-like- free chain is the same.
+        \item With increasing diameter of the end monomer short- and interim- time
+        scale dynamics slightly changes. The relaxation time slightly uncreases. 
+        Change in relaxation time is smaller then in case of anchored chain.
+        \item In difference to anchored chain - MSD in z direction does not differ from x,y.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Definitions, notations, units}
+    Mostly: following \cite{svaneborg_2020}
+
+    Units: LJ
+
+    Notations and definitions:
+
+    \begin{itemize}
+        \item Contour length: $L$
+        \item End to End distance (ETE): $\vec{R}$
+        \item Change of ETE: $[\Delta R(t)]^2 := [\vec{R}(t)-\vec{R}(0)]^2$
+        \item Friction coefficient of bead, viscosity: $\zeta$ $[\frac{\textrm{mass}}{\textrm{time}}]$, $\eta$ $[\frac{\textrm{mass}}{\textrm{time} * \textrm{distance}}]$
+        \item subscript "$b$" to denote bead speciﬁc properties to distinguish these from Kuhn units:
+            \begin{itemize}
+                \item Kuhn lenght, bond length: $l_K$, $l_b$
+                \item Number of Kuhn segments, number of beads: $N_K$, $N_b$
+            \end{itemize}
+        \item Friction coefficient of center of mass: $\zeta_{CM}=N_b \zeta$ 
+        \item Rouse relaxation time \cite{svaneborg_2020}: $\tau_R = \frac{1}{3 \pi^2} \frac{\zeta_{CM} \mean{R^2}}{k_B T} = \frac{1}{3 \pi^2} \frac{\zeta N_b^2 l_b^2}{k_B T}$
+        \item Relaxation time of single bead: $\tau_0 = \frac{3\pi^2 \tau_R}{N^2}$ 
+    \end{itemize}
+
+\end{frame}
+
+\section{References}
+
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+\begin{frame}
+    \frametitle{References}
+    \bibliographystyle{apalike}
+    \bibliography{sources}
+\end{frame}
+
+\end{document}

@@ -18,10 +18,10 @@ directories_anchored_chain = [
 data_files_free_chain = [
     "data/processed/main_axis.csv",
     "data/processed/msd.csv",
-    "data/processed/main_ax_frame/msd.csv",
-    "data/processed/main_ax_frame/msd_lm.csv",
     "data/processed/lm_msd.csv",
     "data/processed/lm_msd_avg-1000.csv",
+    "data/processed/fm_msd.csv",
+    "data/processed/fm_msd_avg.csv"
 ]
 
 data_files_anchored_chain = [
@@ -35,15 +35,11 @@ def add_configs_and_scripts(arch_file: tarfile.TarFile, exp_dir: pathlib.Path):
     print(f"Adding {exp_conf} ...")
     arch_file.add(exp_conf)
 
-    jobs = exp_dir.glob("*.sh")
-    for job in jobs:
-        arch_file.add(job)
-
     lammps_file = next(exp_dir.glob("*.lammps"))
     arch_file.add(lammps_file)
 
 
-with tarfile.open("/beegfs/ws/0/s4610340-polyflexmd/.dev/experiment_results.tar.gz", "w:gz") as arch_file:
+with tarfile.open("/beegfs/ws/0/s4610340-polyflexmd/polyflexmd_results_ipf.tar.gz", "w:gz") as arch_file:
     for exp_dir in directories_free_chain:
         exp_dir = pathlib.Path(exp_dir)
         print(f"exp_dir={exp_dir}")
@@ -52,8 +48,11 @@ with tarfile.open("/beegfs/ws/0/s4610340-polyflexmd/.dev/experiment_results.tar.
 
         for rel_file_path in data_files_free_chain:
             file_path = exp_dir / rel_file_path
-            print(f"Adding {file_path} ...")
-            arch_file.add(file_path)
+            if file_path.exists():
+                print(f"Adding {file_path} ...")
+                arch_file.add(file_path)
+            else:
+                print(f"Does not exist: {file_path}")
 
     for exp_dir in directories_anchored_chain:
         exp_dir = pathlib.Path(exp_dir)
@@ -63,11 +62,5 @@ with tarfile.open("/beegfs/ws/0/s4610340-polyflexmd/.dev/experiment_results.tar.
 
         for rel_file_path in data_files_anchored_chain:
             file_path = exp_dir / rel_file_path
-            if not file_path.exists():
-                if rel_file_path == "data/processed/msd.csv":
-                    file_path = exp_dir / "data/processed/ete.csv"
-                elif rel_file_path == "data/processed/l_K-estimate.csv":
-                    print(f"Absent: {exp_dir / file_path}, skipping.")
-                    continue
             print(f"Adding {file_path} ...")
             arch_file.add(file_path)
