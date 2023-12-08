@@ -82,6 +82,7 @@
 
 \begin{frame}
     \frametitle{Motivation - experimental study}
+    \framesubtitle{MSD and local scaling exponent}
     \centering
     \begin{figure}[h]
         \centering
@@ -131,13 +132,6 @@
 
 \end{frame}
 
-\section{Theoretical background}
-
-\begin{frame}
-    \frametitle{Theory - Rouse model predictions: flexible chain}
-    
-\end{frame}
-
 \begin{frame}
     \frametitle{Limitations}
 
@@ -157,42 +151,21 @@
     \framesubtitle{MSD: $\mean{[\Delta R(t)]^2}$ - free vs anchored chains}
 
     \begin{figure}[h]
-        \includegraphics[trim={0.1cm 0.1cm 0.1cm 1cm},clip,height=6cm]{./3-exp-free-param-log.png}
-        \caption{MSD - compare simulation of free chains, anchored chains and Rouse model}
+        \includegraphics[trim={0.1cm 0.1cm 0.1cm 1cm},clip,width=\textwidth]{./3-exp-free-param-log.png}
+        \caption{
+            MSD - compare simulation of free chains, anchored chains and Rouse model,
+            $\frac{\tau_{R, \textrm{empirical,anchored}}}{\tau_{R, \textrm{analytical, free}}} \approx 4.47$
+        }
         \label{fig:full-flex-chain-free-log}
     \end{figure}
 \end{frame}
 
-\begin{frame}
-    \frametitle{Anchored fully flexible chains}
-    \framesubtitle{$\tau_R$ analytcal/free values}
-
-    Analytical: $\tau_R=130.16$, $\tau_0=0.941$
-    \\
-    Free parameter: $\tau_R=582.3 \pm 28.6$, $\tau_0=4.21 \pm 0.07$
-    \\
-    \vspace{1cm}
-    Define adjustment factor
-    $ \alpha := \frac{\tau_{0, \textrm{empirical}}}{\tau_{0, \textrm{analytical}}} \approx 4.47$
-\end{frame}
-
-\begin{frame}
-    \frametitle{Anchored fully flexible chains}
-    \framesubtitle{Conclusions / Results}
-    \begin{itemize}
-        \item Boundary conditions of Rouse model must be adjusted to describe dynamics on 
-        short/interim time-scales.
-        \item Rouse model with $\tau_R$ as free parameter is introduced to account for boundary
-        conditions. Based on $\tau_R$ estimate the adjustment factor for $\tau_0$ is calculated.
-        This allows to use the model on chains with different number of segments.
-
-    \end{itemize}
-\end{frame}
-
 \subsection{Impact of chain stiffness}
 
+% Semiflexible anchored - Equations -------------------------------------------------------------------
+
 \begin{frame}
-    \frametitle{Experiment 2: Semi-flexible chain, vary persistence length}
+    \frametitle{Anchored semiflexible chains - impact of stiffness}
     \framesubtitle{Used equations}
 
     Kuhn length \cite{svaneborg_2020}:
@@ -288,19 +261,17 @@
 
 % Semiflexible anchored impact of zeta_e - intro ----------------------------------------
 
-\section{Experiment 3: EEA1/EEA1+Rab5-like chain, anchored}
-
 \begin{frame}
     \frametitle{Anchored semiflexible chains - impact of $\zeta_e$}
-    \framesubtitle{Settings}
-    Same potentials used as in \cite[Section 2.1]{svaneborg_2020}, except:
+    \framesubtitle{Settings, definitions, notations}
+    Notations:
     \begin{itemize}
-        \item Only bonded beads interract
+        \item index "e" for variables referring end-monomer of the chain: $m_e$, $\zeta_e$ 
     \end{itemize}
-    Modelling EEA1 and EEA1+Rab5:
+    Settings:
     \begin{itemize}
-        \item EEA1: $\kappa = 190.2 \Rightarrow l_K/L=6.02$ 
-        \item EEA1+Rab5: $\zeta_e = 10\zeta, 20\zeta$; $m_e=1.5m$
+        \item $\kappa = 190.2 \Rightarrow l_K/L=6.02$ (Same as EEA1 in \cite{Singh:2022})
+        \item $\zeta_e = 10\zeta, 20\zeta$; $m_e=1.5m$
     \end{itemize}
 \end{frame}
 
@@ -349,21 +320,6 @@
     \end{figure}
 \end{frame}
 
-% Semiflexible anchored impact of zeta_e - by dim ----------------------------------------
-
-\begin{frame}
-    \frametitle{Anchored semiflexible chains - impact of $\zeta_e$}
-    \framesubtitle{Separation of the dynamics into components parallel and perpendicular to the main-axis}
-    \begin{figure}[h]
-        \includegraphics[width=11.2cm]{./14+15+16-exp-msd-dim-log.png}
-        \caption{
-        Empirical MSD of ETE of anchored chains with different values of the friction
-        coefficient of the chain end $\zeta_e$, separated in components parallel and 
-        perpendicular to the main-axis.
-        }
-    \end{figure}
-\end{frame}
-
 % Semiflexible anchored impact of zeta_e - conclusions ----------------------------------------
 
 \begin{frame}
@@ -378,7 +334,7 @@
 \end{frame}
 
 
-\section{Free chains}
+\section{Free chain dynamics}
 
 % Free, smaller end - MSD ----------------------------------------
 
@@ -410,6 +366,27 @@
     \end{figure}
 \end{frame}
 
+\begin{frame}
+    \frametitle{Free chains}
+    \framesubtitle{Scaling behavior, smaller chain end}
+    \begin{figure}
+        \centering
+        \begin{subfigure}{0.58\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{17+18+19+20-exp-delta_alpha_min_fm.png}
+        \end{subfigure}
+        \begin{subfigure}{0.4\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{cases_diag.png}
+        \end{subfigure}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Free chains}
+    \framesubtitle{Conclusions}
+
+\end{frame}
 
 \begin{frame}
     \frametitle{Definitions, notations, units}
@@ -499,6 +476,21 @@
 
     \begin{figure}[h]
         \includegraphics[width=11cm]{./4-exp-msd_by_dim-log.png}
+    \end{figure}
+\end{frame}
+
+% Semiflexible anchored impact of zeta_e - by dim ----------------------------------------
+
+\begin{frame}
+    \frametitle{Anchored semiflexible chains - impact of $\zeta_e$}
+    \framesubtitle{Separation of the dynamics into components parallel and perpendicular to the main-axis}
+    \begin{figure}[h]
+        \includegraphics[width=11.2cm]{./14+15+16-exp-msd-dim-log.png}
+        \caption{
+        Empirical MSD of ETE of anchored chains with different values of the friction
+        coefficient of the chain end $\zeta_e$, separated in components parallel and 
+        perpendicular to the main-axis.
+        }
     \end{figure}
 \end{frame}
 
